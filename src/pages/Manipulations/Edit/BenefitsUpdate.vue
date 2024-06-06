@@ -31,15 +31,13 @@
             <v-col cols="5" v-if="payCheck && payCheck.families">
               FAMILY SCREEN | {{ firstLetter }} | {{ childrenChecks }}
 
-              {{ payCheck.children }}
-
               <v-row>
                 <v-col cols="6">
                   <v-text-field v-model="payCheck.children" label="01 A-children" variant="outlined"></v-text-field>
                 </v-col>
                 <v-col cols="6">
                   <v-text-field v-model="payCheck.families.length" label="02 Family Size"
-                    variant="outlined"></v-text-field>
+                    variant="outlined"></v-text-field>          
                 </v-col>
               </v-row>
 
@@ -49,7 +47,7 @@
                     variant="outlined"></v-text-field>
                 </v-col>
                 <v-col cols="6" v-if="payCheck.families[0]">
-                  <v-select v-model="payCheck.families[0].gender" label="02  Gender" variant="outlined"
+                  <v-select v-model="payCheck.families[0].gender" label="01  Gender of Child" variant="outlined"
                     :items="gender"></v-select>
                 </v-col>
               </v-row>
@@ -60,29 +58,29 @@
                     variant="outlined"></v-text-field>
                 </v-col>
                 <v-col cols="6" v-if="payCheck.families[1]">
-                  <v-select v-model="payCheck.families[1].gender" label="02  Gender" variant="outlined"
+                  <v-select v-model="payCheck.families[1].gender" label="02  Gender of Child" variant="outlined"
                     :items="gender"></v-select>
                 </v-col>
               </v-row>
 
               <v-row>
                 <v-col cols="6" v-if="payCheck.families[2]">
-                  <v-text-field v-model="payCheck.families[2].namex" label="01 Name of Child Three"
+                  <v-text-field v-model="payCheck.families[2].id" label="01 Name of Child Three"
                     variant="outlined"></v-text-field>
                 </v-col>
                 <v-col cols="6" v-if="payCheck.families[2]">
-                  <v-select v-model="payCheck.families[2].gender" label="02  Gender" variant="outlined"
+                  <v-select v-model="payCheck.families[2].gender" label="02  Gender of Child" variant="outlined"
                     :items="gender"></v-select>
                 </v-col>
               </v-row>
 
               <v-row>
-                <v-col cols="6" v-if="payCheck.families[3]">
+                <v-col cols="6" v-if="payCheck.families[3]">             
                   <v-text-field v-model="payCheck.families[3].namex" label="01 Name of Child four"
                     variant="outlined"></v-text-field>
                 </v-col>
                 <v-col cols="6" v-if="payCheck.families[3]">
-                  <v-select v-model="payCheck.families[3].gender" label="02  Gender" variant="outlined"
+                  <v-select v-model="payCheck.families[3].gender" label="02  Gender of Child" variant="outlined"
                     :items="gender"></v-select>
                 </v-col>
               </v-row>
@@ -93,7 +91,7 @@
                     variant="outlined"></v-text-field>
                 </v-col>
                 <v-col cols="6" v-if="payCheck.families[4]">
-                  <v-select v-model="payCheck.families[4].gender" label="02  Gender" variant="outlined"
+                  <v-select v-model="payCheck.families[4].gender" label="02  Gender of Child" variant="outlined"
                     :items="gender"></v-select>
                 </v-col>
               </v-row>
@@ -104,7 +102,7 @@
                     variant="outlined"></v-text-field>
                 </v-col>
                 <v-col cols="6" v-if="payCheck.families[5]">
-                  <v-select v-model="payCheck.families[5].gender" label="02  Gender" variant="outlined"
+                  <v-select v-model="payCheck.families[5].gender" label="02  Gender of Child" variant="outlined"
                     :items="gender"></v-select>
                 </v-col>
               </v-row>
@@ -169,7 +167,7 @@ onMounted(async () => {
 
 const updatesFromAPI = () => {
   payCheck.value = storeAPI.loadedSalaries.filter(
-    (x) => x.id == customId.value,
+    (x) => x.id == customId.value
   )[0];
 };
 
@@ -193,7 +191,6 @@ async function updateEmployeesBenefits() {
       updated: payCheck.value.updated,
       created: payCheck.value.created,
       emailx: payCheck.value.emailx,
-
       paycheck: 2000 / 26,
       costBenefits:
         (1000 + 500 * numberOfChildren + married * 500 - discountedA) / 12,
@@ -203,6 +200,7 @@ async function updateEmployeesBenefits() {
       marriage: payCheck.value.marriage,
       families: payCheck.value.families.length,
     };
+    console.log(W1);
     storeAPI.updateOrAddBenefits(W1);
     goBackPage();
   }

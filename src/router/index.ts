@@ -1,29 +1,42 @@
 import { createRouter, createWebHistory } from "vue-router";
 
+import Login from '@/pages/Login.vue';
+import BenefitsEntry from '@/pages/Manipulations/Add/BenefitsEntry.vue';
+import BenefitsUpdate from '@/pages/Manipulations/Edit/BenefitsUpdate.vue';
+import AccountView from '@/pages/Employees/AccountView.vue';
+import RegistrationView from '@/pages/Employees/Registration.vue';
+
 const routes = [
   {
     path: "/",
     name: "Login",
     meta: { requiresAuth: false },
-    component: () => import("@/pages/Login.vue"),
+    component: Login,
   },
   {
     path: "/add-benefits",
     name: "Add-benefits",
     meta: { requiresAuth: false },
-    component: () => import("@/pages/Manipulations/Add/BenefitsEntry.vue"),
+    component: BenefitsEntry,
   },
   {
     path: "/edit-benefits/:id",
     name: "Edit-benefits",
     meta: { requiresAuth: false },
-    component: () => import("@/pages/Manipulations/Edit/BenefitsUpdate.vue"),
+    component: BenefitsUpdate,
   },
   {
     path: "/employees",
     name: "Employees",
-    meta: { requiresAuth: true },
-    component: () => import("@/pages/Employees/AccountView.vue"),
+    meta: { requiresAuth: false },
+    component: AccountView,
+  },
+
+  {
+    path: "/registraion",
+    name: "Registration",
+    meta: { requiresAuth: false },
+    component: RegistrationView,
   },
 ];
 

@@ -1,50 +1,115 @@
 <template>
-  <v-parallax src="../../assets/200.jpg" width="95%" height="950px" style="margin: 2%">
-    <v-sheet color="transparent" rounded width="90%" height="850px" style="margin: 2%">
-      <v-card class="mx-auto justify-center align-center" color="transparent" theme="light" width="80%" height="800"
-        style="margin: 2%" prepend-icon="mdi-rhombus-outline" title="Medical Benefits Office">
-        <v-form v-model="loaded" @submit.prevent="onSubmit" style="
+  <v-parallax
+    src="../../assets/200.jpg"
+    width="95%"
+    height="950px"
+    style="margin: 2%"
+  >
+    <v-sheet
+      color="transparent"
+      rounded
+      width="90%"
+      height="850px"
+      style="margin: 2%"
+    >
+      <v-card
+        class="mx-auto justify-center align-center"
+        color="transparent"
+        theme="light"
+        width="80%"
+        height="800"
+        style="margin: 2%"
+        prepend-icon="mdi-rhombus-outline"
+        title="Medical Benefits Office"
+      >
+        <v-form
+          v-model="loaded"
+          @submit.prevent="onSubmit"
+          style="
             text-align: center;
             background-color: transparent;
             max-width: 100%;
             height: 75%;
             margin: 2%;
             padding: 2px;
-          ">
+          "
+        >
           <br />
-          <v-text-field v-model="form.email" :readonly="loading" class="loginEmail" clearable label="Email"
-            color="black" bg-color="teal" required></v-text-field>
+          <v-text-field
+            v-model="form.email"
+            :readonly="loading"
+            class="loginEmail"
+            clearable
+            label="Email"
+            color="black"
+            bg-color="teal"
+            required
+          ></v-text-field>
 
-          <v-text-field v-model="form.password" :readonly="loading" clearable label="Password" bg-color="blue"
-           :type="showPassword ? 'text' : 'password'" class="loginEmail" @click:clear="clearPassword">
+          <v-text-field
+            v-model="form.password"
+            :readonly="loading"
+            clearable
+            label="Password"
+            bg-color="blue"
+            :type="showPassword ? 'text' : 'password'"
+            class="loginEmail"
+            @click:clear="clearPassword"
+          >
             <template #append>
               <v-icon @click="togglePasswordVisibility" class="icon-right">{{
                 showPassword ? "mdi-eye-off" : "mdi-eye"
-                }}</v-icon>
+              }}</v-icon>
             </template>
           </v-text-field>
           <br />
 
-          <v-btn :disabled="!form" :loading="loading" color="success" size="large" type="submit" variant="flat"
-            width="300" height="50">
+          <v-btn
+            :disabled="!form"
+            :loading="loading"
+            color="success"
+            size="large"
+            type="submit"
+            variant="flat"
+            width="300"
+            height="50"
+          >
             Sign In
           </v-btn>
           <br />
           <br />
 
-          <v-btn :disabled="!form" :loading="loading" color="success" size="large" type="submit" variant="flat"
-            width="300" height="50">
-            <router-link to="/createAdministrator" class="text-decoration-none">
+          <v-btn
+            :disabled="!form"
+            :loading="loading"
+            color="success"
+            size="large"
+            type="submit"
+            variant="flat"
+            width="300"
+            height="50"
+          >
+            <router-link to="/Registration" class="text-decoration-none">
               <span> Create Account? </span>
-            </router-link></v-btn>
+            </router-link></v-btn
+          >
           <br />
           <br />
 
-          <v-btn :disabled="!form" :loading="loading" color="success" size="large" type="submit" variant="flat"
-            width="300" height="50">
-            <router-link to="/forgotPassword" class="text-decoration-none">
+          <v-btn
+            :disabled="!form"
+            :loading="loading"
+            color="success"
+            size="large"
+            type="submit"
+            variant="flat"
+            width="300"
+            height="50"
+          >
+            <router-link to="/Registration" class="text-decoration-none">
               <span> Forgot Password? </span>
-            </router-link></v-btn>
+            </router-link></v-btn
+          >
           <br />
           <p>
             {{ tradeMark }} |
@@ -97,8 +162,9 @@ const onSubmit = async () => {
     router.push({ name: "Employees" });
     getInitialData();
   } catch (error) {
-    if (error instanceof Error) {
-      alert(error.message);
+    if (error) {
+      alert(error);
+      console.log("the is error ", error);
     }
   } finally {
     loading.value = false;

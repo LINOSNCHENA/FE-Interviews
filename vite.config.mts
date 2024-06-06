@@ -57,6 +57,7 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
+     // '@': fileURLToPath.resolve(__dirname, 'src'),
     },
     extensions: [
       '.js',

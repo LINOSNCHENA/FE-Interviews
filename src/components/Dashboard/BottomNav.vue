@@ -6,7 +6,7 @@
 
       <v-btn :to="{ name: 'Employees' }">
         <v-icon aria-hidden="true">mdi-account-supervisor</v-icon>
-        <span>1Employees </span>
+        <span>1. Employees </span>
       </v-btn>
 
       <v-spacer />
@@ -17,7 +17,7 @@
         v-if="userEmails"
       >
         <v-icon aria-hidden="true">mdi-finance</v-icon>
-        <span> 2Famiies | {{ loansNumber }}</span>
+        <span> 2. Famiies | {{ loansNumber }}</span>
       </v-btn>
 
       <v-spacer />
@@ -28,9 +28,8 @@
         v-if="userEmails"
       >
         <v-icon aria-hidden="true">mdi-finance</v-icon>
-        <span> 3AddData | {{ loansNumber }}</span>
+        <span> 3. AddData | {{ loansNumber }}</span>
       </v-btn>
-
       <v-spacer />
 
       <v-btn to="{ name: 'Login' }">
@@ -39,8 +38,8 @@
           userEmails.toLowerCase()
         }}</span>
       </v-btn>
-
       <v-spacer />
+      
     </v-bottom-navigation>
   </div>
 </template>
