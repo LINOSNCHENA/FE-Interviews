@@ -1,7 +1,7 @@
 <template>
   <div v-if="salaries">
     <v-data-table :headers="headerWages" :items="salaries" :items-per-page="20" :search="search" color="lime-lighten-1"
-      class="elevation-1" v-if="salaries">
+      class="elevation-1">
       <template v-slot:item="{ item }">
         <tr>
           <td>{{ item.id }}</td>
@@ -48,13 +48,14 @@ onMounted(async () => {
     if (result) {
       salaries.value = result;
       counted.value = result.length;
+      console.log(salaries.value);
+      
     } else {
       error.value = "No salaries were found.";
     }
   } catch (e) {
     error.value = "An error occurred while fetching the salaries.";
     console.log(e);
-    console.error(e);
   }
 });
 

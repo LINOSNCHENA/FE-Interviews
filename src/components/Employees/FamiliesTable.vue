@@ -1,8 +1,6 @@
 <template>
   <div v-if="families">
-    {{ families.length }}
-
-    <v-data-table :headers="headerFamilies" :items="families" :items-per-page="20" :search="search"
+      <v-data-table :headers="headerFamilies" :items="families" :items-per-page="20" :search="search"
       color="lime-lighten-1" class="yellow">
       <template v-slot:item="{ item }">
         <tr>
@@ -40,9 +38,9 @@ onMounted(async () => {
   try {
     const result = await FamiliesServices.getFamilyRecords();
     if (result) {
-      families.value = result;
-    
-      counted.value = result.length
+      families.value = result;    
+      counted.value = result.length;
+      console.log(families.value);
     } else {
       error.value = "No salaries were found.";
     }

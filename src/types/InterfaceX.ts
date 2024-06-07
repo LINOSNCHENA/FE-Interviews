@@ -9,14 +9,11 @@ export interface Salary {
   emailx: string;
   periodMonth: string;
   periodYear: number;
-
   costBenefits: number;    
   paycheck: number; 
   grosspay: number; 
-
   created: Date; 
   updated: Date;
-
   marriage?: string;
   children?: number;
   discounted?: number;
