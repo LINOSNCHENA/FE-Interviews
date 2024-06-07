@@ -1,5 +1,5 @@
-import { createRouter, createWebHistory } from "vue-router";
 
+import { createRouter, createWebHistory } from "vue-router";
 import Login from '@/pages/Login.vue';
 import BenefitsEntry from '@/pages/Manipulations/Add/BenefitsEntry.vue';
 import BenefitsUpdate from '@/pages/Manipulations/Edit/BenefitsUpdate.vue';
@@ -31,7 +31,6 @@ const routes = [
     meta: { requiresAuth: false },
     component: AccountView,
   },
-
   {
     path: "/registraion",
     name: "Registration",
