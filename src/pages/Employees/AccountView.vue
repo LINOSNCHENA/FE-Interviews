@@ -50,7 +50,6 @@ import { useEmployeeStore } from "@/stores/DataEmployees";
 const store = useEmployeeStore();
 const tab = ref("health");
 const salaries = ref<any[]>([]);
-
 const permit = ref(false);
 const emailx = ref("marvin");
 const counted = ref(0);

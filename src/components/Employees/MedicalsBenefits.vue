@@ -6,8 +6,7 @@
         <tr>
           <td>{{ item.id }}</td>
           <td>{{ item.namex }}</td>
-          <td>{{ item.numberx }}</td>
-          <td>{{ item.emailx }}</td>
+                 <td>{{ item.emailx }}</td>
           <td>{{ item.costBenefits }}</td>
           <td>{{ item.paycheck }}</td>
           <td>{{ item.grosspay }}</td>

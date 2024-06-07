@@ -4,7 +4,6 @@
     <h3 class="head">
       {{ title.toUpperCase() }}
     </h3>
-
     <div v-if="payCheck">
       <v-card class="mx-auto justify-space-evenly customa-portfolio" color="#D7CCC8" theme="light" width="95%"
         height="98%" prepend-icon="mdi-rhombus-outline" title="Employee Paycheck and Medical Benefits | Updating">
@@ -30,14 +29,13 @@
 
             <v-col cols="5" v-if="payCheck && payCheck.families">
               FAMILY SCREEN | {{ firstLetter }} | {{ childrenChecks }}
-
               <v-row>
                 <v-col cols="6">
                   <v-text-field v-model="payCheck.children" label="01 A-children" variant="outlined"></v-text-field>
                 </v-col>
                 <v-col cols="6">
                   <v-text-field v-model="payCheck.families.length" label="02 Family Size"
-                    variant="outlined"></v-text-field>          
+                    variant="outlined"></v-text-field>
                 </v-col>
               </v-row>
 
@@ -75,7 +73,7 @@
               </v-row>
 
               <v-row>
-                <v-col cols="6" v-if="payCheck.families[3]">             
+                <v-col cols="6" v-if="payCheck.families[3]">
                   <v-text-field v-model="payCheck.families[3].namex" label="01 Name of Child four"
                     variant="outlined"></v-text-field>
                 </v-col>
@@ -143,6 +141,9 @@ const customId = ref(router.currentRoute.value.params.id);
 const tabX = ref("health");
 const firstLetter = ref(0);
 const childrenChecks = ref(0);
+const years = [2023, 2024, 2025];
+const gender = ["Male", "Female", "Others"];
+const marriage = ["Yes", "No"];
 
 const validateForm = () => {
   const isWorkedNumeric = !isNaN(parseFloat(payCheck.value.periodYear));
@@ -152,9 +153,6 @@ const validateForm = () => {
     parseFloat(payCheck.value.periodYear) <= 2025;
   validfx.value = isWorkedValid;
 };
-const years = [2023, 2024, 2025];
-const gender = ["Male", "Female", "Others"];
-const marriage = ["Yes", "No"];
 
 watchEffect(() => {
   validateForm();
@@ -179,29 +177,29 @@ async function updateEmployeesBenefits() {
     }
     let a = payCheck.value.families.map((x: { namex: any }) => x.namex);
     let numberOfChildren = a.length;
-    const filteredNames = a.filter((n: string) => n.startsWith("A"));
-    const discountedA = (filteredNames.length * 500 * 10) / 100;
-    const W1: Salary = {
+    const filteredAANames = a.filter((n: string) => n.startsWith("A"));
+    const discountedA = (filteredAANames.length * 500 * 10) / 100;
+    const deducts = (1000 + 500 * numberOfChildren + married * 500) / 12; // Monthly
+    const monthlyBenefit: Salary = {
       id: customId.value,
       namex: payCheck.value.namex,
       numberx: payCheck.value.numberx,
-
       periodMonth: payCheck.value.periodMonth,
       periodYear: payCheck.value.periodYear,
-      updated: payCheck.value.updated,
       created: payCheck.value.created,
+      paycheck: 2000 * 2, // Monthly
+
+      updated: new Date(),
       emailx: payCheck.value.emailx,
-      paycheck: 2000 / 26,
-      costBenefits:
-        (1000 + 500 * numberOfChildren + married * 500 - discountedA) / 12,
-      grosspay: payCheck.value.grosspay,
+      costBenefits: deducts, // Monthly
       children: numberOfChildren,
       discounted: discountedA,
+      grosspay: (2000 * 2) - deducts,
       marriage: payCheck.value.marriage,
       families: payCheck.value.families.length,
     };
-    console.log(W1);
-    storeAPI.updateOrAddBenefits(W1);
+    console.log(monthlyBenefit);
+    storeAPI.updateOrAddBenefits(monthlyBenefit);
     goBackPage();
   }
 }

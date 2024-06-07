@@ -26,7 +26,6 @@ export const useTableStore = defineStore("tableStore", {
         key: "id",
       },
       { title: "Employee", key: "namex" },
-      { title: "ManNo.", key: "numberx" },
       { title: "Email", key: "emailx" },
       { title: "Benefits", key: "costBenefits" },
       { title: "Paycheck", key: "paycheck" },

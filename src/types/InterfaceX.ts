@@ -6,7 +6,6 @@ export interface Salary {
   [key: string]: any;
   id: any;
   namex: string;
-  numberx: string;
   emailx: string;
   periodMonth: string;
   periodYear: number;

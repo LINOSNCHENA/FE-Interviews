@@ -6,8 +6,7 @@ const salariesData: Salary[] = [
   {
     id: 1,
     namex: "Presly",
-    numberx: "1234567890",
-    emailx: "alice@example.com",
+     emailx: "alice@example.com",
     periodMonth: "January",
     periodYear: 2024,
     created: new Date(),
