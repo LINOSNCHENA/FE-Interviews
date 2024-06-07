@@ -129,8 +129,8 @@
 <script setup lang="ts">
 import { onMounted, ref, watchEffect } from "vue";
 import { useRouter } from "vue-router";
-import { useEmployeeStore } from "@/stores/DataEmployees";
-import { Salary } from "@/types/InterfaceX";
+import { useEmployeeStore } from "../../../stores/DataEmployees";
+import { Salary } from "../../../types/InterfaceX";
 const storeAPI = useEmployeeStore();
 const router = useRouter();
 const loading = ref(false);

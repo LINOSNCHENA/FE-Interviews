@@ -1,12 +1,13 @@
 <template>
   <div v-if="salaries">
     <v-data-table :headers="headerWages" :items="salaries" :items-per-page="20" :search="search" color="lime-lighten-1"
-      class="elevation-1" v-if="salaries">
-      <template v-slot:item="{ item }">
+      class="elevation-1">
+      <template v-slot:item="{ item, index }">
         <tr>
+          <td>{{ index + 1 }}</td>
+           <td>{{ item.namex }}</td>
+          <td>{{ item.emailx }}</td>
           <td>{{ item.id }}</td>
-          <td>{{ item.namex }}</td>
-                  <td>{{ item.emailx }}</td>
           <td>{{ item.costBenefits }}</td>
           <td>{{ item.paycheck }}</td>
           <td>{{ item.grosspay }}</td>
@@ -31,9 +32,9 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
-import EmployeeServices from "@/services/EmployeeServices";
-import { Salary } from "@/types/InterfaceX";
-import { useTableStore } from "@/stores/DataTables";
+import EmployeeServices from "../../services/EmployeeServices";
+import { Salary } from "../../types/InterfaceX";
+import { useTableStore } from "../../stores/DataTables";
 const storeTable = useTableStore();
 const headerWages = storeTable.headSalaries;
 const search = ref("");
@@ -48,13 +49,13 @@ onMounted(async () => {
     if (result) {
       salaries.value = result;
       counted.value = result.length;
+      console.log(salaries.value);
     } else {
       error.value = "No salaries were found.";
     }
   } catch (e) {
     error.value = "An error occurred while fetching the salaries.";
     console.log(e);
-    console.error(e);
   }
 });
 

@@ -9,11 +9,11 @@ declare module 'vue' {
   export interface GlobalComponents {
     AppFooter: typeof import('./components/AppFooter.vue')['default']
     BottomNav: typeof import('./components/Dashboard/BottomNav.vue')['default']
+    DiscountedChildren: typeof import('./components/Employees/DiscountedChildren.vue')['default']
     EmployeesTable: typeof import('./components/Employees/EmployeesTable.vue')['default']
     FamiliesTable: typeof import('./components/Employees/FamiliesTable.vue')['default']
     HelloWorld: typeof import('./components/HelloWorld.vue')['default']
     LoginPage: typeof import('./components/Dashboard/LoginPage.vue')['default']
-    MedicalsBenefits: typeof import('./components/Employees/MedicalsBenefits.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
   }

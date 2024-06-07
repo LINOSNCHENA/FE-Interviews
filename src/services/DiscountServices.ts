@@ -1,17 +1,18 @@
+
 import { useEmployeeStore } from "../stores/DataEmployees";
 import { Family } from "../types/InterfaceX";
 
 
-class FamiliesServices {
-  async getFamilyRecords(): Promise<Family[] | undefined> {
+class BenefitServices {
+  async getDiscountedRecords(): Promise<Family[] | undefined> {
     const storeData = useEmployeeStore();
-    storeData.fetchFamilies();
+    storeData.fetchDiscounted();
     try {
-      const benefits = storeData.loadedFamilies;
-      const employeeBenefits = benefits
+      const benefits = storeData.loadedDiscounted;
+      const childBenefits = benefits
         .filter((benefits: Family) => benefits.id !== null)
-        .map(FamiliesServices.map);
-      return employeeBenefits;
+        .map(BenefitServices.map);
+      return childBenefits;
     } catch (e) {
       console.error("An error occurred retrieving data", e);
     }
@@ -19,10 +20,10 @@ class FamiliesServices {
 
   async getTotalRecords(): Promise<Number | undefined> {
     const storeData = useEmployeeStore();
-    storeData.fetchFamilies();
+    storeData.fetchDiscounted();
     try {
-      const employeeTotals = storeData.loadedFamilies.length;
-      return employeeTotals;
+      const childrenDiscounted = storeData.loadedDiscounted.length;
+      return childrenDiscounted;
     } catch (e) {
       console.error("An error occurred retrieving data", e);
     }
@@ -39,4 +40,4 @@ class FamiliesServices {
   }
 }
 
-export default new FamiliesServices();
+export default new BenefitServices();

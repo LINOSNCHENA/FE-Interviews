@@ -1,7 +1,8 @@
 
 
-import { useEmployeeStore } from "@/stores/DataEmployees";
-import { Salary } from "@/types/InterfaceX";
+import { useEmployeeStore } from "../stores/DataEmployees";
+import { Salary } from "../types/InterfaceX";
+
 
 class EmployeeServices {
   async getBenefitsRecords(): Promise<Salary[] | undefined> {
@@ -35,19 +36,17 @@ class EmployeeServices {
       namex: benefits.namex,
       numberx: benefits.numberx,
       emailx: benefits.emailx,
-      periodMonth: benefits.periodMonth,    
+      periodMonth: benefits.periodMonth,
       periodYear: benefits.periodYear,
-
       grosspay: benefits.grosspay,
       paycheck: benefits.paycheck,
       costBenefits: benefits.costBenefits,
       created: benefits.created,
       updated: benefits.updated,
-
       marriage: benefits.marriage,
       children: benefits.children,
       discounted: benefits.discounted,
-      families: benefits.families, 
+      families: benefits.families,
 
     } as Salary;
   }
