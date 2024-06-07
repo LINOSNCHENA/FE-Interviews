@@ -31,13 +31,11 @@ export const useTableStore = defineStore("tableStore", {
       { title: "Paycheck", key: "paycheck" },
       { title: "Discount", key: "discounted" },
       { title: "Gross", key: "grosspay" },
-
       { title: "Year", key: "periodYear" },
       { title: "Month", key: "periodMonth" },
       { title: "Marriage", key: "marriage" },
       { title: "Children", key: "children" },
-
-
+      
       { title: "Edit", key: "edit" },//
       { title: "Update", key: "updated" },
       { title: "Dated11", key: "created" },
