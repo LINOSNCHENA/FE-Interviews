@@ -1,8 +1,5 @@
-
-
 import { useEmployeeStore } from "../stores/DataEmployees";
 import { Salary } from "../types/InterfaceX";
-
 
 class EmployeeServices {
   async getBenefitsRecords(): Promise<Salary[] | undefined> {

@@ -1,5 +1,6 @@
 <template>
-  <v-form ref="form" class="mx-2 body" v-model="validfx" lazy-validation @submit.prevent="createEmployeesBenefits">
+  <v-form ref="form" class="mx-2 body" v-model="validfx"
+   lazy-validation @submit.prevent="createEmployeesBenefits">
     <br />
     <h3 class="head">
       {{ title.toUpperCase() }}
@@ -165,7 +166,7 @@ watch(children, (newValue) => {
 });
 
 onMounted(async () => {
-  await storeAPI.fetchSalaries();
+  storeAPI.fetchSalaries();
 });
 
 async function createEmployeesBenefits() {

@@ -4,104 +4,211 @@
     <h3 class="head">
       {{ title.toUpperCase() }}
     </h3>
+
     <div v-if="payCheck">
-      <v-card class="mx-auto justify-space-evenly customa-portfolio" color="#D7CCC8" theme="light" width="95%"
-        height="98%" prepend-icon="mdi-rhombus-outline" title="Employee Paycheck and Medical Benefits | Updating">
-        <v-form ref="form" class="mx-2" v-model="validfx" lazy-validation @submit.prevent="updateEmployeesBenefits">
+      <v-card
+        class="mx-auto justify-space-evenly customa-portfolio"
+        color="#D7CCC8"
+        theme="light"
+        width="95%"
+        height="98%"
+        prepend-icon="mdi-rhombus-outline"
+        title="Employee Paycheck and Medical Benefits | Updating"
+      >
+        <v-form
+          ref="form"
+          class="mx-2"
+          v-model="validfx"
+          lazy-validation
+          @submit.prevent="updateEmployeesBenefits"
+        >
           <v-alert v-if="!validfx" type="error">
             Period is out pf range. Please correct. the invalid input data.
           </v-alert>
+
           <v-row class="mx-auto justify-space-evenly">
             <v-col cols="5">
               <!-- --------------------------------------|EDITABLE|-------2----------------- -->
               EMPLOYEE RECORDS
-              <v-text-field v-model="payCheck.namex" label="01 Customer name" bg-color="teal" variant="solo"
-                style="height: 70px"></v-text-field>
-              <v-text-field v-model="payCheck.emailx" label="02 Email"></v-text-field>
-              <v-text-field v-model="payCheck.numberx" label="03 IDnumber"></v-text-field>
-              <v-select v-model="payCheck.marriage" label="01  Marriage" variant="outlined"
-                :items="marriage"></v-select>
-              <v-text-field v-model="payCheck.grosspay" label="05 Gross Pay" prefix="K"></v-text-field>
-              <v-text-field type="text" label="06 Period Month" v-model="payCheck.periodMonth"></v-text-field>
-              <v-select v-model="payCheck.periodYear" label="07 Period year" variant="outlined"
-                :items="years"></v-select>
+              <v-text-field
+                v-model="payCheck.namex"
+                label="01 Customer name"
+                bg-color="teal"
+                variant="outlined"
+              ></v-text-field>
+              <v-text-field
+                v-model="payCheck.emailx"
+                label="02 Email"
+                variant="outlined"
+              ></v-text-field>
+              <v-select
+                v-model="payCheck.marriage"
+                label="03  Marriage"
+                variant="outlined"
+                :items="marriage"
+              ></v-select>
+              <v-text-field
+                v-model="payCheck.grosspay"
+                label="04 Gross Pay"
+                prefix="K"
+                variant="outlined"
+              ></v-text-field>
+              <v-text-field
+                type="text"
+                label="05 Period Month"
+                v-model="payCheck.periodMonth"
+                variant="outlined"
+              ></v-text-field>
+              <v-select
+                v-model="payCheck.periodYear"
+                label="06 Period year"
+                variant="outlined"
+                :items="years"
+              ></v-select>
             </v-col>
 
             <v-col cols="5" v-if="payCheck && payCheck.families">
               FAMILY SCREEN | {{ firstLetter }} | {{ childrenChecks }}
               <v-row>
                 <v-col cols="6">
-                  <v-text-field v-model="payCheck.children" label="01 A-children" variant="outlined"></v-text-field>
+                  <v-text-field
+                    v-model="payCheck.children"
+                    label="01 A-children"
+                    variant="outlined"
+                  ></v-text-field>
                 </v-col>
                 <v-col cols="6">
-                  <v-text-field v-model="payCheck.families.length" label="02 Family Size"
-                    variant="outlined"></v-text-field>
+                  <v-text-field
+                    v-model="payCheck.families.length"
+                    label="02 Family Size"
+                    variant="outlined"
+                  ></v-text-field>
                 </v-col>
               </v-row>
 
               <v-row>
-                <v-col cols="6" v-if="payCheck.families[0]">
-                  <v-text-field v-model="payCheck.families[0].namex" label="01 Name oF Child One"
-                    variant="outlined"></v-text-field>
+                <v-col cols="6" v-if="payCheck.children > 0">
+                  <v-text-field
+                    v-model="payCheck.families[0].namex"
+                    label="01 Name oF Child One"
+                    variant="outlined"
+                  ></v-text-field>
                 </v-col>
-                <v-col cols="6" v-if="payCheck.families[0]">
-                  <v-select v-model="payCheck.families[0].gender" label="01  Gender of Child" variant="outlined"
-                    :items="gender"></v-select>
-                </v-col>
-              </v-row>
-
-              <v-row>
-                <v-col cols="6" v-if="payCheck.families[1]">
-                  <v-text-field v-model="payCheck.families[1].namex" label="01 Name of Child Two"
-                    variant="outlined"></v-text-field>
-                </v-col>
-                <v-col cols="6" v-if="payCheck.families[1]">
-                  <v-select v-model="payCheck.families[1].gender" label="02  Gender of Child" variant="outlined"
-                    :items="gender"></v-select>
+                <v-col cols="6" v-if="payCheck.children > 0">
+                  <v-select
+                    v-model="payCheck.families[0].gender"
+                    label="01  Gender of Child"
+                    variant="outlined"
+                    :items="gender"
+                  ></v-select>
                 </v-col>
               </v-row>
 
               <v-row>
-                <v-col cols="6" v-if="payCheck.families[2]">
-                  <v-text-field v-model="payCheck.families[2].id" label="01 Name of Child Three"
-                    variant="outlined"></v-text-field>
+                <v-col cols="6" v-if="payCheck.children > 1">
+                  <v-text-field
+                    v-model="payCheck.families[1].namex"
+                    label="01 Name of Child Two"
+                    variant="outlined"
+                  ></v-text-field>
                 </v-col>
-                <v-col cols="6" v-if="payCheck.families[2]">
-                  <v-select v-model="payCheck.families[2].gender" label="02  Gender of Child" variant="outlined"
-                    :items="gender"></v-select>
-                </v-col>
-              </v-row>
-
-              <v-row>
-                <v-col cols="6" v-if="payCheck.families[3]">
-                  <v-text-field v-model="payCheck.families[3].namex" label="01 Name of Child four"
-                    variant="outlined"></v-text-field>
-                </v-col>
-                <v-col cols="6" v-if="payCheck.families[3]">
-                  <v-select v-model="payCheck.families[3].gender" label="02  Gender of Child" variant="outlined"
-                    :items="gender"></v-select>
+                <v-col cols="6" v-if="payCheck.cildren > 1">
+                  <v-select
+                    v-model="payCheck.families[1].gender"
+                    label="02  Gender of Child"
+                    variant="outlined"
+                    :items="gender"
+                  ></v-select>
                 </v-col>
               </v-row>
 
               <v-row>
-                <v-col cols="6" v-if="payCheck.families[4]">
-                  <v-text-field v-model="payCheck.families[4].namex" label="01 Name of Child five"
-                    variant="outlined"></v-text-field>
+                <v-col cols="6" v-if="payCheck.children > 2">
+                  <v-text-field
+                    v-model="payCheck.families[2].id"
+                    label="01 Name of Child Three"
+                    variant="outlined"
+                  ></v-text-field>
                 </v-col>
-                <v-col cols="6" v-if="payCheck.families[4]">
-                  <v-select v-model="payCheck.families[4].gender" label="02  Gender of Child" variant="outlined"
-                    :items="gender"></v-select>
+                <v-col cols="6" v-if="payCheck.children > 2">
+                  <v-select
+                    v-model="payCheck.families[2].gender"
+                    label="02  Gender of Child"
+                    variant="outlined"
+                    :items="gender"
+                  ></v-select>
                 </v-col>
               </v-row>
 
               <v-row>
-                <v-col cols="6" v-if="payCheck.families[5]">
-                  <v-text-field v-model="payCheck.families[5].namex" label="01 Name of Child six"
-                    variant="outlined"></v-text-field>
+                <v-col cols="6" v-if="payCheck.children > 3">
+                  <v-text-field
+                    v-model="payCheck.families[3].namex"
+                    label="01 Name of Child four"
+                    variant="outlined"
+                  ></v-text-field>
                 </v-col>
-                <v-col cols="6" v-if="payCheck.families[5]">
-                  <v-select v-model="payCheck.families[5].gender" label="02  Gender of Child" variant="outlined"
-                    :items="gender"></v-select>
+                <v-col cols="6" v-if="payCheck.children > 3">
+                  <v-select
+                    v-model="payCheck.families[3].gender"
+                    label="02  Gender of Child"
+                    variant="outlined"
+                    :items="gender"
+                  ></v-select>
+                </v-col>
+              </v-row>
+
+              <v-row>
+                <v-col cols="6" v-if="payCheck.children > 4">
+                  <v-text-field
+                    v-model="payCheck.families[4].namex"
+                    label="01 Name of Child five"
+                    variant="outlined"
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="6" v-if="payCheck.children > 4">
+                  <v-select
+                    v-model="payCheck.families[4].gender"
+                    label="02  Gender of Child"
+                    variant="outlined"
+                    :items="gender"
+                  ></v-select>
+                </v-col>
+              </v-row>
+
+              <v-row>
+                <v-col cols="6" v-if="payCheck.children > 5">
+                  <v-text-field
+                    v-model="payCheck.families[5].namex"
+                    label="01 Name of Child six"
+                    variant="outlined"
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="6" v-if="payCheck.children > 5">
+                  <v-select
+                    v-model="payCheck.families[5].gender"
+                    label="02  Gender of Child"
+                    variant="outlined"
+                    :items="gender"
+                  ></v-select>
+                </v-col>
+              </v-row>
+
+              <v-row>
+                <v-col cols="6" v-if="payCheck.children > 6">
+                  <v-text-field
+                    v-model="payCheck.families[6].namex"
+                    label="01 Name of Child Two"
+                    variant="outlined"
+                  ></v-text-field>
+                </v-col>
+                <v-col cols="6" v-if="payCheck.cildren > 6">
+                  <v-select
+                    v-model="payCheck.families[6].gender"
+                    label="02  Gender of Child"
+                    variant="outlined"
+                    :items="gender"
+                  ></v-select>
                 </v-col>
               </v-row>
             </v-col>
@@ -110,13 +217,29 @@
           <!-- ---------------------------------|ActionsBox|------------------1---------------- -->
 
           <v-card-actions class="mx-auto justify-space-evenly">
-            <v-btn color="#B3E5FC" variant="elevated" width="165" height="40" min-width="140" size="small"
-              @click="updateEmployeesBenefits" :disabled="!validfx">
+            <v-btn
+              color="#B3E5FC"
+              variant="elevated"
+              width="165"
+              height="40"
+              min-width="140"
+              size="small"
+              @click="updateEmployeesBenefits"
+              :disabled="!validfx"
+            >
               Update Benefits | {{ payCheck.fotoz }}
             </v-btn>
 
-            <v-btn color="#E0F7FA" variant="elevated" width="165" height="40" min-width="140" size="small"
-              :disabled="loading" :to="{ name: 'Employees', query: { tab: tabX } }">
+            <v-btn
+              color="#E0F7FA"
+              variant="elevated"
+              width="165"
+              height="40"
+              min-width="140"
+              size="small"
+              :disabled="loading"
+              :to="{ name: 'Employees', query: { tab: tabX } }"
+            >
               Benefits listed
             </v-btn>
           </v-card-actions>
@@ -170,7 +293,7 @@ const updatesFromAPI = () => {
 };
 
 async function updateEmployeesBenefits() {
-  if (payCheck.value.numberx) {
+  if (payCheck.value.namex) {
     let married = 0;
     if (payCheck.value.marriage === "Yes") {
       married = 1;
@@ -194,7 +317,7 @@ async function updateEmployeesBenefits() {
       costBenefits: deducts, // Monthly
       children: numberOfChildren,
       discounted: discountedA,
-      grosspay: (2000 * 2) - deducts,
+      grosspay: 2000 * 2 - deducts,
       marriage: payCheck.value.marriage,
       families: payCheck.value.families.length,
     };

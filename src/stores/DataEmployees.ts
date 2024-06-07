@@ -68,7 +68,7 @@ const salariesData: Salary[] = [
       },
     ],
     marriage: "No",
-    children: 90,
+    children: 2,
     grosspay: 90,
     paycheck: 90,
     costBenefits: 90,
@@ -92,7 +92,7 @@ const salariesData: Salary[] = [
       },
     ],
     marriage: "No",
-    children: 90,
+    children: 3,
     grosspay: 90,
     paycheck: 90,
     costBenefits: 90,
@@ -123,7 +123,7 @@ const salariesData: Salary[] = [
       },
     ],
     marriage: "No",
-    children: 90,
+    children: 4,
     grosspay: 90,
     paycheck: 90,
     costBenefits: 90,
@@ -171,20 +171,18 @@ export const useEmployeeStore = defineStore("employeeStore", {
     },
 
     fetchDiscounted() {
-      console.log(this.loadedSalaries);
+      // console.log(this.loadedSalaries);
       const kids = this.loadedSalaries.flatMap(
         (salaryRecord: Salary) => salaryRecord.families
       );
-
-      console.log(kids);
+     //  console.log(kids);
       this.discounted = kids.filter((family: Family) =>
         family.namex.startsWith("A")
       );
     },
 
     updateOrAddBenefits(unit: Salary) {
-      console.log("Backed ");
-      try {
+        try {
         if (unit.id !== undefined) {
           const index = this.salaries.findIndex(
             (salary: { id: any }) => salary.id === unit.id

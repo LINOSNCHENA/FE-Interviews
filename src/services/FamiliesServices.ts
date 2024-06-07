@@ -1,7 +1,6 @@
 import { useEmployeeStore } from "../stores/DataEmployees";
 import { Family } from "../types/InterfaceX";
 
-
 class FamiliesServices {
   async getFamilyRecords(): Promise<Family[] | undefined> {
     const storeData = useEmployeeStore();

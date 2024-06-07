@@ -37,6 +37,7 @@ export const useTableStore = defineStore("tableStore", {
       { title: "Month", key: "periodMonth", width: "50px", align: "left", },
       { title: "Marriage", key: "marriage", width: "10px", align: "left", },
       { title: "Children", key: "children", width: "10px", align: "left", },
+      
       { title: "Edit", key: "edit", width: "50px", align: "left", },//
       { title: "Updated", key: "updated", width: "150px", align: "left", },
       { title: "Created", key: "created", width: "150px", align: "left", },
