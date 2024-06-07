@@ -1,7 +1,6 @@
+import { useEmployeeStore } from "../stores/DataEmployees";
+import { Family } from "../types/InterfaceX";
 
-
-import { useEmployeeStore } from "@/stores/DataEmployees";
-import { Family } from "@/types/InterfaceX";
 
 class FamiliesServices {
   async getFamilyRecords(): Promise<Family[] | undefined> {
@@ -36,7 +35,6 @@ class FamiliesServices {
       gender: benefits.gender,
       created: benefits.created,
       updated: benefits.updated,
-
     } as Family;
   }
 }

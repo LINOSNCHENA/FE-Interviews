@@ -1,18 +1,16 @@
 
+import { useEmployeeStore } from "../stores/DataEmployees";
+import { Family } from "../types/InterfaceX";
 
-import { useEmployeeStore } from "@/stores/DataEmployees";
-import { Salary } from "@/types/InterfaceX";
 
 class BenefitServices {
-  async getDiscountedRecords(): Promise<Salary[] | undefined> {
+  async getDiscountedRecords(): Promise<Family[] | undefined> {
     const storeData = useEmployeeStore();
-
-
     storeData.fetchDiscounted();
     try {
       const benefits = storeData.loadedDiscounted;
       const childBenefits = benefits
-        .filter((benefits: Salary) => benefits.id !== null)
+        .filter((benefits: Family) => benefits.id !== null)
         .map(BenefitServices.map);
       return childBenefits;
     } catch (e) {
@@ -22,7 +20,7 @@ class BenefitServices {
 
   async getTotalRecords(): Promise<Number | undefined> {
     const storeData = useEmployeeStore();
-    storeData.fetchSalaries();
+    storeData.fetchDiscounted();
     try {
       const childrenDiscounted = storeData.loadedDiscounted.length;
       return childrenDiscounted;
@@ -31,26 +29,14 @@ class BenefitServices {
     }
   }
 
-  private static map(benefits: Salary): Salary {
+  private static map(benefits: Family): Family {
     return {
       id: benefits.id,
       namex: benefits.namex,
-      numberx: benefits.numberx,
-      emailx: benefits.emailx,
-      periodMonth: benefits.periodMonth,    
-      periodYear: benefits.periodYear,
-
-      grosspay: benefits.grosspay,
-      paycheck: benefits.paycheck,
-      costBenefits: benefits.costBenefits,
+      gender: benefits.gender,
       created: benefits.created,
       updated: benefits.updated,
-
-      marriage: benefits.marriage,
-      children: benefits.children,
-      discounted: benefits.discounted,
-      families: benefits.families, 
-    } as Salary;
+    } as Family;
   }
 }
 

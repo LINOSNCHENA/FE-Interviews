@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { Family, Salary } from "@/types/InterfaceX";
+import { Family, Salary } from "../types/InterfaceX";
 
 // Dummy data
 const salariesData: Salary[] = [
@@ -86,7 +86,6 @@ const salariesData: Salary[] = [
       {
         id: 2,
         namex: "Albert",
-        relations: "child",
         created: new Date(),
         updated: new Date(),
         gender: "Male",
@@ -136,7 +135,6 @@ interface EmployeeState {
   loading: boolean;
   dateStamp: string | null;
   error: string | null;
-
   salaries: Salary[];
   families: Family[];
   discounted: Family[];
@@ -168,7 +166,7 @@ export const useEmployeeStore = defineStore("employeeStore", {
 
     fetchFamilies() {
       this.families = this.loadedSalaries.flatMap(
-        (x: { families: any; }) => x.families,
+        (x: { families: any }) => x.families
       );
     },
 
@@ -176,28 +174,29 @@ export const useEmployeeStore = defineStore("employeeStore", {
       console.log(this.loadedSalaries);
       const kids = this.loadedSalaries.flatMap(
         (salaryRecord: Salary) => salaryRecord.families
-      )
+      );
 
       console.log(kids);
-      this.discounted = kids.filter(
-        (family: Family) => family.namex.startsWith('A')
+      this.discounted = kids.filter((family: Family) =>
+        family.namex.startsWith("A")
       );
     },
-
 
     updateOrAddBenefits(unit: Salary) {
       console.log("Backed ");
       try {
         if (unit.id !== undefined) {
           const index = this.salaries.findIndex(
-            (salary: { id: any; }) => salary.id === unit.id,
+            (salary: { id: any }) => salary.id === unit.id
           );
           if (index === -1) return { error: "Unit not found" };
           this.salaries.splice(index, 1, unit);
           console.log(`Updated unit with ID: ${unit.id}`);
         } else {
           unit.id = this.salaries.length
-            ? Math.max(...this.salaries.map((salary: { id: any; }) => salary.id!)) + 1
+            ? Math.max(
+              ...this.salaries.map((salary: { id: any }) => salary.id!)
+            ) + 1
             : 1;
           this.salaries.push(unit);
           console.log(`Added new unit with ID: ${unit.id}`);

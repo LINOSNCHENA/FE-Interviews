@@ -1,22 +1,15 @@
 <template>
   <div v-if="families">
-    <v-data-table
-      :headers="headerFamilies"
-      :items="families"
-      :items-per-page="20"
-      :search="search"
-      color="lime-lighten-1"
-      class="elevation-1"
-    >
-      <template v-slot:item="{ item }">
+    <v-data-table :headers="headerFamilies" :items="families" :items-per-page="20" :search="search"
+      color="lime-lighten-1" class="elevation-1">
+      <template v-slot:item="{ item, index }">
         <tr>
-          <td>{{ item.id }}</td>
+          <td>{{ index + 1 }}</td>
           <td>{{ item.namex }}</td>
+          <td>{{ item.id }}</td>
           <td>{{ item.gender }}</td>
           <td>
-            <router-link
-              :to="{ name: 'Edit-benefits', params: { id: item.id } }"
-            >
+            <router-link :to="{ name: 'Edit-benefits', params: { id: item.id } }">
               <v-icon small>mdi-monitor-edit</v-icon>
             </router-link>
             | Edit
@@ -31,9 +24,9 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
-import DiscountServices from "@/services/DiscountServices";
-import { Family } from "@/types/InterfaceX";
-import { useTableStore } from "@/stores/DataTables";
+import DiscountServices from "../../services/DiscountServices";
+import { Family } from "../../types/InterfaceX";
+import { useTableStore } from "../../stores/DataTables";
 const storeTable = useTableStore();
 const headerFamilies = storeTable.headFamilies;
 const search = ref("");

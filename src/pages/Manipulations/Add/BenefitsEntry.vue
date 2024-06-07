@@ -6,10 +6,9 @@
     </h3>
 
     <v-row>
-        <v-col cols="6">
+      <v-col cols="6">
         <v-select v-model="namex" label="01 Names" :items="staffNames" variant="outlined"></v-select>
       </v-col>
-
       <v-col cols="6">
         <v-text-field v-model="emailx" label="02 Email" required variant="outlined"></v-text-field>
       </v-col>
@@ -86,10 +85,10 @@
 
       <v-row>
         <v-col cols="6" v-if="children > 5">
-          <v-text-field v-model="families[4].namex" label="06 Name of Child six" variant="outlined"></v-text-field>
+          <v-text-field v-model="families[5].namex" label="06 Name of Child six" variant="outlined"></v-text-field>
         </v-col>
         <v-col cols="6" v-if="children > 5">
-          <v-select v-model="families[4].gender" label="06  Gender of Child" variant="outlined"
+          <v-select v-model="families[5].gender" label="06  Gender of Child" variant="outlined"
             :items="gender"></v-select>
         </v-col>
       </v-row>
@@ -113,7 +112,7 @@
 <script setup lang="ts">
 import { onMounted, ref, watch } from "vue";
 import { useRouter } from "vue-router";
-import { useEmployeeStore } from "@/stores/DataEmployees";
+import { useEmployeeStore } from "../../../stores/DataEmployees";
 
 const storeAPI = useEmployeeStore();
 const router = useRouter();
@@ -122,12 +121,10 @@ const validfx = ref(false);
 const periodMonth = ref("");
 const namex = ref("");
 const periodYear = ref(0);
-const tabToOpen = ref("benefits");
-const title = " Add Employee Records";
 const benefits = ref(0);
 const children = ref(0);
+const title = " Add Employee Records";
 const emailx = ref("salaries");
-const numberx = ref(0);
 const marriage = ref("yes");
 const families = ref<any[]>([]);
 
@@ -148,9 +145,9 @@ const months = [
 
 const years = [2024, 2025];
 const familyMembers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-const marriad = ["yes", "no"];
+const marriad = ["Yes", "No"];
 const gender = ["Male", "Female", "Other"];
-const staffNames = ["James", "Malawo", "Inonge"];
+const staffNames = ["Besa", "James", "Malawo", "Inonge", "Kelvin"];
 
 watch(children, (newValue) => {
   while (families.value.length < newValue) {
@@ -175,7 +172,7 @@ async function createEmployeesBenefits() {
   if (namex.value) {
     const W1: any = {
       namex: namex.value,
-          emailx: emailx.value,
+      emailx: emailx.value,
       periodMonth: periodMonth.value,
       periodYear: periodYear.value,
       updated: new Date(),
@@ -193,7 +190,6 @@ async function createEmployeesBenefits() {
 }
 
 async function goBackPage() {
-  tabToOpen.value = String(namex.value).split(" ")[0].toLowerCase();
-  router.push({ name: "Employees", query: { tab: tabToOpen.value } });
+  router.push({ name: "Employees" });
 }
 </script>

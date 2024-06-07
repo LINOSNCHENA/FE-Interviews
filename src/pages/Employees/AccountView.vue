@@ -1,47 +1,31 @@
 <template>
   <div class="frontFont">
-    <v-tabs
-      v-model="tab"
-      background-color="deep-purple accent-4"
-      dark
-      icons-and-text
-    >
+    <v-tabs v-model="tab" background-color="deep-purple accent-4" dark icons-and-text>
       <v-spacer />
       <v-tab value="health">
         Employees <v-icon>mdi-account-group</v-icon>
       </v-tab>
       <v-spacer />
       <v-tab value="family">
-        <v-icon>mdi-family-tree</v-icon> Family record
-      </v-tab>
+       Families <v-icon>mdi-family-tree</v-icon> </v-tab>
       <v-spacer />
       <v-tab value="benefits">
-        Healthcare Benefits <v-icon>mdi-stethoscope</v-icon>
+        Benefited <v-icon>mdi-stethoscope</v-icon>
       </v-tab>
       <v-spacer />
     </v-tabs>
 
-    <v-card
-      class="mx-auto"
-      color="#26c6da"
-      theme="dark"
-      width="95%"
-      height="100%"
-      min-height="100vh"
-    >
+    <v-card class="mx-auto" color="#26c6da" theme="dark" width="95%" height="100%" min-height="100vh">
       <v-card-text>
-        <!-- ==============================================|3-Evaluations|=================================== -->
         <v-window v-model="tab">
           <v-window-item value="health">
             Employees data | {{ counted1 }}
             <employees-tabel></employees-tabel>
           </v-window-item>
-
           <v-window-item value="family">
             Family members | {{ counted2 }}
             <families-table></families-table>
           </v-window-item>
-
           <v-window-item value="benefits">
             Discount Benefitiaries | {{ counted3 }}
             <discounted-children></discounted-children>
@@ -53,12 +37,13 @@
 </template>
 
 <script setup lang="ts">
-import EmployeesTabel from "@/components/Employees/EmployeesTable.vue";
-import FamiliesTable from "@/components/Employees/FamiliesTable.vue";
-import DiscountedChildren from "@/components/Employees/DiscountedChildren.vue";
 
 import { onMounted, ref } from "vue";
-import { useEmployeeStore } from "@/stores/DataEmployees";
+import EmployeesTabel from "../../components/Employees/EmployeesTable.vue";
+import FamiliesTable from "../../components/Employees/FamiliesTable.vue";
+import DiscountedChildren from "../../components/Employees/DiscountedChildren.vue";
+
+import { useEmployeeStore } from "../../stores/DataEmployees";
 
 const store = useEmployeeStore();
 const tab = ref("health");
@@ -66,10 +51,10 @@ const salaries = ref<any[]>([]);
 const families = ref<any[]>([]);
 const discounted = ref<any[]>([]);
 const permit = ref(false);
-const emailx = ref("marvin");
 const counted1 = ref(0);
 const counted2 = ref(0);
 const counted3 = ref(0);
+const emailx = ref("Administrator");
 
 onMounted(async () => {
   store.fetchSalaries();
@@ -82,20 +67,20 @@ const updatesFromAPI = () => {
   salaries.value = store.loadedSalaries;
   families.value = store.loadedFamilies;
   discounted.value = store.loadedDiscounted;
-  emailx.value = String("zambia");
-  isAuthorizedAdmin(emailx.value);
 
+  isAuthorizedAdmin(emailx.value);
   counted1.value = salaries.value.length;
   counted2.value = families.value.length;
   counted3.value = discounted.value.length;
-
 };
 
-async function isAuthorizedAdmin(user: string | undefined) {
-  const enforcer = String(user);
+async function isAuthorizedAdmin(userEmail: string | undefined) {
+
+  const enforcer = String(userEmail);
   const authorizedEmails = ["test1@gmail.com", "test2@gmail.com"];
   const goodUser = authorizedEmails.includes(enforcer);
   permit.value = goodUser;
+  
   return goodUser;
 }
 </script>

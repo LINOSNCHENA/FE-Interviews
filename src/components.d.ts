@@ -14,7 +14,6 @@ declare module 'vue' {
     FamiliesTable: typeof import('./components/Employees/FamiliesTable.vue')['default']
     HelloWorld: typeof import('./components/HelloWorld.vue')['default']
     LoginPage: typeof import('./components/Dashboard/LoginPage.vue')['default']
-    MedicalsBenefits: typeof import('./components/Employees/MedicalsBenefits.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
   }

@@ -9,14 +9,12 @@ Download and install from Node.js official website.
 
 Open a terminal and  Clone the project repository:
 
-
 ```
 git clone https://github.com/LINOSNCHENA/FE-Interviews
 ```
+
+
 Navigate to the project directory:
-
-
-
 ```
 cd FE-Interviews
 ```
@@ -31,9 +29,7 @@ Run: npm install or yarn install
 
 Start the server: 
 ```
-npm run dev 
-
-or yarn dev
+npm run dev  or yarn dev
 
 ```
 
