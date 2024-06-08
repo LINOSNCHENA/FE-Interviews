@@ -4,12 +4,14 @@
     <h3 class="head">{{ title.toUpperCase() }}</h3>
 
     <div v-if="payCheck">
-      <v-card class="mx-auto justify-space-evenly customa-portfolio" color="#D7CCC8" theme="light" width="95%"
-        height="98%" prepend-icon="mdi-rhombus-outline" title="Employee Paycheck and Medical Benefits | Updating">
+      <v-card class="mx-auto justify-space-evenly customa-portfolio" 
+      color="#D7CCC8" theme="light" width="100vw"
+        height="95vh" prepend-icon="mdi-rhombus-outline" title="Employee Paycheck and Medical Benefits | Updating">
         <v-form ref="form" class="mx-2" v-model="validfx" lazy-validation @submit.prevent="updateEmployeesBenefits">
           <v-alert v-if="!validfx" type="error">
             Period is out of range. Please correct the invalid input data.
           </v-alert>
+
 
           <v-row class="mx-auto justify-space-evenly">
             <v-col cols="5">
@@ -30,8 +32,11 @@
               <h4>FAMILY SCREEN | {{ payCheck.families.length}} | {{ payCheck.children }}</h4>
               <v-row>
                 <v-col cols="6">
-                  <v-text-field v-model="payCheck.children" label="01 A-children" variant="outlined"></v-text-field>
+                  <v-select v-model="payCheck.children" label="01 Children" variant="outlined"
+                  :items="childrenx"></v-select>
                 </v-col>
+              
+
                 <v-col cols="6">
                   <v-text-field v-model="payCheck.families.length" label="02 Family Size"
                     variant="outlined"></v-text-field>
@@ -78,7 +83,7 @@
               </v-row>
              
               <div v-if="payCheck.children">   
-             Children : | {{ payCheck.children }}
+             Approved Children : | {{ payCheck.families.length }} / {{ payCheck.children }}
             </div>
 
             </v-col>
@@ -118,6 +123,7 @@ const tabX = ref("health");
 const years = [2023, 2024, 2025];
 const genders = ["Male", "Female", "Others"];
 const marriage = ["Yes", "No"];
+const childrenx = [1,2,3,4,5,6,7,8,9,10,11,12];
 
 const validateForm = () => {
   const isWorkedNumeric = !isNaN(parseFloat(payCheck.value.periodYear));
@@ -192,6 +198,8 @@ const goBackPage = () => {
   background-color: wheat;
   margin: 25px;
   text-align: center;
-  width: 90%;
+  width: 90vw;
+  height: 2vh;
 }
+
 </style>
