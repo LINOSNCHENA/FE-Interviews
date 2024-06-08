@@ -4,20 +4,18 @@
     <h3 class="head">{{ title.toUpperCase() }}</h3>
 
     <div v-if="payCheck">
-      <v-card class="mx-auto justify-space-evenly customa-portfolio" 
-      color="#D7CCC8" theme="light" width="100vw"
+      <v-card class="mx-auto justify-space-evenly customa-portfolio" color="#D7CCC8" theme="light" width="100vw"
         height="95vh" prepend-icon="mdi-rhombus-outline" title="Employee Paycheck and Medical Benefits | Updating">
         <v-form ref="form" class="mx-2" v-model="validfx" lazy-validation @submit.prevent="updateEmployeesBenefits">
           <v-alert v-if="!validfx" type="error">
             Period is out of range. Please correct the invalid input data.
           </v-alert>
 
-
           <v-row class="mx-auto justify-space-evenly">
             <v-col cols="5">
-              <h4>EMPLOYEE RECORDS</h4>
+              <h4>EMPLOYEE RECORDS</h4><br>
               <v-text-field v-model="payCheck.namex" label="01 Customer name" bg-color="teal"
-                variant="outlined"></v-text-field>
+                variant="solo"></v-text-field>
               <v-text-field v-model="payCheck.emailx" label="02 Email" variant="outlined"></v-text-field>
               <v-select v-model="payCheck.marriage" label="03 Marriage" variant="outlined" :items="marriage"></v-select>
               <v-text-field v-model="payCheck.grosspay" label="04 Gross Pay" prefix="K"
@@ -29,13 +27,15 @@
             </v-col>
 
             <v-col cols="5" v-if="payCheck && payCheck.families">
-              <h4>FAMILY SCREEN | {{ payCheck.families.length}} | {{ payCheck.children }}</h4>
+              <h4>
+                FAMILY SCREEN | {{ payCheck.families.length }} |
+                {{ payCheck.children }}
+              </h4><br>
               <v-row>
                 <v-col cols="6">
                   <v-select v-model="payCheck.children" label="01 Children" variant="outlined"
-                  :items="childrenx"></v-select>
+                    :items="childrenx"></v-select>
                 </v-col>
-              
 
                 <v-col cols="6">
                   <v-text-field v-model="payCheck.families.length" label="02 Family Size"
@@ -43,49 +43,56 @@
                 </v-col>
               </v-row>
 
- 
               <v-row v-if="payCheck.families[0]">
                 <v-col cols="6" v-if="payCheck.children > 0">
                   <v-text-field v-model="payCheck.families[0].namex" label="01 Name oF Child One"
                     variant="outlined"></v-text-field>
                 </v-col>
                 <v-col cols="6" v-if="payCheck.children > 0">
-                  <v-select v-model="payCheck.families[0].gender" label="01  Gender of Child" 
-                  variant="outlined"
+                  <v-select v-model="payCheck.families[0].gender" label="01  Gender of Child" variant="outlined"
                     :items="genders"></v-select>
                 </v-col>
               </v-row>
-              
+
               <v-row v-if="payCheck.families[1]">
                 <v-col cols="6" v-if="payCheck.children > 1">
                   <v-text-field v-model="payCheck.families[1].namex" label="01 Name oF Child One"
                     variant="outlined"></v-text-field>
                 </v-col>
                 <v-col cols="6" v-if="payCheck.children > 1">
-                  <v-select v-model="payCheck.families[1].gender" label="01  Gender of Child" 
-                  variant="outlined"
+                  <v-select v-model="payCheck.families[1].gender" label="01  Gender of Child" variant="outlined"
                     :items="genders"></v-select>
                 </v-col>
               </v-row>
-              
+
               <v-row v-if="payCheck.families[2]">
                 <v-col cols="6" v-if="payCheck.children > 2">
                   <v-text-field v-model="payCheck.families[2].namex" label="01 Name oF Child One"
                     variant="outlined"></v-text-field>
                 </v-col>
                 <v-col cols="6" v-if="payCheck.children > 2">
-                  <v-select                              
-                  v-model="payCheck.families[2].gender" 
-                  label="01  Gender of Child" 
-                  variant="outlined"
+                  <v-select v-model="payCheck.families[2].gender" label="01  Gender of Child" variant="outlined"
                     :items="genders"></v-select>
                 </v-col>
               </v-row>
-             
-              <div v-if="payCheck.children">   
-             Approved Children : | {{ payCheck.families.length }} / {{ payCheck.children }}
-            </div>
 
+              <div v-if="payCheck.children">
+                Approved Children : | {{ payCheck.families.length }} /
+                {{ payCheck.children }} | | Balance | {{ balancex }} / {{ payCheck.children }}
+                <br />
+                New Child
+                <br />
+                <br />
+                <v-row v-if="balancex">
+                  <v-col cols="6" v-if="balancex > 0">
+                    <v-text-field v-model="name1" label="01 Name oF Child One" variant="outlined"></v-text-field>
+                  </v-col>
+                  <v-col cols="6" v-if="balancex > 0">
+                    <v-select v-model="gender1" label="01  Gender of Child" variant="outlined"
+                      :items="genders"></v-select>
+                  </v-col>
+                </v-row>
+              </div>
             </v-col>
           </v-row>
 
@@ -107,10 +114,10 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, watchEffect } from "vue";
+import { computed, onMounted, ref, watchEffect } from "vue";
 import { useRouter } from "vue-router";
 import { useEmployeeStore } from "../../../stores/DataEmployees";
-import { Salary } from "../../../types/InterfaceX";
+import { Family, Salary } from "../../../types/InterfaceX";
 
 const storeAPI = useEmployeeStore();
 const router = useRouter();
@@ -123,7 +130,9 @@ const tabX = ref("health");
 const years = [2023, 2024, 2025];
 const genders = ["Male", "Female", "Others"];
 const marriage = ["Yes", "No"];
-const childrenx = [1,2,3,4,5,6,7,8,9,10,11,12];
+const childrenx = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+const name1 = ref("NikolasXXX");
+const gender1 = ref("Male");
 
 const validateForm = () => {
   const isWorkedNumeric = !isNaN(parseFloat(payCheck.value.periodYear));
@@ -136,6 +145,10 @@ const validateForm = () => {
 
 watchEffect(() => {
   validateForm();
+});
+
+const balancex = computed(() => {
+  return payCheck.value.children - payCheck.value.families.length;
 });
 
 onMounted(async () => {
@@ -174,9 +187,18 @@ const updateEmployeesBenefits = async () => {
       discounted: discountedA,
       grosspay: 2000 * 2 - deducts,
       marriage: payCheck.value.marriage,
-      families: payCheck.value.families.length,
+      families: payCheck.value.families,
     };
 
+    console.log(monthlyBenefit);
+    const x: Family = {
+      id: 1,
+      created: new Date(),
+      updated: new Date(),
+      namex: name1.value,
+      gender: gender1.value,
+    };
+    monthlyBenefit.families.push(x);
     console.log(monthlyBenefit);
     storeAPI.updateOrAddBenefits(monthlyBenefit);
     goBackPage();
@@ -184,7 +206,7 @@ const updateEmployeesBenefits = async () => {
 };
 
 const goBackPage = () => {
-  router.push({ name: "Employees"});
+  router.push({ name: "Employees" });
 };
 </script>
 
@@ -201,5 +223,4 @@ const goBackPage = () => {
   width: 90vw;
   height: 2vh;
 }
-
 </style>
