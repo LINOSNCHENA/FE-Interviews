@@ -17,18 +17,16 @@
               <v-text-field v-model="payCheck.namex" label="01 Customer name" bg-color="teal"
                 variant="solo"></v-text-field>
               <v-text-field v-model="payCheck.emailx" label="02 Email" variant="outlined"></v-text-field>
-
-              <v-select v-model="payCheck.periodMonth" label="04 Period Months" variant="outlined"
+              <v-select v-model="payCheck.periodMonth" label="03 Period Months" variant="outlined"
                 :items="months"></v-select>
               <v-select v-model="payCheck.periodYear" label="04 Period Year" variant="outlined"
                 :items="years"></v-select>
               <v-select v-model="payCheck.marriage" label="05 Marriage" variant="outlined" :items="marriage"></v-select>
-
-              <v-text-field v-model="payCheck.grosspay" label="06 Gross Pay" prefix="K"
+              <v-text-field v-model="payCheck.balance" label="06 Balance" prefix="K" variant="outlined"></v-text-field>
+              <v-text-field v-model="payCheck.cost" label="07 cost" prefix="K" variant="outlined"></v-text-field>
+              <v-text-field v-model="payCheck.cbenefits" label="08 Benefits" prefix="K"
                 variant="outlined"></v-text-field>
-              <v-text-field v-model="payCheck.cbenefits" label="07 Benefits" prefix="K"
-                variant="outlined"></v-text-field>
-              <v-text-field v-model="payCheck.paycheck" label="08 Paycheck" prefix="K"
+              <v-text-field v-model="payCheck.paycheck" label="09 Paycheck" prefix="K"
                 variant="outlined"></v-text-field>
               <br />
             </v-col>
@@ -36,12 +34,12 @@
             <v-col cols="5" v-if="payCheck && payCheck.families">
               <h4>
                 FAMILY SCREEN | {{ payCheck.families.length }} |
-                {{ payCheck.children }}
+                {{ payCheck.kids }}
               </h4>
               <br />
               <v-row>
                 <v-col cols="6">
-                  <v-select v-model="payCheck.children" label="01 Children" variant="outlined"
+                  <v-select v-model="payCheck.kids" label="01 Children" variant="outlined"
                     :items="childrenx"></v-select>
                 </v-col>
 
@@ -52,7 +50,7 @@
               </v-row>
 
               <template v-for="(family, index) in payCheck.families" :key="index">
-                <v-row v-if="index < payCheck.children">
+                <v-row v-if="index < payCheck.kids">
                   <v-col cols="6">
                     <v-text-field v-model="family.namex" :label="`0${index + 1} Name of Child`"
                       variant="outlined"></v-text-field>
@@ -64,14 +62,16 @@
                 </v-row>
               </template>
 
-              <div v-if="payCheck.children">
+              <div v-if="payCheck.kids">
                 Approved Children: | {{ payCheck.families.length }} /
-                {{ payCheck.children }} | Balance: | {{ balancex }} /
-                {{ payCheck.children }}
+                {{ payCheck.kids }} | Balance: | {{ balancex }} /
+                {{ payCheck.kids }}
                 <br />
                 <v-row v-if="balancex">
-                  <br />
-                  New Child
+                  <div class="centered-container">
+                    <br />
+                    New Child
+                  </div>
                   <br />
                 </v-row>
                 <v-row v-if="balancex">
@@ -87,26 +87,17 @@
           </v-row>
 
           <v-card-actions class="mx-auto justify-space-evenly">
-            <v-btn color="#B3E5FC" variant="elevated" width="165" height="40" min-width="140" size="small"
+            <v-btn color="#B3E5FC" variant="elevated" width="230" height="40" min-width="200" size="small"
               :disabled="loading" @click="updateEmployeesBenefits">
-              Update Employees | {{ payCheck.id }} | {{ payCheck.grosspay }}
+              Update Employees | {{ payCheck.id }} | {{ payCheck.discounted }}
             </v-btn>
 
-            <v-btn color="#E0F7FA" variant="elevated" width="165" height="40" min-width="140" size="small"
+            <v-btn color="#E0F7FA" variant="elevated" width="230" height="40" min-width="200" size="small"
               :disabled="loading" @click="updateChildrenBenefits">
-              Update Children | {{ payCheck.children }} |
-              {{ payCheck.cbenefits }}
+              Update Children | {{ payCheck.id }} |
+              {{ payCheck.kids }}
             </v-btn>
           </v-card-actions>
-          <div class="centered-container">
-            =======================================pppppppppppppp===pppppppp=====================
-            <br />
-            {{ computedData }}
-            <br />
-            {{ payCheck.grosspay }}
-            <br />
-            ===================================xxxxxxxxxxxxxxxxxxxx================================
-          </div>
         </v-form>
       </v-card>
     </div>
@@ -125,8 +116,9 @@ const loading = ref(false);
 const validfx = ref(false);
 const payCheck = ref<any>({});
 const title = "Edit Medical Benefits records for Employee";
-//const custom = ref(router.currentRoute.value.params.id);
-const customId = ref<number>(parseInt(String(router.currentRoute.value.params.id)));
+const customId = ref<number>(
+  parseInt(String(router.currentRoute.value.params.id))
+);
 const childrenx = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 const genders = ["Male", "Female", "Others"];
 const marriage = ["Yes", "No"];
@@ -174,28 +166,32 @@ const updatesFromAPI = () => {
 };
 
 const balancex = computed(() => {
-  return payCheck.value.children - payCheck.value.families.length;
+  return payCheck.value.kids - payCheck.value.families.length;
 });
 
 const computedData = computed(() => {
   const married = payCheck.value.marriage === "Yes" ? 1 : 0;
   const numberOfChildren = payCheck.value.families?.length;
-  const cheque = 2 * 1000;
+  const cheque = 1000 * 2;
   const AAs = payCheck.value.families?.filter((x: { namex: string }) =>
     x.namex.startsWith("A")
   );
-  const discountedN = (AAs?.length * 500 * 10) / 100;
+  const discountedN = AAs?.length;
+  const fullpay = numberOfChildren - AAs?.length; ///
   const deducts = (1000 + 500 * numberOfChildren + married * 500) / 12;
-  const net = cheque - deducts;
-
+  const monthlyCost =
+    (1000 + fullpay * 500 + (discountedN * 500 * 10) / 100) / 12;
+  const balance = cheque - monthlyCost;
   return {
     marriage: married,
-    children: numberOfChildren,
     payCheque: cheque,
-    discounted: discountedN,
     deducted: deducts,
     cbenefits: deducts,
-    grosspay: net,
+    cost: monthlyCost,
+    balance: balance,
+    kids: numberOfChildren,
+    fullpay: fullpay,
+    discounted: discountedN,
   };
 });
 
@@ -212,17 +208,13 @@ const updateEmployeesBenefits = async () => {
       created: payCheck.value.created,
       emailx: payCheck.value.emailx,
       paycheck: computedData.value.payCheque,
-      cbenefits: computedData.value.children,
-      children: computedData.value.children,
+      cbenefits: computedData.value.cbenefits,
+      kids: computedData.value.kids,
       discounted: computedData.value.discounted,
-      grosspay: computedData.value.grosspay,
+      cost: computedData.value.cost,
+      balance: computedData.value.balance,
     };
-    console.log(monthlyBenefit.paycheck);
-    console.log(monthlyBenefit.grosspay);
-    console.log(monthlyBenefit.id);
-    payCheck.value = monthlyBenefit;
     storeAPI.updateOrAddBenefit(monthlyBenefit);
-    console.log(monthlyBenefit);
     goBackPage();
   }
 };
@@ -240,12 +232,12 @@ const updateChildrenBenefits = async () => {
       created: payCheck.value.created,
       emailx: payCheck.value.emailx,
       paycheck: computedData.value.payCheque,
-      cbenefits: computedData.value.children,
-      children: computedData.value.children,
+      cbenefits: computedData.value.cbenefits,
+      kids: computedData.value.kids,
       discounted: computedData.value.discounted,
-      grosspay: computedData.value.grosspay,
+      cost: computedData.value.cost,
+      balance: computedData.value.balance,
     };
-
     const newFamilyMember: Family = {
       id: 1,
       created: new Date(),
@@ -254,13 +246,7 @@ const updateChildrenBenefits = async () => {
       gender: gender1.value,
     };
     monthlyBenefit.families.push(newFamilyMember);
-    console.log(monthlyBenefit.paycheck);
-    console.log(monthlyBenefit.grosspay);
-    console.log(monthlyBenefit.id);
-    payCheck.value = monthlyBenefit;
     storeAPI.updateOrAddBenefit(monthlyBenefit);
-    console.log(monthlyBenefit);
-    console.log(payCheck.value);
     goBackPage();
   }
 };
@@ -288,5 +274,8 @@ const goBackPage = () => {
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-left: 3rem;
+  margin-top: 3rem;
+  color: brown;
 }
 </style>

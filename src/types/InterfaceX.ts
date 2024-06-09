@@ -3,27 +3,28 @@
 
 export interface Salary {
   [key: string]: any;
-  id: number;
+  id: number; 
   namex: string;
   emailx: string;
   periodMonth: string;
   periodYear: number;
-  cbenefits: number;    
-  paycheck: number; 
-  grosspay: number; 
+  paycheck: number;
+  cost: number;
+  cbenefits: number;
+  balance: number
 
-  created: Date; 
+  created: Date;
   updated: Date;
   marriage?: string;
-  children?: number;
+  kids?: number;
   discounted?: number;
-  families: Family[]; // Array of Family objects
+  families: Family[]; 
 }
 
 
 export interface Family {
   [key: string]: any;
-  id: number;
+  id?: number; // Optional id field
   namex: string;
   gender: string;
   created: Date;

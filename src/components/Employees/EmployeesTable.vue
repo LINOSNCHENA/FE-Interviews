@@ -1,23 +1,37 @@
 <template>
   <div v-if="salaries">
-    <v-data-table :headers="headerWages" :items="salaries" :items-per-page="20" :search="search" color="lime-lighten-1"
-      class="elevation-1">
+    <v-data-table
+      :headers="headerWages"
+      :items="salaries"
+      :items-per-page="20"
+      :search="search"
+      color="lime-lighten-1"
+      class="elevation-1"
+      :sort-by="[
+          { key: 'cost', order: 'asc' },
+          { key: 'balance', order: 'desc' },
+        ]"       
+    >
       <template v-slot:item="{ item, index }">
         <tr>
           <td>{{ index + 1 }}</td>
-           <td>{{ item.namex }}</td>
-          <td>{{ item.emailx }}</td>     
-          <td>{{ item.paycheck }}</td>       
+          <td>{{ item.namex }}</td>
+          <td>{{ item.emailx }}</td>
+          <td>{{ formatCurrency(item.paycheck) }}</td>
+          <td>{{ item.kids }}</td>
           <td>{{ item.discounted }}</td>
-          <td>{{ item.cbenefits }}</td>
-          <td>{{ item.grosspay }}</td>
+          <td>{{ formatCurrency(item.cbenefits) }}</td>
+          <td>{{ formatCurrency(item.balance) }}</td>
+          <td>{{ formatCurrency(item.cost) }}</td>
           <td>{{ item.id }}</td>
           <td>{{ item.periodYear }}</td>
-          <td>{{ item.periodMonth }}</td>  
+          <td>{{ item.periodMonth }}</td>
           <td>{{ item.marriage }}</td>
-          <td>{{ item.children }}</td>
+
           <td>
-            <router-link :to="{ name: 'Edit-benefits', params: { id: item.id } }">
+            <router-link
+              :to="{ name: 'Edit-benefits', params: { id: item.id } }"
+            >
               <v-icon small>mdi-monitor-edit</v-icon>
             </router-link>
             | Edit
@@ -49,7 +63,7 @@ onMounted(async () => {
     if (result) {
       salaries.value = result;
       counted.value = result.length;
-     // console.log(salaries.value);
+      // console.log(salaries.value);
     } else {
       error.value = "No salaries were found.";
     }
@@ -69,6 +83,15 @@ const formatDate = (value: any) => {
     minute: "2-digit",
   });
 };
+
+// Method to format currency
+const formatCurrency = (value: number) =>
+  value.toLocaleString("en-CZ", {
+    style: "currency",
+    currency: "CZM",
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
 </script>
 
 <style scoped>

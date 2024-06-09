@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { Family, Salary } from "../types/InterfaceX";
 
-// Corrected dummy data
+// Initial data
 const salariesData: Salary[] = [
   {
     id: 11,
@@ -35,11 +35,12 @@ const salariesData: Salary[] = [
       },
     ],
     marriage: "Yes",
-    children: 0,
-    grosspay: 0,
+    kids: 0,
     paycheck: 4000,
     cbenefits: 84,
     discounted: 5,
+    cost: 0,
+    balance: 0
   },
   {
     id: 22,
@@ -71,6 +72,8 @@ const salariesData: Salary[] = [
     paycheck: 4000,
     cbenefits: 85,
     discounted: 55,
+    cost: 0,
+    balance: 0
   },
   {
     id: 33,
@@ -90,11 +93,12 @@ const salariesData: Salary[] = [
       },
     ],
     marriage: "No",
-    children: 0,
-    grosspay: 90,
+    kids: 0,
     paycheck: 2000,
     cbenefits: 86,
     discounted: 55,
+    cost: 0,
+    balance: 0
   },
   {
     id: 44,
@@ -121,11 +125,12 @@ const salariesData: Salary[] = [
       },
     ],
     marriage: "No",
-    children: 0,
-    grosspay: 90,
+    kids: 0,
     paycheck: 4000,
     cbenefits: 87,
     discounted: 55,
+    cost: 0,
+    balance: 0
   },
 ];
 
@@ -190,42 +195,23 @@ export const useEmployeeStore = defineStore("employeeStore", {
     },
     updateBenefit(unit: Salary) {
       try {
-        // Log the IDs and their types for debugging
-        console.log("=========|UpdateBenefits|==========");
-        console.log("Unit ID:", unit.id, "Type:", typeof unit.id);
-        this.salaries.forEach((salary: { id: number; }) => {
-          console.log("Salary ID:", salary.id, "Type:", typeof salary.id);
-        });
-        console.log("=========|UpdateBenefits|==========");    
-        // Find the index of the salary unit to update
-        const index = this.salaries.findIndex((s: { id: number; }) => s.id === unit.id);    
-        console.log("Index found:", index);    
+        const index = this.salaries.findIndex((s: { id: number; }) => s.id === unit.id);
         // If index is -1, the unit was not found in the array
         if (index === -1) {
           console.error("Unit not found");
           return { error: "Unit not found" };
-        }    
-        // Ensure the unit has a valid structure
+        }
         if (!unit || !unit.id) {
           console.error("Invalid unit structure");
           return { error: "Invalid unit structure" };
-        }    
-        // Update the salary at the found index
-        this.salaries[index] = { ...this.salaries[index], ...unit };    
-        // Debug logs for confirmation
-        console.log("Updated unit:", this.salaries[index]);
-        console.log(`Updated unit with ID: ${unit.id}`);
-        console.log("Updated Salaries:", this.salaries);
-    
+        }
+        this.salaries[index] = { ...this.salaries[index], ...unit };
         return {};
       } catch (error) {
-        // Log and return any errors encountered during the update process
         console.error("Error updating benefit:", error);
         return { error: error.message || error };
       }
     },
-    
-    
 
     addBenefit(unit: Salary) {
       try {
