@@ -1,7 +1,5 @@
 // Data-Securirity.ts
-
 import { defineStore } from "pinia";
-
 interface HealthAuthState {
   loading: boolean;
   error: string | null;
@@ -22,15 +20,14 @@ export const useAuthStore = defineStore("authStore", {
         "test1@gmail.com",
         "test2@gmail.com",
         "test3@gmail.com",
+        "christinadolonina@gmail.com",
       ];
       return authorizedEmails.includes(enforcer);
     },
 
     async isAuthorizedAdmin(user: string | undefined) {
       const enforcer = String(user);
-      const authorizedEmails = [
-        "test1@gmail.com",
-      ];
+      const authorizedEmails = ["test1@gmail.com"];
       return authorizedEmails.includes(enforcer);
     },
   },
@@ -38,6 +35,6 @@ export const useAuthStore = defineStore("authStore", {
   getters: {
     loadedRates(state) {
       return state.rate;
-    }
-  }
+    },
+  },
 });

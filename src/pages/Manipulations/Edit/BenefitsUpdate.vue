@@ -273,10 +273,10 @@ const updateEmployeesBenefits = async () => {
     );
     const discountedA = (filteredAANames.length * 500 * 10) / 100;
     const deducts = (1000 + 500 * numberOfChildren + married * 500) / 12;
+
     const monthlyBenefit: Salary = {
       id: customId.value,
       namex: payCheck.value.namex,
-      numberx: payCheck.value.numberx,
       periodMonth: payCheck.value.periodMonth,
       periodYear: payCheck.value.periodYear,
       created: payCheck.value.created,
@@ -290,7 +290,8 @@ const updateEmployeesBenefits = async () => {
       marriage: payCheck.value.marriage,
       families: payCheck.value.families,
     };
-    console.log(monthlyBenefit);
+    console.log(monthlyBenefit.paycheck);
+    console.log(monthlyBenefit.grosspay);
     storeAPI.updateOrAddBenefits(monthlyBenefit);
     goBackPage();
   }
@@ -299,16 +300,16 @@ const updateEmployeesBenefits = async () => {
 const updateChildrenBenefits = async () => {
   if (payCheck.value.namex) {
     const married = payCheck.value.marriage === "Yes" ? 1 : 0;
-    const numberOfChildren = payCheck.value.families.length;
+    const numberOfChildren =Number(payCheck.value.families.length);
     const filteredAANames = payCheck.value.families.filter(
       (x: { namex: string }) => x.namex.startsWith("A")
     );
     const discountedA = (filteredAANames.length * 500 * 10) / 100;
     const deducts = (1000 + 500 * numberOfChildren + married * 500) / 12;
+
     const monthlyBenefit: Salary = {
       id: customId.value,
-      namex: payCheck.value.namex,
-      numberx: payCheck.value.numberx,
+      namex: payCheck.value.namex, 
       periodMonth: payCheck.value.periodMonth,
       periodYear: payCheck.value.periodYear,
       created: payCheck.value.created,
@@ -322,7 +323,7 @@ const updateChildrenBenefits = async () => {
       marriage: payCheck.value.marriage,
       families: payCheck.value.families,
     };
-    console.log(monthlyBenefit);
+
     const x: Family = {
       id: 1,
       created: new Date(),
@@ -331,7 +332,8 @@ const updateChildrenBenefits = async () => {
       gender: gender1.value,
     };
     monthlyBenefit.families.push(x);
-    console.log(monthlyBenefit);
+    console.log(monthlyBenefit.paycheck);
+    console.log(monthlyBenefit.grosspay);
     storeAPI.updateOrAddBenefits(monthlyBenefit);
     goBackPage();
   }

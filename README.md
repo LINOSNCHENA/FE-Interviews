@@ -38,5 +38,12 @@ npm run dev  or yarn dev
 ```
 Your application should now be running locally.
 
+use any of the below Temporal passwords;
+
+"test1@gmail.com",
+"test2@gmail.com",
+"test3@gmail.com",
+"christinadolonina@gmail.com",
+
 ```
 

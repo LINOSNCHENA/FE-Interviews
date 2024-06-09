@@ -40,7 +40,7 @@ onMounted(async () => {
     if (result) {
       families.value = result;
       counted.value = result.length;
-      console.log(families.value);
+    //  console.log(families.value);
     } else {
       error.value = "No salaries were found.";
     }

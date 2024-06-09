@@ -132,7 +132,8 @@
 import { onBeforeMount, ref } from "vue";
 
 import { useRouter } from "vue-router";
-import { useEmployeeStore } from "@/stores/DataEmployees";
+import { useEmployeeStore } from "../../stores/DataEmployees";
+import { useAuthStore } from "../../stores/AppsAuth";
 
 const router = useRouter();
 
@@ -140,6 +141,7 @@ const loading = ref(false);
 const loaded = ref(false);
 const showPassword = ref(false);
 const storeAPI = useEmployeeStore();
+const storeAUT = useAuthStore();
 const tradeMark = ref("Health Guards (Z) Ltd (v 4.0.0.)");
 
 const form = ref({
@@ -148,19 +150,24 @@ const form = ref({
 });
 
 onBeforeMount(async () => {
-  await storeAPI.fetchSalaries();
+  await storeAPI.fetchSalaries(); 
 });
 
 const onSubmit = async () => {
   if (!form.value.email || !form.value.password) return;
   loading.value = true;
   const isAuthenticated = form.value.email;
-  console.log(isAuthenticated);
   localStorage.setItem("ActiveUserEmail", JSON.stringify(isAuthenticated));
+  const x= await storeAUT.isAuthorized(isAuthenticated);
+  console.log(x);
+  console.log(isAuthenticated);
 
   try {
-    router.push({ name: "Employees" });
-    getInitialData();
+  if(x)
+   { router.push({ name: "Employees" });}
+   else{
+    alert(" Wrong password | maybe Use guests password | test1@gmail.com")
+   }
   } catch (error) {
     if (error) {
       alert(error);
@@ -179,10 +186,7 @@ const clearPassword = () => {
   form.value.password = "";
 };
 
-async function getInitialData() {
-  const investmentsRecords = storeAPI.loadedSalaries;
-  console.log("Size Initial Data --> ", investmentsRecords.length);
-}
+
 </script>
 
 <style lang="scss" scoped>

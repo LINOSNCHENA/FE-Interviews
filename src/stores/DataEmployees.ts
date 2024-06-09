@@ -37,7 +37,7 @@ const salariesData: Salary[] = [
     marriage: "Yes",
     children: 0,
     grosspay: 0,
-    paycheck: 0,
+    paycheck: 4000,
     costBenefits: 0,
     discounted: 5,
   },
@@ -70,7 +70,7 @@ const salariesData: Salary[] = [
     marriage: "No",
     children: 0,
     grosspay: 90,
-    paycheck: 90,
+    paycheck: 4000,
     costBenefits: 90,
     discounted: 55,
   },
@@ -94,7 +94,7 @@ const salariesData: Salary[] = [
     marriage: "No",
     children: 0,
     grosspay: 90,
-    paycheck: 90,
+    paycheck: 2000,
     costBenefits: 90,
     discounted: 55,
   },
@@ -125,7 +125,7 @@ const salariesData: Salary[] = [
     marriage: "No",
     children: 0,
     grosspay: 90,
-    paycheck: 90,
+    paycheck: 4000,
     costBenefits: 90,
     discounted: 55,
   },
@@ -171,24 +171,28 @@ export const useEmployeeStore = defineStore("employeeStore", {
     },
 
     fetchDiscounted() {
-      // console.log(this.loadedSalaries);
       const kids = this.loadedSalaries.flatMap(
         (salaryRecord: Salary) => salaryRecord.families
       );
-     //  console.log(kids);
+
       this.discounted = kids.filter((family: Family) =>
         family.namex.startsWith("A")
       );
     },
 
     updateOrAddBenefits(unit: Salary) {
-        try {
+      console.log(unit);
+      try {
         if (unit.id !== undefined) {
           const index = this.salaries.findIndex(
             (salary: { id: any }) => salary.id === unit.id
           );
           if (index === -1) return { error: "Unit not found" };
           this.salaries.splice(index, 1, unit);
+         const x = this.salaries.splice(index, 1, unit);
+          console.log(unit);
+          console.log(x);
+
           console.log(`Updated unit with ID: ${unit.id}`);
         } else {
           unit.id = this.salaries.length
@@ -197,6 +201,7 @@ export const useEmployeeStore = defineStore("employeeStore", {
             ) + 1
             : 1;
           this.salaries.push(unit);
+          console.log(unit);
           console.log(`Added new unit with ID: ${unit.id}`);
         }
         return {};

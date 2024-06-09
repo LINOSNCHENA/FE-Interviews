@@ -6,17 +6,14 @@
         <tr>
           <td>{{ index + 1 }}</td>
            <td>{{ item.namex }}</td>
-          <td>{{ item.emailx }}</td>
-       
-          <td>{{ item.costBenefits }}</td>
-          <td>{{ item.paycheck }}</td>
+          <td>{{ item.emailx }}</td>     
+          <td>{{ item.paycheck }}</td>       
           <td>{{ item.discounted }}</td>
+          <td>{{ item.costBenefits }}</td>
           <td>{{ item.grosspay }}</td>
           <td>{{ item.id }}</td>
-
           <td>{{ item.periodYear }}</td>
-          <td>{{ item.periodMonth }}</td>    
-    
+          <td>{{ item.periodMonth }}</td>  
           <td>{{ item.marriage }}</td>
           <td>{{ item.children }}</td>
           <td>
@@ -52,7 +49,7 @@ onMounted(async () => {
     if (result) {
       salaries.value = result;
       counted.value = result.length;
-      console.log(salaries.value);
+     // console.log(salaries.value);
     } else {
       error.value = "No salaries were found.";
     }

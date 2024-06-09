@@ -1,7 +1,6 @@
 
 // interfaces.ts
 
-
 export interface Salary {
   [key: string]: any;
   id: any;
@@ -12,6 +11,7 @@ export interface Salary {
   costBenefits: number;    
   paycheck: number; 
   grosspay: number; 
+
   created: Date; 
   updated: Date;
   marriage?: string;
