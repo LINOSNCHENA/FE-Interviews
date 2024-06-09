@@ -28,7 +28,7 @@ export const useTableStore = defineStore("tableStore", {
       { title: "Email", key: "emailx", width: "100px", align: "left" },    
       { title: "Paycheck", key: "paycheck", width: "50px", align: "left" },   
       { title: "Discount", key: "discounted", width: "50px", align: "left" },
-      { title: "Benefits", key: "costBenefits", width: "50px", align: "left" },
+      { title: "Benefits", key: "cbenefits", width: "50px", align: "left" },
       { title: "Gross", key: "grosspay", width: "50px", align: "left" },
       { title: "Index", key: "id", width: "5px", align: "left" },
 

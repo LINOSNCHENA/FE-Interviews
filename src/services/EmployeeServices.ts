@@ -30,14 +30,14 @@ class EmployeeServices {
   private static map(benefits: Salary): Salary {
     return {
       id: benefits.id,
-      namex: benefits.namex,
-      numberx: benefits.numberx,
+      namex: benefits.namex,     
       emailx: benefits.emailx,
       periodMonth: benefits.periodMonth,
       periodYear: benefits.periodYear,
       grosspay: benefits.grosspay,
       paycheck: benefits.paycheck,
-      costBenefits: benefits.costBenefits,
+      cbenefits: benefits.cbenefits,// 4
+      
       created: benefits.created,
       updated: benefits.updated,
       marriage: benefits.marriage,

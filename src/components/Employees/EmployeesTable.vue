@@ -9,7 +9,7 @@
           <td>{{ item.emailx }}</td>     
           <td>{{ item.paycheck }}</td>       
           <td>{{ item.discounted }}</td>
-          <td>{{ item.costBenefits }}</td>
+          <td>{{ item.cbenefits }}</td>
           <td>{{ item.grosspay }}</td>
           <td>{{ item.id }}</td>
           <td>{{ item.periodYear }}</td>

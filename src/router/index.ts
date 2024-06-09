@@ -1,10 +1,10 @@
 
 import { createRouter, createWebHistory } from "vue-router";
-import Login from '@/pages/Login.vue';
-import BenefitsEntry from '@/pages/Manipulations/Add/BenefitsEntry.vue';
-import BenefitsUpdate from '@/pages/Manipulations/Edit/BenefitsUpdate.vue';
-import AccountView from '@/pages/Employees/AccountView.vue';
-import RegistrationView from '@/pages/Employees/Registration.vue';
+import Login from '../pages/Login.vue';
+import BenefitsEntry from '../pages/Manipulations/Add/BenefitsEntry.vue';
+import BenefitsUpdate from '../pages/Manipulations/Edit/BenefitsUpdate.vue';
+import AccountView from '../pages/Employees/AccountView.vue';
+import RegistrationView from '../pages/Employees/Registration.vue';
 
 const routes = [
   {
@@ -34,7 +34,7 @@ const routes = [
   {
     path: "/registraion",
     name: "Registration",
-    meta: { requiresAuth: false },
+     meta: { requiresAuth: false },
     component: RegistrationView,
   },
 ];

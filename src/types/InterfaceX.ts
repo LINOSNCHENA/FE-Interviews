@@ -3,12 +3,12 @@
 
 export interface Salary {
   [key: string]: any;
-  id: any;
+  id: number;
   namex: string;
   emailx: string;
   periodMonth: string;
   periodYear: number;
-  costBenefits: number;    
+  cbenefits: number;    
   paycheck: number; 
   grosspay: number; 
 
@@ -23,7 +23,7 @@ export interface Salary {
 
 export interface Family {
   [key: string]: any;
-  id: any;
+  id: number;
   namex: string;
   gender: string;
   created: Date;

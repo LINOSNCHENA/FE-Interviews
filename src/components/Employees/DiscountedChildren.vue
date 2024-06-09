@@ -19,11 +19,12 @@
         </tr>
       </template>
     </v-data-table>
+  
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
+import { ref, onMounted, onUnmounted } from "vue";
 import DiscountServices from "../../services/DiscountServices";
 import { Family } from "../../types/InterfaceX";
 import { useTableStore } from "../../stores/DataTables";
@@ -34,20 +35,53 @@ const families = ref<Family[] | undefined>(undefined);
 const counted = ref(0);
 const error = ref<string | null>(null);
 
-onMounted(async () => {
+// onMounted(async () => {
+//   try {
+//     const result = await DiscountServices.getDiscountedRecords();
+//     if (result) {
+//       families.value = result;
+//       counted.value = result.length;
+//      // console.log(families.value);
+//     } else {
+//       error.value = "No salaries were found.";
+//     }
+//   } catch (e) {
+//     error.value = "An error occurred while fetching the dicounted families.";
+//     console.error(e);
+//   }
+// });
+
+
+const fetchFamilies = async () => {
   try {
     const result = await DiscountServices.getDiscountedRecords();
     if (result) {
       families.value = result;
       counted.value = result.length;
-     // console.log(families.value);
     } else {
       error.value = "No salaries were found.";
     }
   } catch (e) {
-    error.value = "An error occurred while fetching the dicounted families.";
+    error.value = "An error occurred while fetching the discounted families.";
     console.error(e);
   }
+};
+
+
+onMounted(async () => {
+  await fetchFamilies();
+
+  const handleVisibilityChange = async () => {
+    if (document.visibilityState === "visible") {
+      await fetchFamilies();
+    }
+  };
+
+  document.addEventListener("visibilitychange", handleVisibilityChange);
+
+  onUnmounted(() => {
+    document.removeEventListener("visibilitychange", handleVisibilityChange);
+  });
 });
 
 const formatDate = (value: any) => {

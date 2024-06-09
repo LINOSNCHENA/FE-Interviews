@@ -1,10 +1,10 @@
 import { defineStore } from "pinia";
 import { Family, Salary } from "../types/InterfaceX";
 
-// Dummy data
+// Corrected dummy data
 const salariesData: Salary[] = [
   {
-    id: 1,
+    id: 11,
     namex: "Presly",
     emailx: "presly@gmail.com",
     periodMonth: "January",
@@ -17,32 +17,32 @@ const salariesData: Salary[] = [
         namex: "Nikolas",
         created: new Date(),
         updated: new Date(),
-        gender: "Famale",
+        gender: "Female",
       },
       {
         id: 2,
         namex: "Alfred",
         created: new Date(),
         updated: new Date(),
-        gender: "famale",
+        gender: "Female",
       },
       {
         id: 3,
         namex: "Leon",
         created: new Date(),
         updated: new Date(),
-        gender: "Famale",
+        gender: "Female",
       },
     ],
     marriage: "Yes",
     children: 0,
     grosspay: 0,
     paycheck: 4000,
-    costBenefits: 0,
+    cbenefits: 84,
     discounted: 5,
   },
   {
-    id: 2,
+    id: 22,
     namex: "Katerina",
     emailx: "katerina@moffat.com",
     periodMonth: "February",
@@ -53,7 +53,6 @@ const salariesData: Salary[] = [
       {
         id: 1,
         namex: "Gabriel",
-        relations: "spouse",
         created: new Date(),
         updated: new Date(),
         gender: "Male",
@@ -61,7 +60,6 @@ const salariesData: Salary[] = [
       {
         id: 2,
         namex: "Eve",
-        relations: "child",
         created: new Date(),
         updated: new Date(),
         gender: "Male",
@@ -71,11 +69,11 @@ const salariesData: Salary[] = [
     children: 0,
     grosspay: 90,
     paycheck: 4000,
-    costBenefits: 90,
+    cbenefits: 85,
     discounted: 55,
   },
   {
-    id: 3,
+    id: 33,
     namex: "Theresa",
     emailx: "thresa@moffat.com",
     periodMonth: "May",
@@ -95,11 +93,11 @@ const salariesData: Salary[] = [
     children: 0,
     grosspay: 90,
     paycheck: 2000,
-    costBenefits: 90,
+    cbenefits: 86,
     discounted: 55,
   },
   {
-    id: 4,
+    id: 44,
     namex: "Dauti",
     emailx: "dauti@james.com",
     periodMonth: "April",
@@ -126,7 +124,7 @@ const salariesData: Salary[] = [
     children: 0,
     grosspay: 90,
     paycheck: 4000,
-    costBenefits: 90,
+    cbenefits: 87,
     discounted: 55,
   },
 ];
@@ -134,7 +132,6 @@ const salariesData: Salary[] = [
 interface EmployeeState {
   loading: boolean;
   dateStamp: string | null;
-  error: string | null;
   salaries: Salary[];
   families: Family[];
   discounted: Family[];
@@ -153,61 +150,93 @@ export const useEmployeeStore = defineStore("employeeStore", {
       second: "numeric",
       hour12: false,
     }),
-    error: null,
-    families: [] as Family[],
-    salaries: [] as Salary[],
-    discounted: [] as Family[],
+    salaries: salariesData,
+    families: [],
+    discounted: [],
   }),
 
   actions: {
-    fetchSalaries() {
-      this.salaries = salariesData;
-    },
-
-    fetchFamilies() {
-      this.families = this.loadedSalaries.flatMap(
-        (x: { families: any }) => x.families
-      );
-    },
-
-    fetchDiscounted() {
-      const kids = this.loadedSalaries.flatMap(
-        (salaryRecord: Salary) => salaryRecord.families
-      );
-
-      this.discounted = kids.filter((family: Family) =>
-        family.namex.startsWith("A")
-      );
-    },
-
-    updateOrAddBenefits(unit: Salary) {
-      console.log(unit);
+    async fetchSalaries() {
       try {
-        if (unit.id !== undefined) {
-          const index = this.salaries.findIndex(
-            (salary: { id: any }) => salary.id === unit.id
-          );
-          if (index === -1) return { error: "Unit not found" };
-          this.salaries.splice(index, 1, unit);
-         const x = this.salaries.splice(index, 1, unit);
-          console.log(unit);
-          console.log(x);
+        this.salaries = salariesData;
+      } catch (error) {
+        console.error("Error fetching salaries:", error);
+      }
+    },
 
-          console.log(`Updated unit with ID: ${unit.id}`);
-        } else {
-          unit.id = this.salaries.length
-            ? Math.max(
-              ...this.salaries.map((salary: { id: any }) => salary.id!)
-            ) + 1
-            : 1;
-          this.salaries.push(unit);
-          console.log(unit);
-          console.log(`Added new unit with ID: ${unit.id}`);
-        }
+    async fetchFamilies() {
+      try {
+        this.families = this.salaries.flatMap((salary: { families: any; }) => salary.families);
+      } catch (error) {
+        console.error("Error fetching families:", error);
+      }
+    },
+
+    async fetchDiscounted() {
+      try {
+        const kids = this.salaries.flatMap((salary: { families: any; }) => salary.families);
+        this.discounted = kids.filter((family: { namex: string; }) => family.namex.startsWith("A"));
+      } catch (error) {
+        console.error("Error fetching discounted families:", error);
+      }
+    },
+
+    updateOrAddBenefit(unit: Salary) {
+      if (unit.id !== undefined) {
+        return this.updateBenefit(unit);
+      } else {
+        return this.addBenefit(unit);
+      }
+    },
+    updateBenefit(unit: Salary) {
+      try {
+        // Log the IDs and their types for debugging
+        console.log("=========|UpdateBenefits|==========");
+        console.log("Unit ID:", unit.id, "Type:", typeof unit.id);
+        this.salaries.forEach((salary: { id: number; }) => {
+          console.log("Salary ID:", salary.id, "Type:", typeof salary.id);
+        });
+        console.log("=========|UpdateBenefits|==========");    
+        // Find the index of the salary unit to update
+        const index = this.salaries.findIndex((s: { id: number; }) => s.id === unit.id);    
+        console.log("Index found:", index);    
+        // If index is -1, the unit was not found in the array
+        if (index === -1) {
+          console.error("Unit not found");
+          return { error: "Unit not found" };
+        }    
+        // Ensure the unit has a valid structure
+        if (!unit || !unit.id) {
+          console.error("Invalid unit structure");
+          return { error: "Invalid unit structure" };
+        }    
+        // Update the salary at the found index
+        this.salaries[index] = { ...this.salaries[index], ...unit };    
+        // Debug logs for confirmation
+        console.log("Updated unit:", this.salaries[index]);
+        console.log(`Updated unit with ID: ${unit.id}`);
+        console.log("Updated Salaries:", this.salaries);
+    
         return {};
       } catch (error) {
-        console.error("Error updating or adding benefit:", error);
-        return { error: error };
+        // Log and return any errors encountered during the update process
+        console.error("Error updating benefit:", error);
+        return { error: error.message || error };
+      }
+    },
+    
+    
+
+    addBenefit(unit: Salary) {
+      try {
+        unit.id = this.salaries.length
+          ? Math.max(...this.salaries.map((s: { id: any; }) => s.id)) + 1
+          : 1;
+        this.salaries.push(unit);
+        return {};
+      } catch (error) {
+        console.error("Error adding benefit:", error);
+        return { error: error.message || error };
       }
     },
   },
