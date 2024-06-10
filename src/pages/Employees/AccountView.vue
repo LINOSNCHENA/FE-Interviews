@@ -41,7 +41,7 @@
 import { onMounted, ref } from "vue";
 import EmployeesTabel from "../../components/Employees/EmployeesTable.vue";
 import FamiliesTable from "../../components/Employees/FamiliesTable.vue";
-import DiscountedChildren from "../../components/Employees/DiscountedChildren.vue";
+import DiscountedChildren from "../../components/Employees/DiscountedKids.vue";
 
 import { useEmployeeStore } from "../../stores/DataEmployees";
 

@@ -63,8 +63,8 @@
               </template>
 
               <div v-if="payCheck.kids">
-                Approved Children: | {{ payCheck.families.length }} /
-                {{ payCheck.kids }} | Balance: | {{ balancex }} /
+                Approved Children : | {{ payCheck.families.length }} /
+                {{ payCheck.kids }} | Balance children : | {{ balancex }} /
                 {{ payCheck.kids }}
                 <br />
                 <v-row v-if="balancex">
@@ -87,15 +87,14 @@
           </v-row>
 
           <v-card-actions class="mx-auto justify-space-evenly">
-            <v-btn color="#B3E5FC" variant="elevated" width="230" height="40" min-width="200" size="small"
+            <v-btn color="#B3E5FC" variant="elevated" width="300" height="50" min-width="200" size="small"
               :disabled="loading" @click="updateEmployeesBenefits">
-              Update Employees | {{ payCheck.id }} | {{ payCheck.discounted }}
+              Update Employee | Total discounts : {{ payCheck.discounted }}
             </v-btn>
 
-            <v-btn color="#E0F7FA" variant="elevated" width="230" height="40" min-width="200" size="small"
+            <v-btn color="#E0F7FA" variant="elevated" width="300" height="50" min-width="200" size="small"
               :disabled="loading" @click="updateChildrenBenefits">
-              Update Children | {{ payCheck.id }} |
-              {{ payCheck.kids }}
+              Update Children | Total kids : {{ payCheck.kids }}
             </v-btn>
           </v-card-actions>
         </v-form>

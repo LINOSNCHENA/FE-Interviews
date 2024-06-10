@@ -1,20 +1,14 @@
 <template>
   <div v-if="salaries">
-    <v-data-table
-      :headers="headerWages"
-      :items="salaries"
-      :items-per-page="20"
-      :search="search"
-      color="lime-lighten-1"
-      class="elevation-1"
-      :sort-by="[
-          { key: 'cost', order: 'asc' },
-          { key: 'balance', order: 'desc' },
-        ]"       
-    >
+    <v-data-table :headers="headerWages" :items="salaries" :items-per-page="20" :search="search" 
+    color="lime-lighten-1"
+      class="elevation-1" :sort-by="[
+        { key: 'cost', order: 'asc' },
+        { key: 'balance', order: 'desc' },
+      ]">
       <template v-slot:item="{ item, index }">
         <tr>
-          <td>{{ index + 1 }}</td>
+          <td class="text-start">{{ index + 1 }}</td>
           <td>{{ item.namex }}</td>
           <td>{{ item.emailx }}</td>
           <td>{{ formatCurrency(item.paycheck) }}</td>
@@ -28,16 +22,14 @@
           <td>{{ item.periodMonth }}</td>
           <td>{{ item.marriage }}</td>
 
-          <td>
-            <router-link
-              :to="{ name: 'Edit-benefits', params: { id: item.id } }"
-            >
+          <td class="text-left">
+            <router-link :to="{ name: 'Edit-benefits', params: { id: item.id } }">
               <v-icon small>mdi-monitor-edit</v-icon>
             </router-link>
             | Edit
           </td>
-          <td>{{ formatDate(item.updated) }}</td>
-          <td>{{ formatDate(item.created) }}</td>
+          <td class="text-left">{{ formatDate(item.updated) }}</td>
+          <td class="text-left">{{ formatDate(item.created) }}</td>
         </tr>
       </template>
     </v-data-table>
@@ -56,14 +48,12 @@ const salaries = ref<Salary[] | undefined>(undefined);
 const counted = ref(0);
 const error = ref<string | null>(null);
 
-// Fetch data when component is mounted
 onMounted(async () => {
   try {
     const result = await EmployeeServices.getBenefitsRecords();
     if (result) {
       salaries.value = result;
       counted.value = result.length;
-      // console.log(salaries.value);
     } else {
       error.value = "No salaries were found.";
     }
@@ -73,16 +63,6 @@ onMounted(async () => {
   }
 });
 
-const formatDate = (value: any) => {
-  const date = new Date(value);
-  return date.toLocaleDateString("en-ZM", {
-    year: "numeric",
-    month: "short",
-    day: "2-digit",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-};
 
 // Method to format currency
 const formatCurrency = (value: number) =>
@@ -92,8 +72,30 @@ const formatCurrency = (value: number) =>
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   });
+
+
+  const formatDate = (value: any) => {
+  const date = new Date(value);
+  return date.toLocaleDateString("en-CZ", {
+    year: "numeric",
+    month: "short",
+    day: "2-digit",
+    hour: "numeric",
+    minute: "2-digit",
+    hourCycle: 'h23'
+  });
+};
+
 </script>
 
 <style scoped>
-/* Add your styles here */
+
+.text-start {
+  text-align: start;
+}
+
+.text-left {
+  text-align: left;
+}
+
 </style>

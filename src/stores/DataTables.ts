@@ -43,22 +43,20 @@ export const useTableStore = defineStore("tableStore", {
       { title: "Month", key: "periodMonth", width: "50px", align: "left" },
       { title: "Marriage", key: "marriage", width: "10px", align: "left" },
       { title: "Edit", key: "edit", width: "50px", align: "left" }, //
-      { title: "Updated", key: "updated", width: "150px", align: "left" },
-      { title: "Created", key: "created", width: "150px", align: "left" },
+      { title: "Updated", key: "updated", width: "170px", align: "left" },
+      { title: "Created", key: "created", width: "170px", align: "left" },
     ],
 
     headFamilies: [
       {
-        title: "No.", sortable: true, key: "index", width: "2px", align: "start"
+        title: "No.", sortable: true, key: "index", width: "10%", align: "start"
       },
-      { title: "Name", key: "namex", width: "150px", align: "left" },
-      { title: "Index", key: "id", width: "50px", align: "left" },
-      { title: "Gender", key: "gender", width: "100px", align: "left" },
-      { title: "Edit", key: "edit", width: "100px", align: "left" },
-      { title: "Updated", key: "updated", width: "150px", align: "left" },
-      { title: "Creation", key: "created", width: "150px", align: "left" },
+      { title: "Name", key: "namex", width: "20%", align: "left" },
+      { title: "Index", key: "id", width: "10%", align: "left" },
+      { title: "Gender", key: "gender", width: "15%", align: "left" },
+      { title: "Edit", key: "edit", width: "15%", align: "left" },
+      { title: "Updated", key: "updated", width: "20%", align: "left" },
+      { title: "Creation", key: "created", width: "20%", align: "left" },
     ],
-
-    // =====================================================================================7==================
   }),
 });

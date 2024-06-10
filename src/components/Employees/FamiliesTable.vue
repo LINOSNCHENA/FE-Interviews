@@ -1,21 +1,21 @@
 <template>
   <div v-if="families">
-    <v-data-table :headers="headerFamilies" :items="families" :items-per-page="20" :search="search"
-      color="lime-lighten-1" class="yellow">
+    <v-data-table :headers="headerFamilies" :items="families" :items-per-page="20" 
+    :search="search"  color="lime-lighten-1" class="elevation-1">
       <template v-slot:item="{ item, index }">
         <tr>
-          <td>{{ index + 1 }}</td>
-          <td>{{ item.namex }}</td>
-          <td>{{ item.id }}</td>
-          <td>{{ item.gender }}</td>
-          <td>
+          <td class="text-start">{{ index + 1 }}</td>
+          <td class="text-left">{{ item.namex }}</td>
+          <td class="text-left">{{ item.id }}</td>
+          <td class="text-left">{{ item.gender }}</td>
+          <td class="text-left">
             <router-link :to="{ name: 'Edit-benefits', params: { id: item.id } }">
               <v-icon small>mdi-monitor-edit</v-icon>
             </router-link>
             | Edit
           </td>
-          <td>{{ formatDate(item.updated) }}</td>
-          <td>{{ formatDate(item.created) }}</td>
+          <td class="text-left">{{ formatDate(item.updated) }}</td>
+          <td class="text-left">{{ formatDate(item.created) }}</td>
         </tr>
       </template>
     </v-data-table>
@@ -40,7 +40,6 @@ onMounted(async () => {
     if (result) {
       families.value = result;
       counted.value = result.length;
-    //  console.log(families.value);
     } else {
       error.value = "No salaries were found.";
     }
@@ -50,18 +49,37 @@ onMounted(async () => {
   }
 });
 
+// const formatDate = (value: any) => {
+//   const date = new Date(value);
+//   return date.toLocaleDateString("en-CZ", {
+//     year: "numeric",
+//     month: "short",
+//     day: "2-digit",
+//     hour: "2-digit",
+//     minute: "2-digit",
+//   });
+// };
+
 const formatDate = (value: any) => {
   const date = new Date(value);
-  return date.toLocaleDateString("en-ZM", {
+  return date.toLocaleDateString("en-CZ", {
     year: "numeric",
     month: "short",
     day: "2-digit",
-    hour: "2-digit",
+    hour: "numeric",
     minute: "2-digit",
+    hourCycle: 'h23'
   });
 };
+
 </script>
 
 <style scoped>
-/* Add your styles here */
+.text-start {
+  text-align: start;
+}
+
+.text-left {
+  text-align: left;
+}
 </style>
