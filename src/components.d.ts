@@ -9,8 +9,10 @@ declare module 'vue' {
   export interface GlobalComponents {
     AppFooter: typeof import('./components/AppFooter.vue')['default']
     BottomNav: typeof import('./components/Dashboard/BottomNav.vue')['default']
+    copy: typeof import('./components/Employees/EnergyTable copy.vue')['default']
     DiscountedChildren: typeof import('./components/Employees/DiscountedChildren.vue')['default']
     EmployeesTable: typeof import('./components/Employees/EmployeesTable.vue')['default']
+    EnergyGraph: typeof import('./components/Employees/EnergyGraph.vue')['default']
     EnergyTable: typeof import('./components/Employees/EnergyTable.vue')['default']
     ExtractDates: typeof import('./components/Employees/ExtractDates.vue')['default']
     FamiliesTable: typeof import('./components/Employees/FamiliesTable.vue')['default']

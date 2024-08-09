@@ -35,23 +35,6 @@ const families = ref<Family[] | undefined>(undefined);
 const counted = ref(0);
 const error = ref<string | null>(null);
 
-// onMounted(async () => {
-//   try {
-//     const result = await DiscountServices.getDiscountedRecords();
-//     if (result) {
-//       families.value = result;
-//       counted.value = result.length;
-//      // console.log(families.value);
-//     } else {
-//       error.value = "No salaries were found.";
-//     }
-//   } catch (e) {
-//     error.value = "An error occurred while fetching the dicounted families.";
-//     console.error(e);
-//   }
-// });
-
-
 const fetchFamilies = async () => {
   try {
     const result = await DiscountServices.getDiscountedRecords();
@@ -67,18 +50,14 @@ const fetchFamilies = async () => {
   }
 };
 
-
 onMounted(async () => {
   await fetchFamilies();
-
   const handleVisibilityChange = async () => {
     if (document.visibilityState === "visible") {
       await fetchFamilies();
     }
   };
-
   document.addEventListener("visibilitychange", handleVisibilityChange);
-
   onUnmounted(() => {
     document.removeEventListener("visibilitychange", handleVisibilityChange);
   });

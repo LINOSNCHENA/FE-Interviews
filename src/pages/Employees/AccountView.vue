@@ -21,6 +21,11 @@
       <v-spacer />
 
 
+      <v-tab value="graphs">
+        Graphs <v-icon>mdi-stethoscope</v-icon>
+      </v-tab>
+      <v-spacer />
+
       <v-tab value="energy">
         Energy <v-icon>mdi-stethoscope</v-icon>
       </v-tab>
@@ -42,7 +47,7 @@
           </v-window-item>
 
           <v-window-item value="dated">
-            Family members | {{ counted2 }}           >
+            Family members | {{ counted2 }} 
             <DatedData></DatedData>
           </v-window-item>
 
@@ -51,13 +56,15 @@
             <discounted-children></discounted-children>
           </v-window-item>
 
-          <v-window-item value="energy">            
-            Energy Table | {{ counted3 }}
-            <!-- <discounted-children></discounted-children> -->
-            <EnergyTable></EnergyTable>
+          <v-window-item value="graphs">            
+            Energy Graph | {{ counted3 }}   
+            <EnergyGraph></EnergyGraph>            
           </v-window-item>
 
-
+          <v-window-item value="energy">            
+            Energy Table | {{ counted3 }}   
+            <EnergyTable></EnergyTable>
+          </v-window-item>
 
         </v-window>
       </v-card-text>
@@ -76,7 +83,7 @@ import { useEmployeeStore } from "../../stores/DataEmployees";
 import EnergyTable from "../../components/Employees/EnergyTable.vue";
 
 const store = useEmployeeStore();
-const tab = ref("health");
+const tab = ref("energy");
 const salaries = ref<any[]>([]);
 const families = ref<any[]>([]);
 const discounted = ref<any[]>([]);
