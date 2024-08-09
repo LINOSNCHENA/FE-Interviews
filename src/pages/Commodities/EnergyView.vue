@@ -2,68 +2,61 @@
   <div class="frontFont">
     <v-tabs v-model="tab" background-color="deep-purple accent-4" dark icons-and-text>
       <v-spacer />
-      <v-tab value="health">
-        Employees <v-icon>mdi-account-group</v-icon>
-      </v-tab>
-      <v-spacer />
-      <v-tab value="family">
-       Families <v-icon>mdi-family-tree</v-icon> </v-tab>
-      <v-spacer />
 
-      <v-tab value="dated">
-        Dated  <v-icon>mdi-stethoscope</v-icon>
+      <v-tab value="daily">
+        1 Daily Data points <v-icon>mdi-stethoscope</v-icon>
       </v-tab>
       <v-spacer />
 
-      <v-tab value="benefits">
-        Benefited <v-icon>mdi-stethoscope</v-icon>
+      <v-tab value="maximum">
+        2. Min-Max Area chart <v-icon>mdi-stethoscope</v-icon>
       </v-tab>
       <v-spacer />
 
-
-      <v-tab value="graphs">
-       Energy Graphs <v-icon>mdi-stethoscope</v-icon>
+      <v-tab value="weekly">
+        3 Weekly Avarage Graphs <v-icon>mdi-stethoscope</v-icon>
       </v-tab>
       <v-spacer />
 
-      <v-tab value="energy">
-        Energy data <v-icon>mdi-stethoscope</v-icon>
+      <v-tab value="monthly">
+        4 Month Average Graph <v-icon>mdi-stethoscope</v-icon>
       </v-tab>
       <v-spacer />
-
+      <v-tab value="rawdata">
+        5 Raw Data <v-icon>mdi-stethoscope</v-icon>
+      </v-tab>
+      <v-spacer />
 
     </v-tabs>
 
     <v-card class="mx-auto" color="#26c6da" theme="dark" width="95%" height="100%" min-height="100vh">
       <v-card-text>
         <v-window v-model="tab">
-          <v-window-item value="health">
-            Employees data | {{ counted1 }}
-            <employees-tabel></employees-tabel>
-          </v-window-item>
-          <v-window-item value="family">
-            Family members | {{ counted2 }}
-            <families-table></families-table>
+
+          <v-window-item value="daily">
+            Daily Graph | {{ counted3 }}
+            <DailyGraph></DailyGraph>
           </v-window-item>
 
-          <v-window-item value="dated">
-            Family members | {{ counted2 }} 
-            <DatedData></DatedData>
+          <v-window-item value="maximum">
+            Maximum Table | {{ counted3 }}
+            <DailyGraph></DailyGraph>
           </v-window-item>
 
-          <v-window-item value="benefits">
-            Discount Benefitiaries | {{ counted3 }}
-            <discounted-children></discounted-children>
+          <v-window-item value="weekly">
+            Weeekly Graph | {{ counted3 }}
+            <DailyGraph></DailyGraph>
           </v-window-item>
 
-          <v-window-item value="graphs">            
-            Energy Graph | {{ counted3 }}   
-            <EnergyGraph></EnergyGraph>            
+          <v-window-item value="monthly">
+            Monthly Table | {{ counted3 }}
+
+            <DailyGraph></DailyGraph>
           </v-window-item>
 
-          <v-window-item value="energy">            
-            Energy Table | {{ counted3 }}   
-            <EnergyTable></EnergyTable>
+          <v-window-item value="rawdata">
+            Raw Data | {{ counted3 }}
+            <RawData></RawData>
           </v-window-item>
 
         </v-window>
@@ -75,10 +68,6 @@
 <script setup lang="ts">
 
 import { onMounted, ref } from "vue";
-import DatedData from "../../components/Employees/ExtractDates.vue";
-import EmployeesTabel from "../../components/Employees/EmployeesTable.vue";
-import FamiliesTable from "../../components/Employees/FamiliesTable.vue";
-import DiscountedChildren from "../../components/Employees/DiscountedChildren.vue";
 import { useEmployeeStore } from "../../stores/DataEmployees";
 
 const store = useEmployeeStore();
@@ -103,7 +92,6 @@ const updatesFromAPI = () => {
   salaries.value = store.loadedSalaries;
   families.value = store.loadedFamilies;
   discounted.value = store.loadedDiscounted;
-
   isAuthorizedAdmin(emailx.value);
   counted1.value = salaries.value.length;
   counted2.value = families.value.length;
@@ -111,12 +99,10 @@ const updatesFromAPI = () => {
 };
 
 async function isAuthorizedAdmin(userEmail: string | undefined) {
-
   const enforcer = String(userEmail);
   const authorizedEmails = ["test1@gmail.com", "test2@gmail.com"];
   const goodUser = authorizedEmails.includes(enforcer);
   permit.value = goodUser;
-  
   return goodUser;
 }
 </script>

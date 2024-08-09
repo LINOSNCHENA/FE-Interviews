@@ -1,9 +1,8 @@
-
 // interfaces.ts
 
 export interface Salary {
   [key: string]: any;
-  id: number; 
+  id: number;
   namex: string;
   emailx: string;
   periodMonth: string;
@@ -11,22 +10,30 @@ export interface Salary {
   paycheck: number;
   cost: number;
   cbenefits: number;
-  balance: number
-
+  balance: number;
   created: Date;
   updated: Date;
   marriage?: string;
   kids?: number;
   discounted?: number;
-  families: Family[]; 
+  families: Family[];
 }
-
 
 export interface Family {
   [key: string]: any;
-  id?: number; // Optional id field
+  id?: number;
   namex: string;
   gender: string;
   created: Date;
   updated: Date;
+}
+
+export interface Commodity {
+  [key: string]: any;
+  id?: number; 
+  open: string;
+  hight: string;
+  low: string;
+  close: string;
+  volume: string;
 }

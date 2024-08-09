@@ -1,8 +1,8 @@
 <template>
-  <v-parallax src="../../assets/200.jpg" width="95%" height="950px" style="margin: 2%">
+  <v-parallax src="../../assets/300.jpg" width="95%" height="950px" style="margin: 2%">
     <v-sheet color="transparent" rounded width="90%" height="850px" style="margin: 2%">
       <v-card class="mx-auto justify-center align-center" color="transparent" theme="light" width="80%" height="800"
-        style="margin: 2%" prepend-icon="mdi-rhombus-outline" title="Medical Benefits Office">
+        style="margin: 2%" prepend-icon="mdi-rhombus-outline" title="Commodities Prices and Visualizations">
         <v-form v-model="loaded" @submit.prevent="onSubmit" style="
             text-align: center;
             background-color: transparent;
@@ -31,21 +31,6 @@
           </v-btn>
           <br />
           <br />
-
-          <!-- <v-btn :disabled="!form" :loading="loading" color="success" size="large" type="submit" variant="flat"
-            width="300" height="50">
-            <router-link to="/Registration" class="text-decoration-none">
-              <span> Create Account? </span>
-            </router-link></v-btn>
-          <br />
-          <br />
-
-          <v-btn :disabled="!form" :loading="loading" color="success" size="large" type="submit" variant="flat"
-            width="300" height="50">
-            <router-link to="/Registration" class="text-decoration-none">
-              <span> Forgot Password? </span>
-            </router-link></v-btn>
-          <br /> -->
           <p>
             {{ tradeMark }} |
             {{
@@ -77,7 +62,7 @@ const loaded = ref(false);
 const showPassword = ref(false);
 const storeAPI = useEmployeeStore();
 const storeAUT = useAuthStore();
-const tradeMark = ref("Health Guards (Z) Ltd (v 4.0.0.)");
+const tradeMark = ref("Trading Houses data Ltd (v 2.0.1.)");
 
 const form = ref({
   email: "",
@@ -94,10 +79,8 @@ const onSubmit = async () => {
   const isAuthenticated = form.value.email;
   localStorage.setItem("ActiveUserEmail", JSON.stringify(isAuthenticated));
   const x = await storeAUT.isAuthorized(isAuthenticated);
-  // console.log(x);
-  // console.log(isAuthenticated);
   try {
-    if (x) { router.push({ name: "Employees" }); }
+    if (x) { router.push({ name: "Commodities" }); }
     else {
       alert(" Wrong password | maybe Use guests password | test1@gmail.com")
     }
@@ -118,7 +101,6 @@ const togglePasswordVisibility = () => {
 const clearPassword = () => {
   form.value.password = "";
 };
-
 
 </script>
 
