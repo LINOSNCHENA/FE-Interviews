@@ -11,7 +11,6 @@ declare module 'vue' {
     BottomNav: typeof import('./components/Dashboard/BottomNav.vue')['default']
     copy: typeof import('./components/EnergyRecords/DailyGraph copy.vue')['default']
     DailyGraph: typeof import('./components/EnergyRecords/DailyGraph.vue')['default']
-    'DailyGraph copy': typeof import('./components/EnergyRecords/DailyGraph copy.vue')['default']
     DiscountedChildren: typeof import('./components/Employees/DiscountedChildren.vue')['default']
     EmployeesTable: typeof import('./components/Employees/EmployeesTable.vue')['default']
     EnergyGraph: typeof import('./components/EnergyRecords/EnergyGraph.vue')['default']

@@ -1,19 +1,18 @@
 <template>
   <v-container class="json-container">
-    <h1>JSON Data {{ recordselect }} out of {{ records }}</h1>
-
+    <h1>JSON Data {{ recordselect }} out of {{ records }} Records</h1>
     <v-row>
-      <v-col cols="12" md="6">
+      <v-col cols="8" md="4">
         <v-text-field label="Start Date" v-model="startDate" type="date" bg-color="teal"></v-text-field>
       </v-col>
-      <v-col cols="12" md="6">
+      <v-col cols="8" md="4">
         <v-text-field label="End Date" v-model="endDate" type="date" bg-color="teal"></v-text-field>
       </v-col>
 
+      <v-col cols="8" md="4">
+        <v-btn @click="filterData" width="400px" height="50px" color="teal">Filter Data</v-btn>
+      </v-col>
     </v-row>
-
-    <v-btn @click="filterData">Filter Data</v-btn>
-
     <pre class="json-pre">{{ filteredJsonData }}</pre>
   </v-container>
 </template>
@@ -41,13 +40,11 @@ function formatDate(date: Date): string {
 onMounted(async () => {
   try {
     const data = await EnergyServices.getDataFromJsons();
-
     if (data) {
       jsonData.value = data["Time Series (Daily)"];
       filteredJsonData.value = jsonData.value; // Show all records initially
     } else {
-      console.error("No data found.");
-    }
+      console.error("No data found.");    }
   } catch (error) {
     console.error("An error occurred while fetching the JSON data:", error);
   }
@@ -59,7 +56,7 @@ function filterData() {
     alert("End date must be later than the start date.");
     return;
   }
-  
+
   filteredJsonData.value = filterRecordsByDateRange(
     jsonData.value,
     startDate.value,
@@ -85,7 +82,7 @@ function filterRecordsByDateRange(data: { [x: string]: any; }, start: string | n
 
 <style scoped>
 .json-container {
-  max-width: 800px;
+  max-width: 100vw;
   margin: 20px auto;
   padding: 20px;
   background-color: #f9f9f9;
@@ -110,5 +107,4 @@ h1 {
   border-radius: 6px;
   overflow-x: auto;
 }
-</style>: { [x: string]: any; }: string | number | Date: string | number | Date: { [x: string]: any; }: string | number
-| Date: string | number | Date
+</style>
