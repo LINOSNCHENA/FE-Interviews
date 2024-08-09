@@ -3,9 +3,7 @@
     <Bar :data="chartData" :options="chartOptions" />
   </div>
   <pre>{{ jsonData }}</pre>
-
 </template>
-
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 import { Bar } from "vue-chartjs";
@@ -20,12 +18,52 @@ import {
   ChartOptions,
   ChartData,
 } from "chart.js";
-// import { useEnergyStore } from "../../stores/EnergyData";
 import EnergyServices from "../../services/EnergyServices";
-
 // Initialize reactive variables
 const jsonData = ref<any>(null);
-const energyRecords=ref(8);
+const EnergyData = ref<any>(null);
+const energyRecords = ref(8);
+
+// Fetch data when the component is mounted
+onMounted(async () => {
+  try {
+    // Call the getDataFromJsons method to fetch JSON data
+    const data = await EnergyServices.getDataFromJsons();
+    console.log(data);
+    console.log("===================");
+    // Update the state with the fetched data
+    if (data) {
+      jsonData.value = data;
+      EnergyData.value = data['Time Series (Daily)'];
+      console.log(EnergyData.value);
+      console.log(jsonData.value);
+
+
+         // Extract dates and closing prices from EnergyData
+         const timeSeries = EnergyData.value;
+      const labels = Object.keys(timeSeries).reverse(); // Dates
+      const dataPoints = Object.values(timeSeries).map((entry: any) =>
+        parseFloat(entry["4. close"])
+      ).reverse(); // Closing prices
+         // Update chartData with extracted data
+         chartData.value = {
+        labels: labels,
+        datasets: [
+          {
+            label: `Closing Prices`,
+            backgroundColor: "#42A5F5",
+            data: dataPoints,
+          },
+        ],
+      };
+
+    } else {
+      console.error("No data found.");
+    }
+  } catch (error) {
+    console.error("An error occurred while fetching the JSON data:", error);
+  }
+});
 
 // Define chartData outside of onMounted so it's available in the template
 const chartData = ref<ChartData<"bar">>({
@@ -70,23 +108,8 @@ ChartJS.register(
   LinearScale
 );
 
-// Fetch data when the component is mounted
-onMounted(async () => {
-  try {
-    // Call the getDataFromJsons method to fetch JSON data
-    const data = await EnergyServices.getDataFromJsons();
-    console.log(data);
-    console.log("===================");    
-    // Update the state with the fetched data
-    if (data) {
-      jsonData.value = data;
-    } else {
-      console.error('No data found.');
-    }
-  } catch (error) {
-    console.error('An error occurred while fetching the JSON data:', error);
-  }
-});
+
+
 
 
 </script>
