@@ -1,19 +1,17 @@
 <template>
   <div class="chart-container">
-    <v-row class="date-row" no-gutters>
-      <v-col cols="12" md="4">
+    <v-row>
+      <v-col cols="6" md="3">
         <v-text-field label="Start Date" v-model="startDate" type="date"></v-text-field>
       </v-col>
-      <v-col cols="12" md="4">
+      <v-col cols="6" md="3">
         <v-text-field label="End Date" v-model="endDate" type="date"></v-text-field>
       </v-col>
-      <v-col cols="12" md="4">
-        <v-btn @click="updateChartData" class="update-btn">Update Chart</v-btn>
+      <v-col cols="6" md="3">
+        <v-btn @click="updateChartData" width="400px" height="60px">Update Chart</v-btn>
       </v-col>
     </v-row>
-    <div class="chart-wrapper">
-      <Bar :data="chartData" :options="chartOptions" />
-    </div>
+    <Bar :data="chartData" :options="chartOptions" />
   </div>
 </template>
 
@@ -46,8 +44,7 @@ ChartJS.register(
 // Initialize state variables
 const endDate = ref<string>(formatDate(new Date()));
 const startDate = ref<string>(calculateStartDate(endDate.value));
-
-function calculateStartDate(endDate: string): string {
+  function calculateStartDate(endDate: string): string {
   const end = new Date(endDate);
   end.setDate(end.getDate() - 7);
   return formatDate(end);
@@ -63,7 +60,8 @@ const chartData = ref<ChartData<"bar">>({
   datasets: [
     {
       label: "Closing Prices",
-      backgroundColor: "#42A5F5",
+      backgroundColor: "red",
+      //  backgroundColor: "#42A5F5",
       data: [],
     },
   ],
@@ -115,6 +113,7 @@ function updateChartData() {
     alert("End date must be later than the start date.");
     return;
   }
+
   const filteredData = filterRecordsByDateRange(
     EnergyData.value,
     startDate.value,
@@ -130,8 +129,9 @@ function updateChartData() {
     labels: labels,
     datasets: [
       {
-        label: `Closing Prices | Total Records: ${Object.keys(wholeData.value["Time Series (Daily)"] || {}).length} | Filtered Records: ${Object.keys(filteredData).length}`,
-        backgroundColor: "#42A5F5",
+        label: `Closing Prices Data | Total Records: ${Object.keys(wholeData.value["Time Series (Daily)"] || {}).length} | Filtered Records: ${Object.keys(filteredData).length}`,
+      //  backgroundColor: "yellow",
+        //  backgroundColor: "#42A5F5",
         data: filteredDataPoints,
       },
     ],
@@ -153,56 +153,21 @@ function filterRecordsByDateRange(data, start, end) {
 }
 </script>
 
-<style scoped>
-/* .chart-container {
-  display: flex;
-  flex-direction: column;
-  height: 85vh;
-  width: 100vw;
-  background-color: #f9f9f9;
-  padding: 0.5rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-} */
-
-
+<style lang="scss" scoped>
 .chart-container {
-  display: flex;
-  flex-direction: column;
-  height: 85vh;
   width: 100vw;
-  background-color: #f9f9f9;
+  height: 78vh;
   padding: 1rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-}
-
-.date-row {
-  flex: 0 1 auto;
-  margin-bottom: 1rem;
-}
-
-.update-btn {
-  width: 30px;
-  height: 60px;
-  background-color: blue;
-  color: #fff;
-  font-weight: bold;
-}
-
-.chart-wrapper {
-  flex: 1 1 auto;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: teal;
-  height: 60px;
-}
-
-.chart-wrapper canvas {
-  width: 100% !important;
-  height: 100% !important;
+  background-color: #f9f9f9;
   border-radius: 8px;
-  background-color: #f5428d;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  overflow-x: auto;
+
+  canvas {
+    max-width: 90%;
+    max-height: 95%;
+    border: 5px solid #00ff37;
+    border-radius: 8px;
+  }
 }
 </style>

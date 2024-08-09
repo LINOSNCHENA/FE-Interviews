@@ -29,7 +29,7 @@
 
     </v-tabs>
 
-    <v-card class="mx-auto" color="#26c6da" theme="dark" width="95%" height="100%" min-height="100vh">
+    <v-card class="mx-auto" color="#26c6da" theme="dark" width="100vw" height="90vh" min-height="50vh">
       <v-card-text>
         <v-window v-model="tab">
 
@@ -109,16 +109,21 @@ async function isAuthorizedAdmin(userEmail: string | undefined) {
 
 <style scoped>
 .frontFont {
-  margin: 10px;
-  padding: 10px;
-  height: 100vh;
+  margin: 0;
+  padding: 0x;
+  height: 90vh;
   width: 100%;
+  width: 100vw;
   text-align: center;
+  background:rgb(0, 119, 255);
 }
 
 .importx {
-  padding: 0px;
-  top: 0px;
-  left: 100px;
+  padding: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: rebeccapurple;
 }
+
 </style>
