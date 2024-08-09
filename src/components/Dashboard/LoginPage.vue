@@ -32,7 +32,7 @@
           <br />
           <br />
 
-          <v-btn :disabled="!form" :loading="loading" color="success" size="large" type="submit" variant="flat"
+          <!-- <v-btn :disabled="!form" :loading="loading" color="success" size="large" type="submit" variant="flat"
             width="300" height="50">
             <router-link to="/Registration" class="text-decoration-none">
               <span> Create Account? </span>
@@ -45,7 +45,7 @@
             <router-link to="/Registration" class="text-decoration-none">
               <span> Forgot Password? </span>
             </router-link></v-btn>
-          <br />
+          <br /> -->
           <p>
             {{ tradeMark }} |
             {{

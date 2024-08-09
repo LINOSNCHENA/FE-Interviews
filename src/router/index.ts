@@ -4,7 +4,7 @@ import Login from '../pages/Login.vue';
 import BenefitsEntry from '../pages/Manipulations/Add/BenefitsEntry.vue';
 import BenefitsUpdate from '../pages/Manipulations/Edit/BenefitsUpdate.vue';
 import AccountView from '../pages/Employees/AccountView.vue';
-import RegistrationView from '../pages/Employees/Registration.vue';
+// import RegistrationView from '../pages/Employees/Registration.vue';
 
 const routes = [
   {
@@ -31,12 +31,14 @@ const routes = [
     meta: { requiresAuth: false },
     component: AccountView,
   },
-  {
-    path: "/registraion",
-    name: "Registration",
-     meta: { requiresAuth: false },
-    component: RegistrationView,
-  },
+  // {
+  //   path: "/registraion",
+  //   name: "Registration",
+  //    meta: { requiresAuth: false },
+  //   component: RegistrationView,
+  // },
+
+
 ];
 
 const router = createRouter({

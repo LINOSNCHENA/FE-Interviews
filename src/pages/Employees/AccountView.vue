@@ -9,10 +9,24 @@
       <v-tab value="family">
        Families <v-icon>mdi-family-tree</v-icon> </v-tab>
       <v-spacer />
+
+      <v-tab value="dated">
+        Dated  <v-icon>mdi-stethoscope</v-icon>
+      </v-tab>
+      <v-spacer />
+
       <v-tab value="benefits">
         Benefited <v-icon>mdi-stethoscope</v-icon>
       </v-tab>
       <v-spacer />
+
+
+      <v-tab value="energy">
+        Energy <v-icon>mdi-stethoscope</v-icon>
+      </v-tab>
+      <v-spacer />
+
+
     </v-tabs>
 
     <v-card class="mx-auto" color="#26c6da" theme="dark" width="95%" height="100%" min-height="100vh">
@@ -26,10 +40,25 @@
             Family members | {{ counted2 }}
             <families-table></families-table>
           </v-window-item>
+
+          <v-window-item value="dated">
+            Family members | {{ counted2 }}           >
+            <DatedData></DatedData>
+          </v-window-item>
+
           <v-window-item value="benefits">
             Discount Benefitiaries | {{ counted3 }}
             <discounted-children></discounted-children>
           </v-window-item>
+
+          <v-window-item value="energy">            
+            Energy Table | {{ counted3 }}
+            <!-- <discounted-children></discounted-children> -->
+            <EnergyTable></EnergyTable>
+          </v-window-item>
+
+
+
         </v-window>
       </v-card-text>
     </v-card>
@@ -39,11 +68,12 @@
 <script setup lang="ts">
 
 import { onMounted, ref } from "vue";
+import DatedData from "../../components/Employees/ExtractDates.vue";
 import EmployeesTabel from "../../components/Employees/EmployeesTable.vue";
 import FamiliesTable from "../../components/Employees/FamiliesTable.vue";
 import DiscountedChildren from "../../components/Employees/DiscountedChildren.vue";
-
 import { useEmployeeStore } from "../../stores/DataEmployees";
+import EnergyTable from "../../components/Employees/EnergyTable.vue";
 
 const store = useEmployeeStore();
 const tab = ref("health");

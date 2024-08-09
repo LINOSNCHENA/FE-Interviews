@@ -47,3 +47,12 @@ use any of the below Temporal passwords;
 
 ```
 
+## 6. Graphics
+
+```
+npm install chart.js vue-chartjs
+
+```
+
+## End
+

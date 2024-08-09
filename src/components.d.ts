@@ -11,6 +11,8 @@ declare module 'vue' {
     BottomNav: typeof import('./components/Dashboard/BottomNav.vue')['default']
     DiscountedChildren: typeof import('./components/Employees/DiscountedChildren.vue')['default']
     EmployeesTable: typeof import('./components/Employees/EmployeesTable.vue')['default']
+    EnergyTable: typeof import('./components/Employees/EnergyTable.vue')['default']
+    ExtractDates: typeof import('./components/Employees/ExtractDates.vue')['default']
     FamiliesTable: typeof import('./components/Employees/FamiliesTable.vue')['default']
     HelloWorld: typeof import('./components/HelloWorld.vue')['default']
     LoginPage: typeof import('./components/Dashboard/LoginPage.vue')['default']
