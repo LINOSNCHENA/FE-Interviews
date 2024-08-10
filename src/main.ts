@@ -5,22 +5,13 @@
  */
 
 // Plugins
-import { registerPlugins } from '@/plugins'
+import { registerPlugins } from './plugins'
 // Components
 import App from './App.vue'
 // Composables
 import { createApp } from 'vue'
-// main.js or main.ts
-import { createPinia } from 'pinia';
-import './styles/settings.scss'; // Import global SCSS styles
-
-
-
-
-
+import './styles/settings.scss'; 
 const app = createApp(App)
-const pinia = createPinia();
 registerPlugins(app)
-app.use(pinia);
 app.mount('#app');
 

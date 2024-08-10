@@ -18,6 +18,7 @@ declare module 'vue' {
     HelloWorld: typeof import('./components/HelloWorld.vue')['default']
     LoginPage: typeof import('./components/Dashboard/LoginPage.vue')['default']
     MaxMinGraph: typeof import('./components/EnergyRecords/MaxMinGraph.vue')['default']
+    'MaxMinGraph copy': typeof import('./components/EnergyRecords/MaxMinGraph copy.vue')['default']
     MonthlyGraph: typeof import('./components/EnergyRecords/MonthlyGraph.vue')['default']
     RawData: typeof import('./components/EnergyRecords/RawData.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
