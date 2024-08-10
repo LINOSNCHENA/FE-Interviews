@@ -12,139 +12,176 @@
       </v-col>
     </v-row>
     <div class="chart-wrapper">
-      <Bar :data="chartData" :options="chartOptions" />
+      <Line :data="chartData" :options="chartOptions" />
     </div>
   </div>
 </template>
 
+
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
-import { Bar } from "vue-chartjs";
+
+import { ref, onMounted } from 'vue';
+import { Line } from 'vue-chartjs';
 import {
   Chart as ChartJS,
   Title,
   Tooltip,
   Legend,
-  BarElement,
+  LineElement,
+  PointElement,
   CategoryScale,
   LinearScale,
+  TimeScale,
   ChartOptions,
   ChartData,
-} from "chart.js";
-import EnergyServices from "../../services/EnergyServices";
+} from 'chart.js';
+import 'chartjs-adapter-date-fns'; // Ensure date adapter is included
+import EnergyServices from '../../services/EnergyServices';
 
 // Register chart components
 ChartJS.register(
   Title,
   Tooltip,
   Legend,
-  BarElement,
+  LineElement,
+  PointElement,
   CategoryScale,
-  LinearScale
+  LinearScale,
+  TimeScale
 );
 
 // Initialize state variables
 const endDate = ref<string>(formatDate(new Date()));
 const startDate = ref<string>(calculateStartDate(endDate.value));
 
-function calculateStartDate(endDate: string): string {
-  const end = new Date(endDate);
-  end.setDate(end.getDate() - 7);
-  return formatDate(end);
-}
-
-
-const EnergyData = ref<any>(null);
-const wholeData = ref<any>(null);
-
-
-// Define chartData and chartOptions
-const chartData = ref<ChartData<"bar">>({
+const chartData = ref<ChartData<'line'>>({
   labels: [],
-  datasets: [
-    {
-      label: "Closing Prices",
-      backgroundColor: "#42A5F5",
-      data: [],
-    },
-  ],
+  datasets: []
 });
 
-const chartOptions = ref<ChartOptions<"bar">>({
+const chartOptions = ref<ChartOptions<'line'>>({
   responsive: true,
   plugins: {
     legend: {
-      position: "top",
+      position: 'top',
     },
     tooltip: {
       callbacks: {
-        label: (tooltipItem) =>
-          `${tooltipItem.dataset.label}: ${tooltipItem.raw}`,
+        label: (tooltipItem) => {
+          const datasetLabel = tooltipItem.dataset.label || '';
+          if (Array.isArray(tooltipItem.raw)) {
+            const [min, max] = tooltipItem.raw as [number, number];
+            return `${datasetLabel}: Min ${min}, Max ${max}`;
+          }
+          return `${datasetLabel}: ${tooltipItem.raw}`;
+        },
       },
     },
   },
   scales: {
+    x: {
+      type: 'time',
+      time: {
+        unit: 'day',
+      //  tooltipFormat: 'll',
+        tooltipFormat: 'PP', // Adjust format for date-fns (PP = Date in long format)
+      },
+      title: {
+        display: true,
+        text: 'Date',
+      },
+    },
     y: {
       beginAtZero: true,
+      title: {
+        display: true,
+        text: 'Price',
+      },
     },
   },
 });
 
+const EnergyData = ref<Record<string, { '4. close': string }>>({});
+
 onMounted(async () => {
   try {
     const data = await EnergyServices.getDataFromJsons();
-
     if (data) {
-      wholeData.value = data;
-      EnergyData.value = data["Time Series (Daily)"];
+      EnergyData.value = data['Time Series (Daily)'];
       updateChartData(); // Initialize chart data
     } else {
-      console.error("No data found.");
+      console.error('No data found.');
     }
   } catch (error) {
-    console.error("An error occurred while fetching the JSON data:", error);
+    console.error('An error occurred while fetching the JSON data:', error);
   }
 });
 
-function formatDate(date: Date): string {
-  return date.toISOString().split('T')[0];
-}
-
 function updateChartData() {
-  if (new Date(endDate.value).getTime() <= new Date(startDate.value).getTime()) {
-    alert("End date must be later than the start date.");
+  const start = new Date(startDate.value);
+  const end = new Date(endDate.value);
+
+  if (end.getTime() <= start.getTime()) {
+    alert('End date must be later than the start date.');
     return;
   }
+
   const filteredData = filterRecordsByDateRange(
     EnergyData.value,
     startDate.value,
     endDate.value
   );
 
-
-  const labels = Object.keys(filteredData).reverse();
-  const filteredDataPoints = Object.values(filteredData)
-    .map((entry: any) => parseFloat(entry["4. close"]))
-    .reverse();
-
+  const minMaxData = calculateMinMaxRange(filteredData);
+  const currentYearDataPoints = getCurrentYearDataPoints();
 
   chartData.value = {
-    labels: labels,
+    labels: minMaxData.map(d => d.x),
     datasets: [
       {
-        label: `Closing Prices | Total Records: ${Object.keys(wholeData.value["Time Series (Daily)"] || {}).length} | Filtered Records: ${Object.keys(filteredData).length}`,
-        backgroundColor: "#42A5F5",
-        data: filteredDataPoints,
+        label: 'Min Value',
+        data: minMaxData.map(d => ({
+          x: d.x,
+          y: d.y[0]
+        })),
+        borderColor: 'brown',
+        // borderColor: '#42A5F5',
+        backgroundColor: 'rgba(66, 165, 245, 0.2)',
+        fill: false,
+        type: 'line',
+      },
+      {
+        label: 'Max Value',
+        data: minMaxData.map(d => ({
+          x: d.x,
+          y: d.y[1]
+        })),
+        borderColor: 'yellow',
+        backgroundColor: 'rgba(255, 255, 0, 0.2)',
+        fill: false,
+        type: 'line',
+      },
+      {
+        label: 'Current Year',
+        data: currentYearDataPoints.map(d => ({
+          x: d.x,
+          y: d.y
+        })),
+        borderColor: 'green',
+        // borderColor: '#FF5722',
+        backgroundColor: 'rgba(255, 87, 34, 0.2)',
+        fill: false,
+        type: 'line',
       },
     ],
   };
 }
 
-function filterRecordsByDateRange(data, start, end) {
+function filterRecordsByDateRange(data: Record<string, { '4. close': string }>, start: string, end: string) {
   const startTime = new Date(start).getTime();
   const endTime = new Date(end).getTime();
   return Object.keys(data)
-    .filter((date) => {
+    .filter(date => {
       const dateTime = new Date(date).getTime();
       return dateTime >= startTime && dateTime <= endTime;
     })
@@ -154,6 +191,52 @@ function filterRecordsByDateRange(data, start, end) {
     }, {});
 }
 
+function calculateMinMaxRange(data: Record<string, { '4. close': string }>) {
+  const minMaxMap: Record<string, [number, number]> = {};
+  for (const date in data) {
+    const closePrice = parseFloat(data[date]['4. close']);
+    const dateObject = new Date(date);
+    const monthDay = `${dateObject.getMonth() + 1}-${dateObject.getDate()}`;
+    if (!minMaxMap[monthDay]) {
+      minMaxMap[monthDay] = [Infinity, -Infinity];
+    }
+    minMaxMap[monthDay][0] = Math.min(minMaxMap[monthDay][0], closePrice); // Min
+    minMaxMap[monthDay][1] = Math.max(minMaxMap[monthDay][1], closePrice); // Max
+  }
+  console.log(minMaxMap);
+  return Object.keys(minMaxMap).map(monthDay => ({
+    x: new Date(`2023-${monthDay}`).getTime(), // Use a placeholder year for the x-axis
+    y: minMaxMap[monthDay]
+  }));
+}
+
+
+function getCurrentYearDataPoints() {
+  const currentYearDataPoints: { x: number, y: number }[] = [];
+  const now = new Date();
+  const currentYear = now.getFullYear();
+
+  for (const date in EnergyData.value) {
+    const dataDate = new Date(date);
+    if (dataDate.getFullYear() === currentYear) {
+      currentYearDataPoints.push({
+        x: dataDate.getTime(),
+        y: parseFloat(EnergyData.value[date]['4. close'])
+      });
+    }
+  }
+  return currentYearDataPoints;
+}
+
+function calculateStartDate(endDate: string): string {
+  const end = new Date(endDate);
+  end.setFullYear(end.getFullYear() - 1); // Show data for the previous year
+  return formatDate(end);
+}
+
+function formatDate(date: Date): string {
+  return date.toISOString().split('T')[0];
+}
 </script>
 
 <style scoped>
@@ -166,6 +249,8 @@ function filterRecordsByDateRange(data, start, end) {
   padding: 1rem;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   overflow: hidden;
+  font-size: smaller;
+  text-transform: lowercase;
 }
 
 .date-row {
@@ -179,8 +264,6 @@ function filterRecordsByDateRange(data, start, end) {
 .v-btn {
   margin: 0 5px;
 }
-
-
 .update-btn {
   width: 30vw;
   height: 60vh;
@@ -204,7 +287,7 @@ function filterRecordsByDateRange(data, start, end) {
   width: 100% !important;
   height: 100% !important;
   border-radius: 8px;
-  background-color: #42f5b0;
+  background-color: #e2e2e7;
 }
 
 .text-field-container {
@@ -240,3 +323,4 @@ function filterRecordsByDateRange(data, start, end) {
   }
 }
 </style>
+

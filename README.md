@@ -51,6 +51,7 @@ use any of the below Temporal passwords;
 
 ```
 npm install chart.js vue-chartjs
+npm install date-fns chartjs-adapter-date-fns --save
 
 ```
 ## Task
