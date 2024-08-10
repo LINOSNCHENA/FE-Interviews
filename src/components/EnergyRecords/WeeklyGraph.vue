@@ -8,7 +8,7 @@
         <v-text-field label="End Date" v-model="endDate" type="date" class="compact-text-field"></v-text-field>
       </v-col>
       <v-col cols="12" md="4">
-        <v-btn @click="updateChartData" class="update-btn" width="20vw" height="50px">Update Weekly</v-btn>
+        <v-btn @click="updateChartData" class="update-btn" width="20vw" height="50px">Update Monthly data</v-btn>
       </v-col>
     </v-row>
     <div class="chart-wrapper">
@@ -42,33 +42,20 @@ ChartJS.register(
   CategoryScale,
   LinearScale
 );
-
 // Initialize state variables
 const endDate = ref<string>(formatDate(new Date()));
 const startDate = ref<string>(calculateStartDate(endDate.value));
-
-function calculateStartDate(endDate: string): string {
-  const end = new Date(endDate);
-  end.setDate(end.getDate() - 7);
-  return formatDate(end);
-}
-
-const wholeData = ref<any>(null);
-const EnergyData = ref<any>(null);
-const metaData = ref<any>(null);
-
-// Define chartData and chartOptions
 const chartData = ref<ChartData<"bar">>({
   labels: [],
   datasets: [
     {
-      label: "Closing Prices",
-      backgroundColor: "#42A5F5",
+      label: "Monthly Average Prices",
+      backgroundColor: "yellow",
+      // backgroundColor: "#42A5F5",
       data: [],
     },
   ],
 });
-
 const chartOptions = ref<ChartOptions<"bar">>({
   responsive: true,
   plugins: {
@@ -88,16 +75,16 @@ const chartOptions = ref<ChartOptions<"bar">>({
     },
   },
 });
-
+const EnergyData = ref<any>(null);
+const dataFiltered=ref(0);
+const dataRecorded=ref(0);
 onMounted(async () => {
   try {
     const data = await EnergyServices.getDataFromJsons();
 
-    if (data) {
-      wholeData.value = data;
+    if (data) {    
       EnergyData.value = data["Time Series (Daily)"];
-      metaData.value = data["Meta Data"];
-      updateChartData(); // Initialize chart data
+      updateChartData(); 
     } else {
       console.error("No data found.");
     }
@@ -105,10 +92,6 @@ onMounted(async () => {
     console.error("An error occurred while fetching the JSON data:", error);
   }
 });
-
-function formatDate(date: Date): string {
-  return date.toISOString().split('T')[0];
-}
 
 function updateChartData() {
   if (new Date(endDate.value).getTime() <= new Date(startDate.value).getTime()) {
@@ -120,17 +103,18 @@ function updateChartData() {
     startDate.value,
     endDate.value
   );
-  const labels = Object.keys(filteredData).reverse();
-  const filteredDataPoints = Object.values(filteredData)
-    .map((entry: any) => parseFloat(entry["4. close"]))
-    .reverse(); 
+  const monthlyAverages = calculateWeeklyAverages(filteredData); 
+  dataRecorded.value=Object.values(monthlyAverages).length;
+  dataFiltered.value=Object.values(filteredData).length;
+  
   chartData.value = {
-    labels: labels,
+    labels: Object.keys(monthlyAverages),
     datasets: [
       {
-        label: `Closing Prices | Total Records: ${Object.keys(wholeData.value["Time Series (Daily)"] || {}).length} | Filtered Records: ${Object.keys(filteredData).length}`,
-        backgroundColor: "#42A5F5",
-        data: filteredDataPoints,
+        label: "Closing Prices : Monthly Average Prices | Months counted : ("+String(dataRecorded.value)+"/"+String(dataFiltered.value)+")",
+        backgroundColor: "yellow",
+        //backgroundColor: "#42A5F5", // Inside Background
+        data: Object.values(monthlyAverages),
       },
     ],
   };
@@ -149,10 +133,77 @@ function filterRecordsByDateRange(data, start, end) {
       return result;
     }, {});
 }
+
+//function calculateMonthlyAverages(data) {
+// calculateWeeklyAverages(data);
+// }
+
+/**
+ * Calculate weekly averages from daily data.
+ * 
+ * @param data - Object containing daily data, with dates as keys.
+ * @returns An object with weekly averages.
+ */
+ function calculateWeeklyAverages(data: Record<string, { '4. close': string }>): Record<string, number> {
+  
+  // Object to store the total value for each week
+  const weeklyTotals: Record<string, number> = {};
+  // Object to count the number of data points for each week
+  const weeklyCounts: Record<string, number> = {};
+
+  /**
+   * Helper function to get the start of the week (Monday) for a given date.
+   * 
+   * @param date - The date string in YYYY-MM-DD format.
+   * @returns The start of the week (Monday) as a date string in YYYY-MM-DD format.
+   */
+  function getStartOfWeek(date: string): string {
+    const currentDate = new Date(date);
+    const dayOfWeek = currentDate.getDay();
+    // Calculate the difference from Monday (day 1) and adjust if it's Sunday (day 0)
+    const daysSinceMonday = (dayOfWeek + 6) % 7; 
+    const startOfWeekDate = new Date(currentDate.setDate(currentDate.getDate() - daysSinceMonday));
+    return startOfWeekDate.toISOString().split('T')[0]; // Format to YYYY-MM-DD
+  }
+
+  // Process each entry in the data
+  for (const date in data) {
+    const closePrice = parseFloat(data[date]['4. close']);
+    const weekStart = getStartOfWeek(date);
+
+    // Initialize weekly totals and counts if not already present
+    if (!weeklyTotals[weekStart]) {
+      weeklyTotals[weekStart] = 0;
+      weeklyCounts[weekStart] = 0;
+    }
+
+    // Accumulate totals and counts for the week
+    weeklyTotals[weekStart] += closePrice;
+    weeklyCounts[weekStart] += 1;
+  }
+
+  // Calculate weekly averages
+  const weeklyAverages: Record<string, number> = {};
+  for (const week in weeklyTotals) {
+    weeklyAverages[week] = weeklyTotals[week] / weeklyCounts[week];
+  }
+
+  return weeklyAverages;
+}
+
+function calculateStartDate(endDate: string): string {
+  const end = new Date(endDate);
+  end.setMonth(end.getMonth() - 1); // Adjust to show data for the last month
+  return formatDate(end);
+}
+
+function formatDate(date: Date): string {
+  return date.toISOString().split('T')[0];
+}
+
+
 </script>
-
 <style scoped>
-
 .chart-container {
   display: flex;
   flex-direction: column;
@@ -162,6 +213,8 @@ function filterRecordsByDateRange(data, start, end) {
   padding: 1rem;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   overflow: hidden;
+  font-size: smaller;
+  text-transform: lowercase;
 }
 
 .date-row {
@@ -175,8 +228,6 @@ function filterRecordsByDateRange(data, start, end) {
 .v-btn {
   margin: 0 5px;
 }
-
-
 .update-btn {
   width: 30vw;
   height: 60vh;
@@ -200,7 +251,7 @@ function filterRecordsByDateRange(data, start, end) {
   width: 100% !important;
   height: 100% !important;
   border-radius: 8px;
-  background-color: #42f5b0;
+  background-color: #e2e2e7;
 }
 
 .text-field-container {

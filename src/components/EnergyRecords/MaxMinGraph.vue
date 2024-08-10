@@ -55,7 +55,7 @@ function calculateStartDate(endDate: string): string {
 
 
 const EnergyData = ref<any>(null);
-  const wholeData = ref<any>(null);
+const wholeData = ref<any>(null);
 
 
 // Define chartData and chartOptions
@@ -95,8 +95,9 @@ onMounted(async () => {
     const data = await EnergyServices.getDataFromJsons();
 
     if (data) {
+      wholeData.value = data;
       EnergyData.value = data["Time Series (Daily)"];
-        updateChartData(); // Initialize chart data
+      updateChartData(); // Initialize chart data
     } else {
       console.error("No data found.");
     }
@@ -124,7 +125,7 @@ function updateChartData() {
   const labels = Object.keys(filteredData).reverse();
   const filteredDataPoints = Object.values(filteredData)
     .map((entry: any) => parseFloat(entry["4. close"]))
-    .reverse(); 
+    .reverse();
 
 
   chartData.value = {
@@ -156,7 +157,6 @@ function filterRecordsByDateRange(data, start, end) {
 </script>
 
 <style scoped>
-
 .chart-container {
   display: flex;
   flex-direction: column;

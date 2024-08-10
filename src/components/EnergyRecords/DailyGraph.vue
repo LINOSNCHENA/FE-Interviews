@@ -124,6 +124,7 @@ function updateChartData() {
   const filteredDataPoints = Object.values(filteredData)
     .map((entry: any) => parseFloat(entry["4. close"]))
     .reverse(); 
+    
   chartData.value = {
     labels: labels,
     datasets: [
