@@ -116,7 +116,7 @@ import MaxMinGraph from "../../components/EnergyRecords/MaxMinGraph.vue";
 import WeeklyGraph from "../../components/EnergyRecords/WeeklyGraph.vue";
 
 const store = useEmployeeStore();
-const tab = ref("energy");
+const tab = ref("maximum");
 const salaries = ref<any[]>([]);
 const families = ref<any[]>([]);
 const discounted = ref<any[]>([]);

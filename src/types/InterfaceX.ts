@@ -37,3 +37,7 @@ export interface Commodity {
   close: string;
   volume: string;
 }
+export interface CloseData {
+  date: string;
+  close: number;
+}

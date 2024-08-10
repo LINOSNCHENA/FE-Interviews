@@ -17,11 +17,9 @@
   </div>
 </template>
 
-
 <script setup lang="ts">
-
-import { ref, onMounted } from 'vue';
-import { Line } from 'vue-chartjs';
+import { ref, onMounted } from "vue";
+import { Line } from "vue-chartjs";
 import {
   Chart as ChartJS,
   Title,
@@ -34,9 +32,9 @@ import {
   TimeScale,
   ChartOptions,
   ChartData,
-} from 'chart.js';
-import 'chartjs-adapter-date-fns';
-import EnergyServices from '../../services/EnergyServices';
+} from "chart.js";
+import "chartjs-adapter-date-fns";
+import EnergyServices from "../../services/EnergyServices";
 
 // Register chart components
 ChartJS.register(
@@ -50,70 +48,74 @@ ChartJS.register(
   TimeScale
 );
 
-
 // Initialize state variables
 const endDate = ref<string>(formatDate(new Date()));
 const startDate = ref<string>(calculateStartDate(endDate.value));
 
-const chartData = ref<ChartData<'line'>>({
+const chartData = ref<ChartData<"line">>({
   labels: [],
-  datasets: []
+  datasets: [],
 });
 
-const chartOptions = ref<ChartOptions<'line'>>({
+const chartOptions = ref<ChartOptions<"line">>({
   responsive: true,
   plugins: {
     legend: {
-      position: 'top',
+      position: "top",
     },
     tooltip: {
       callbacks: {
         label: (tooltipItem) => {
-          const datasetLabel = tooltipItem.dataset.label || '';
+          const datasetLabel = tooltipItem.dataset.label || "";
           if (Array.isArray(tooltipItem.raw)) {
             const [min, max] = tooltipItem.raw as [number, number];
+            console.log(max, min);
             return `${datasetLabel}: Min ${min}, Max ${max}`;
           }
-          return `${datasetLabel}: ${tooltipItem.raw}`;
+          // console.log(tooltipItem.raw);
+          let z = Object.values(tooltipItem);
+          let date = new Date(z[2].x).toDateString();
+          return `${datasetLabel}: ${z[2].y} | ${date}`;
+          // return `${datasetLabel}: ${tooltipItem.raw}`;
         },
       },
     },
   },
   scales: {
     x: {
-      type: 'time',
+      type: "time",
       time: {
-        unit: 'day',
-        tooltipFormat: 'PP', 
+        unit: "day",
+        tooltipFormat: "PP",
       },
       title: {
         display: true,
-        text: 'Date',
+        text: "Date",
       },
     },
     y: {
       beginAtZero: true,
       title: {
         display: true,
-        text: 'Price',
+        text: "Price",
       },
     },
   },
 });
 
-const EnergyData = ref<Record<string, { '4. close': string }>>({});
+const EnergyData = ref<Record<string, { "4. close": string }>>({});
 
 onMounted(async () => {
   try {
     const data = await EnergyServices.getDataFromJsons();
     if (data) {
-      EnergyData.value = data['Time Series (Daily)'];
+      EnergyData.value = data["Time Series (Daily)"];
       updateChartData(); // Initialize chart data
     } else {
-      console.error('No data found.');
+      console.error("No data found.");
     }
   } catch (error) {
-    console.error('An error occurred while fetching the JSON data:', error);
+    console.error("An error occurred while fetching the JSON data:", error);
   }
 });
 
@@ -121,7 +123,7 @@ function updateChartData() {
   const start = new Date(startDate.value);
   const end = new Date(endDate.value);
   if (end.getTime() <= start.getTime()) {
-    alert('End date must be later than the start date.');
+    alert("End date must be later than the start date.");
     return;
   }
   const filteredData = filterRecordsByDateRange(
@@ -132,51 +134,67 @@ function updateChartData() {
   const minMaxData = calculateMinMaxRange(filteredData);
   const currentYearDataPoints = getCurrentYearDataPoints();
 
+  let x = minMaxData[0].x; //.y[0];
+  let y = minMaxData[0].y[1];
+  let z = minMaxData[0].y; //.y[0];
+
+  console.log(x);
+  console.log(y);
+  console.log(z);
+  // console.log(minMaxData[0]);
+  console.log(minMaxData);
+  console.log(z[0]);
+  console.log(z[1]);
+
   chartData.value = {
-    labels: minMaxData.map(d => d.x),
+    labels: minMaxData.map((d) => new Date(d.x)), // Format x-axis la
     datasets: [
       {
-        label: 'Min Value (' + String(minMaxData.length) + ')',
-        data: minMaxData.map(d => ({
+        label: "Min Value (" + String(minMaxData.length) + ")",
+        data: minMaxData.map((d) => ({
           x: d.x,
-          y: d.y[0]
+          y: d.y[0], // Min value
         })),
-        borderColor: 'green',  
-        backgroundColor: 'rgba(66, 165, 245, 0.2)',
-        fill: false,
-        type: 'line',
+        borderColor: "green",
+        backgroundColor: "rgba(66, 165, 245, 0.2)",
+        fill: true,
+        type: "line",
       },
       {
-        label: 'Max Value (' + String(minMaxData.length) + ')',
-        data: minMaxData.map(d => ({
+        label: "Max Value (" + String(minMaxData.length) + ")",
+        data: minMaxData.map((d) => ({
           x: d.x,
-          y: d.y[1]
+          y: d.y[1],
         })),
-        borderColor: 'blue',
-        backgroundColor: 'rgba(255, 255, 0, 0.2)',
+        borderColor: "blue",
+        backgroundColor: "rgba(255, 255, 0, 0.2)",
         fill: false,
-        type: 'line',
+        type: "line",
       },
       {
-        label: 'Current Year (' + currentYearDataPoints.length + ')',
-        data: currentYearDataPoints.map(d => ({
+        label: "Current Year (" + currentYearDataPoints.length + ")",
+        data: currentYearDataPoints.map((d) => ({
           x: d.x,
-          y: d.y
+          y: d.y,
         })),
-        borderColor: 'brown',
-        backgroundColor: 'rgba(255, 87, 34, 0.2)',
+        borderColor: "brown",
+        backgroundColor: "rgba(255, 87, 34, 0.2)",
         fill: false,
-        type: 'line',
+        type: "line",
       },
     ],
   };
 }
 
-function filterRecordsByDateRange(data: Record<string, { '4. close': string }>, start: string, end: string) {
+function filterRecordsByDateRange(
+  data: Record<string, { "4. close": string }>,
+  start: string,
+  end: string
+) {
   const startTime = new Date(start).getTime();
   const endTime = new Date(end).getTime();
   return Object.keys(data)
-    .filter(date => {
+    .filter((date) => {
       const dateTime = new Date(date).getTime();
       return dateTime >= startTime && dateTime <= endTime;
     })
@@ -187,36 +205,79 @@ function filterRecordsByDateRange(data: Record<string, { '4. close': string }>, 
 }
 
 // =================================================================================0========
-function calculateMinMaxRange(data: Record<string, { '4. close': string }>) {
-  const minMaxMap: Record<string, [number, number]> = {};
+function calculateMinMaxRange(data: Record<string, { "4. close": string }>) {
+  const minMaxMap: Record<string, any> = {};
+  console.clear();
+
   for (const date in data) {
-    const closePrice = parseFloat(data[date]['4. close']);
+    const closePrice = parseFloat(data[date]["4. close"]);
+    if (isNaN(closePrice)) continue; // Skip invalid close prices
     const dateObject = new Date(date);
     const monthDay = `${dateObject.getMonth() + 1}-${dateObject.getDate()}`;
-    if (!minMaxMap[monthDay]) {
-      minMaxMap[monthDay] = [Infinity, -Infinity];
-    }
-    minMaxMap[monthDay][0] = Math.min(minMaxMap[monthDay][0], closePrice+30); // Min
-    minMaxMap[monthDay][1] = Math.max(minMaxMap[monthDay][1], closePrice); // Max
-  }
-  console.log(minMaxMap);
-  console.log(minMaxMap[0]);
-  const firstEntry = Object.entries(minMaxMap)[0];
-  console.log(firstEntry);
 
-  let dataX = Object.keys(minMaxMap).map(monthDay => ({
-    x: new Date(`2023-${monthDay}`).getTime(), 
-    y: minMaxMap[monthDay]
-  }));
-  console.log(dataX);
-  console.log(dataX.length);
-  console.log(dataX[0]);
+    // Collect all '4. close' data points that match the current monthDay across different years
+    const filteredData1 = Object.entries(data);
+    const filteredData2 = filteredData1.filter(([dataDate]) => {
+      const dataDateObject = new Date(dataDate);
+      const monthDay2 = `${dataDateObject.getMonth() + 1}-${dataDateObject.getDate()}`;
+      return monthDay === monthDay2;
+    })
+    const filteredData = filteredData2.map(([dataDate, value]) => ({
+      date: dataDate.slice(5),
+      close: parseFloat(value["4. close"]),
+    }));
+
+    // Use reduce to find the maximum 'close' value
+    const maxClose = filteredData.reduce((max, item) => {
+      return item.close > max ? item.close : max;
+    }, -Infinity);
+
+    const minClose = filteredData.reduce((min, item) => {
+      return item.close < min ? item.close : min;
+    }, Infinity);
+
+    const maxMinBalance=[maxClose,minClose, maxClose-minClose]
+   // console.log(maxClose,minClose); // Output: 621.7
+
+    console.log(filteredData.length, filteredData);
+    console.log(maxMinBalance);
+
+    if (!minMaxMap[monthDay]) {
+      // Initialize with the first value
+      minMaxMap[monthDay] = [closePrice, closePrice, [closePrice], filteredData];
+    } else {
+      minMaxMap[monthDay][0] = Math.min(minMaxMap[monthDay][0], closePrice); // Update Min
+      minMaxMap[monthDay][1] = Math.max(minMaxMap[monthDay][1], closePrice); // Update Max
+      minMaxMap[monthDay][2].push(closePrice); // Add to full array of close prices
+      minMaxMap[monthDay][3] = filteredData; // Store the filtered data by date
+    }
+  }
+
+  // Use a placeholder year for consistent x-axis values
+  const placeholderYear = 2023;
+
+  // Prepare data for plotting
+  const dataX = Object.keys(minMaxMap).map((monthDay) => {
+    // Ensure the month and day are zero-padded for consistent date format
+    const [month, day] = monthDay.split("-").map(Number);
+    const formattedDate = `${placeholderYear}-${month.toString().padStart(2, "0")}-${day.toString().padStart(2, "0")}`;
+    return {
+      x: new Date(formattedDate).getTime(), // Convert to timestamp
+      y: [minMaxMap[monthDay][0], minMaxMap[monthDay][1]], // [min, max]
+      closePrices: minMaxMap[monthDay][2], // Full array of close prices
+      filteredData: minMaxMap[monthDay][3], // Filtered data by dates with only '4. close'
+    };
+  });
+
+ // console.log(dataX);
   return dataX;
 }
 
+
+
 // =================================================================================1========
 function getCurrentYearDataPoints() {
-  const currentYearDataPoints: { x: number, y: number }[] = [];
+  const currentYearDataPoints: { x: number; y: number }[] = [];
   const now = new Date();
   const currentYear = now.getFullYear();
 
@@ -225,7 +286,7 @@ function getCurrentYearDataPoints() {
     if (dataDate.getFullYear() === currentYear) {
       currentYearDataPoints.push({
         x: dataDate.getTime(),
-        y: parseFloat(EnergyData.value[date]['4. close'])
+        y: parseFloat(EnergyData.value[date]["4. close"]),
       });
     }
   }
@@ -235,17 +296,16 @@ function getCurrentYearDataPoints() {
 
 function calculateStartDate(endDate: string): string {
   const end = new Date(endDate);
-  end.setFullYear(end.getFullYear() - 1); 
+  end.setFullYear(end.getFullYear() - 4);
   return formatDate(end);
 }
 
 function formatDate(date: Date): string {
-  return date.toISOString().split('T')[0];
+  return date.toISOString().split("T")[0];
 }
 </script>
 
 <style scoped>
-
 .chart-container {
   display: flex;
   flex-direction: column;
@@ -311,13 +371,13 @@ function formatDate(date: Date): string {
   }
 
   .v-input__slot {
-    border: 1px solid #42A5F5;
+    border: 1px solid #42a5f5;
     border-radius: 4px;
   }
 
   .v-label {
     font-size: 0.9rem;
-    color: #42A5F5;
+    color: #42a5f5;
   }
 
   .v-text-field__slot {
