@@ -35,7 +35,7 @@ import {
   ChartOptions,
   ChartData,
 } from 'chart.js';
-import 'chartjs-adapter-date-fns'; // Ensure date adapter is included
+import 'chartjs-adapter-date-fns';
 import EnergyServices from '../../services/EnergyServices';
 
 // Register chart components
@@ -49,6 +49,7 @@ ChartJS.register(
   LinearScale,
   TimeScale
 );
+
 
 // Initialize state variables
 const endDate = ref<string>(formatDate(new Date()));
@@ -83,8 +84,7 @@ const chartOptions = ref<ChartOptions<'line'>>({
       type: 'time',
       time: {
         unit: 'day',
-      //  tooltipFormat: 'll',
-        tooltipFormat: 'PP', // Adjust format for date-fns (PP = Date in long format)
+        tooltipFormat: 'PP', 
       },
       title: {
         display: true,
@@ -120,18 +120,15 @@ onMounted(async () => {
 function updateChartData() {
   const start = new Date(startDate.value);
   const end = new Date(endDate.value);
-
   if (end.getTime() <= start.getTime()) {
     alert('End date must be later than the start date.');
     return;
   }
-
   const filteredData = filterRecordsByDateRange(
     EnergyData.value,
     startDate.value,
     endDate.value
   );
-
   const minMaxData = calculateMinMaxRange(filteredData);
   const currentYearDataPoints = getCurrentYearDataPoints();
 
@@ -139,36 +136,34 @@ function updateChartData() {
     labels: minMaxData.map(d => d.x),
     datasets: [
       {
-        label: 'Min Value',
+        label: 'Min Value (' + String(minMaxData.length) + ')',
         data: minMaxData.map(d => ({
           x: d.x,
           y: d.y[0]
         })),
-        borderColor: 'brown',
-        // borderColor: '#42A5F5',
+        borderColor: 'green',  
         backgroundColor: 'rgba(66, 165, 245, 0.2)',
         fill: false,
         type: 'line',
       },
       {
-        label: 'Max Value',
+        label: 'Max Value (' + String(minMaxData.length) + ')',
         data: minMaxData.map(d => ({
           x: d.x,
           y: d.y[1]
         })),
-        borderColor: 'yellow',
+        borderColor: 'blue',
         backgroundColor: 'rgba(255, 255, 0, 0.2)',
         fill: false,
         type: 'line',
       },
       {
-        label: 'Current Year',
+        label: 'Current Year (' + currentYearDataPoints.length + ')',
         data: currentYearDataPoints.map(d => ({
           x: d.x,
           y: d.y
         })),
-        borderColor: 'green',
-        // borderColor: '#FF5722',
+        borderColor: 'brown',
         backgroundColor: 'rgba(255, 87, 34, 0.2)',
         fill: false,
         type: 'line',
@@ -191,6 +186,7 @@ function filterRecordsByDateRange(data: Record<string, { '4. close': string }>, 
     }, {});
 }
 
+// =================================================================================0========
 function calculateMinMaxRange(data: Record<string, { '4. close': string }>) {
   const minMaxMap: Record<string, [number, number]> = {};
   for (const date in data) {
@@ -200,17 +196,25 @@ function calculateMinMaxRange(data: Record<string, { '4. close': string }>) {
     if (!minMaxMap[monthDay]) {
       minMaxMap[monthDay] = [Infinity, -Infinity];
     }
-    minMaxMap[monthDay][0] = Math.min(minMaxMap[monthDay][0], closePrice); // Min
+    minMaxMap[monthDay][0] = Math.min(minMaxMap[monthDay][0], closePrice+30); // Min
     minMaxMap[monthDay][1] = Math.max(minMaxMap[monthDay][1], closePrice); // Max
   }
   console.log(minMaxMap);
-  return Object.keys(minMaxMap).map(monthDay => ({
-    x: new Date(`2023-${monthDay}`).getTime(), // Use a placeholder year for the x-axis
+  console.log(minMaxMap[0]);
+  const firstEntry = Object.entries(minMaxMap)[0];
+  console.log(firstEntry);
+
+  let dataX = Object.keys(minMaxMap).map(monthDay => ({
+    x: new Date(`2023-${monthDay}`).getTime(), 
     y: minMaxMap[monthDay]
   }));
+  console.log(dataX);
+  console.log(dataX.length);
+  console.log(dataX[0]);
+  return dataX;
 }
 
-
+// =================================================================================1========
 function getCurrentYearDataPoints() {
   const currentYearDataPoints: { x: number, y: number }[] = [];
   const now = new Date();
@@ -227,10 +231,11 @@ function getCurrentYearDataPoints() {
   }
   return currentYearDataPoints;
 }
+// ==================================================================================2=======
 
 function calculateStartDate(endDate: string): string {
   const end = new Date(endDate);
-  end.setFullYear(end.getFullYear() - 1); // Show data for the previous year
+  end.setFullYear(end.getFullYear() - 1); 
   return formatDate(end);
 }
 
@@ -240,6 +245,7 @@ function formatDate(date: Date): string {
 </script>
 
 <style scoped>
+
 .chart-container {
   display: flex;
   flex-direction: column;
@@ -264,6 +270,7 @@ function formatDate(date: Date): string {
 .v-btn {
   margin: 0 5px;
 }
+
 .update-btn {
   width: 30vw;
   height: 60vh;
@@ -323,4 +330,3 @@ function formatDate(date: Date): string {
   }
 }
 </style>
-
