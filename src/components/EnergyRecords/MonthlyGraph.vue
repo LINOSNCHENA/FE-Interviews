@@ -42,30 +42,20 @@ ChartJS.register(
   CategoryScale,
   LinearScale
 );
-
 // Initialize state variables
 const endDate = ref<string>(formatDate(new Date()));
 const startDate = ref<string>(calculateStartDate(endDate.value));
-
-function calculateStartDate(endDate: string): string {
-  const end = new Date(endDate);
-  end.setMonth(end.getMonth() - 1); // Adjust to show data for the last month
-  return formatDate(end);
-}
-
-const EnergyData = ref<any>(null);
-
 const chartData = ref<ChartData<"bar">>({
   labels: [],
   datasets: [
     {
       label: "Monthly Average Prices",
-      backgroundColor: "#42A5F5",
+      backgroundColor: "yellow",
+      // backgroundColor: "#42A5F5",
       data: [],
     },
   ],
 });
-
 const chartOptions = ref<ChartOptions<"bar">>({
   responsive: true,
   plugins: {
@@ -85,14 +75,16 @@ const chartOptions = ref<ChartOptions<"bar">>({
     },
   },
 });
-
+const EnergyData = ref<any>(null);
+const dataFiltered=ref(0);
+const dataRecorded=ref(0);
 onMounted(async () => {
   try {
     const data = await EnergyServices.getDataFromJsons();
 
     if (data) {    
       EnergyData.value = data["Time Series (Daily)"];
-      updateChartData(); // Initialize chart data
+      updateChartData(); 
     } else {
       console.error("No data found.");
     }
@@ -101,31 +93,27 @@ onMounted(async () => {
   }
 });
 
-function formatDate(date: Date): string {
-  return date.toISOString().split('T')[0];
-}
-
 function updateChartData() {
   if (new Date(endDate.value).getTime() <= new Date(startDate.value).getTime()) {
     alert("End date must be later than the start date.");
     return;
   }
-
   const filteredData = filterRecordsByDateRange(
     EnergyData.value,
     startDate.value,
     endDate.value
   );
-
-  const monthlyAverages = calculateMonthlyAverages(filteredData);
-  console.log(monthlyAverages);
+  const monthlyAverages = calculateMonthlyAverages(filteredData); 
+  dataRecorded.value=Object.values(monthlyAverages).length;
+  dataFiltered.value=Object.values(filteredData).length;
   
   chartData.value = {
     labels: Object.keys(monthlyAverages),
     datasets: [
       {
-        label: "Monthly Average Prices",
-        backgroundColor: "#42A5F5",
+        label: "Closing Prices : Monthly Average Prices | Months counted : ("+String(dataRecorded.value)+"/"+String(dataFiltered.value)+")",
+        backgroundColor: "yellow",
+        //backgroundColor: "#42A5F5", // Inside Background
         data: Object.values(monthlyAverages),
       },
     ],
@@ -149,32 +137,36 @@ function filterRecordsByDateRange(data, start, end) {
 function calculateMonthlyAverages(data) {
   const monthlyTotals = {};
   const monthlyCounts = {};
-
   Object.keys(data).forEach(date => {
     const value = parseFloat(data[date]["4. close"]);
     const month = date.slice(0, 7); // YYYY-MM
-
     if (!monthlyTotals[month]) {
       monthlyTotals[month] = 0;
       monthlyCounts[month] = 0;
     }
-
     monthlyTotals[month] += value;
     monthlyCounts[month] += 1;
   });
-
   const monthlyAverages = Object.keys(monthlyTotals).reduce((averages, month) => {
     averages[month] = monthlyTotals[month] / monthlyCounts[month];
     return averages;
   }, {});
-
   return monthlyAverages;
 }
+
+function calculateStartDate(endDate: string): string {
+  const end = new Date(endDate);
+  end.setMonth(end.getMonth() - 1); // Adjust to show data for the last month
+  return formatDate(end);
+}
+
+function formatDate(date: Date): string {
+  return date.toISOString().split('T')[0];
+}
+
+
 </script>
-
-
 <style scoped>
-
 .chart-container {
   display: flex;
   flex-direction: column;
@@ -184,6 +176,8 @@ function calculateMonthlyAverages(data) {
   padding: 1rem;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   overflow: hidden;
+  font-size: smaller;
+  text-transform: lowercase;
 }
 
 .date-row {
@@ -197,8 +191,6 @@ function calculateMonthlyAverages(data) {
 .v-btn {
   margin: 0 5px;
 }
-
-
 .update-btn {
   width: 30vw;
   height: 60vh;
@@ -222,7 +214,7 @@ function calculateMonthlyAverages(data) {
   width: 100% !important;
   height: 100% !important;
   border-radius: 8px;
-  background-color: #42f5b0;
+  background-color: #e2e2e7;
 }
 
 .text-field-container {
