@@ -207,14 +207,11 @@ function filterRecordsByDateRange(
 // =================================================================================0========
 function calculateMinMaxRange(data: Record<string, { "4. close": string }>) {
   const minMaxMap: Record<string, any> = {};
-  console.clear();
-
   for (const date in data) {
     const closePrice = parseFloat(data[date]["4. close"]);
     if (isNaN(closePrice)) continue; // Skip invalid close prices
     const dateObject = new Date(date);
     const monthDay = `${dateObject.getMonth() + 1}-${dateObject.getDate()}`;
-
     // Collect all '4. close' data points that match the current monthDay across different years
     const filteredData1 = Object.entries(data);
     const filteredData2 = filteredData1.filter(([dataDate]) => {
@@ -231,31 +228,22 @@ function calculateMinMaxRange(data: Record<string, { "4. close": string }>) {
     const maxClose = filteredData.reduce((max, item) => {
       return item.close > max ? item.close : max;
     }, -Infinity);
-
     const minClose = filteredData.reduce((min, item) => {
       return item.close < min ? item.close : min;
     }, Infinity);
-
-    const maxMinBalance=[maxClose,minClose, maxClose-minClose]
-   // console.log(maxClose,minClose); // Output: 621.7
-
-    console.log(filteredData.length, filteredData);
-    console.log(maxMinBalance);
+    const maxMinBalance=[maxClose,minClose, maxClose-minClose];
 
     if (!minMaxMap[monthDay]) {
-      // Initialize with the first value
       minMaxMap[monthDay] = [closePrice, closePrice, [closePrice], filteredData];
     } else {
       minMaxMap[monthDay][0] = Math.min(minMaxMap[monthDay][0], closePrice); // Update Min
       minMaxMap[monthDay][1] = Math.max(minMaxMap[monthDay][1], closePrice); // Update Max
       minMaxMap[monthDay][2].push(closePrice); // Add to full array of close prices
-      minMaxMap[monthDay][3] = filteredData; // Store the filtered data by date
+      minMaxMap[monthDay][3] = maxMinBalance;
     }
   }
-
   // Use a placeholder year for consistent x-axis values
   const placeholderYear = 2023;
-
   // Prepare data for plotting
   const dataX = Object.keys(minMaxMap).map((monthDay) => {
     // Ensure the month and day are zero-padded for consistent date format
@@ -264,12 +252,14 @@ function calculateMinMaxRange(data: Record<string, { "4. close": string }>) {
     return {
       x: new Date(formattedDate).getTime(), // Convert to timestamp
       y: [minMaxMap[monthDay][0], minMaxMap[monthDay][1]], // [min, max]
-      closePrices: minMaxMap[monthDay][2], // Full array of close prices
-      filteredData: minMaxMap[monthDay][3], // Filtered data by dates with only '4. close'
+      all: minMaxMap[monthDay][2], // Full array of close prices
+      max: minMaxMap[monthDay][3][0], // Filtered data by dates with only '4. close'
+      min: minMaxMap[monthDay][3][1], // Filtered data by dates with only '4. close'
+      diff: minMaxMap[monthDay][3][2], // Filtered data by dates with only '4. close'
     };
   });
-
- // console.log(dataX);
+  console.clear();
+ console.log(dataX);
   return dataX;
 }
 
