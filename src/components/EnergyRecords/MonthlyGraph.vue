@@ -8,7 +8,7 @@
         <v-text-field label="End Date" v-model="endDate" type="date" class="compact-text-field"></v-text-field>
       </v-col>
       <v-col cols="12" md="4">
-        <v-btn @click="updateChartData" class="update-btn" width="20vw" height="50px">Update Monthly</v-btn>
+        <v-btn @click="updateChartData" class="update-btn" width="20vw" height="50px">Update Monthly data</v-btn>
       </v-col>
     </v-row>
     <div class="chart-wrapper">
@@ -49,20 +49,17 @@ const startDate = ref<string>(calculateStartDate(endDate.value));
 
 function calculateStartDate(endDate: string): string {
   const end = new Date(endDate);
-  end.setDate(end.getDate() - 7);
+  end.setMonth(end.getMonth() - 1); // Adjust to show data for the last month
   return formatDate(end);
 }
 
-const wholeData = ref<any>(null);
 const EnergyData = ref<any>(null);
-const metaData = ref<any>(null);
 
-// Define chartData and chartOptions
 const chartData = ref<ChartData<"bar">>({
   labels: [],
   datasets: [
     {
-      label: "Closing Prices",
+      label: "Monthly Average Prices",
       backgroundColor: "#42A5F5",
       data: [],
     },
@@ -93,10 +90,8 @@ onMounted(async () => {
   try {
     const data = await EnergyServices.getDataFromJsons();
 
-    if (data) {
-      wholeData.value = data;
+    if (data) {    
       EnergyData.value = data["Time Series (Daily)"];
-      metaData.value = data["Meta Data"];
       updateChartData(); // Initialize chart data
     } else {
       console.error("No data found.");
@@ -115,22 +110,23 @@ function updateChartData() {
     alert("End date must be later than the start date.");
     return;
   }
+
   const filteredData = filterRecordsByDateRange(
     EnergyData.value,
     startDate.value,
     endDate.value
   );
-  const labels = Object.keys(filteredData).reverse();
-  const filteredDataPoints = Object.values(filteredData)
-    .map((entry: any) => parseFloat(entry["4. close"]))
-    .reverse(); 
+
+  const monthlyAverages = calculateMonthlyAverages(filteredData);
+  console.log(monthlyAverages);
+  
   chartData.value = {
-    labels: labels,
+    labels: Object.keys(monthlyAverages),
     datasets: [
       {
-        label: `Closing Prices | Total Records: ${Object.keys(wholeData.value["Time Series (Daily)"] || {}).length} | Filtered Records: ${Object.keys(filteredData).length}`,
+        label: "Monthly Average Prices",
         backgroundColor: "#42A5F5",
-        data: filteredDataPoints,
+        data: Object.values(monthlyAverages),
       },
     ],
   };
@@ -149,7 +145,33 @@ function filterRecordsByDateRange(data, start, end) {
       return result;
     }, {});
 }
+
+function calculateMonthlyAverages(data) {
+  const monthlyTotals = {};
+  const monthlyCounts = {};
+
+  Object.keys(data).forEach(date => {
+    const value = parseFloat(data[date]["4. close"]);
+    const month = date.slice(0, 7); // YYYY-MM
+
+    if (!monthlyTotals[month]) {
+      monthlyTotals[month] = 0;
+      monthlyCounts[month] = 0;
+    }
+
+    monthlyTotals[month] += value;
+    monthlyCounts[month] += 1;
+  });
+
+  const monthlyAverages = Object.keys(monthlyTotals).reduce((averages, month) => {
+    averages[month] = monthlyTotals[month] / monthlyCounts[month];
+    return averages;
+  }, {});
+
+  return monthlyAverages;
+}
 </script>
+
 
 <style scoped>
 

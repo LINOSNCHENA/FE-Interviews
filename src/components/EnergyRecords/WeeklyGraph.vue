@@ -8,7 +8,7 @@
         <v-text-field label="End Date" v-model="endDate" type="date" class="compact-text-field"></v-text-field>
       </v-col>
       <v-col cols="12" md="4">
-        <v-btn @click="updateChartData" class="update-btn" width="20vw" height="50px">Update Monthly</v-btn>
+        <v-btn @click="updateChartData" class="update-btn" width="20vw" height="50px">Update Weekly</v-btn>
       </v-col>
     </v-row>
     <div class="chart-wrapper">

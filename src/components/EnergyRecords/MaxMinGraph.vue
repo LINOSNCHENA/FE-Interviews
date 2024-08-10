@@ -8,7 +8,7 @@
         <v-text-field label="End Date" v-model="endDate" type="date" class="compact-text-field"></v-text-field>
       </v-col>
       <v-col cols="12" md="4">
-        <v-btn @click="updateChartData" class="update-btn" width="20vw" height="50px">Update Monthly</v-btn>
+        <v-btn @click="updateChartData" class="update-btn" width="20vw" height="50px">Update MaxMin</v-btn>
       </v-col>
     </v-row>
     <div class="chart-wrapper">
@@ -53,9 +53,10 @@ function calculateStartDate(endDate: string): string {
   return formatDate(end);
 }
 
-const wholeData = ref<any>(null);
+
 const EnergyData = ref<any>(null);
-const metaData = ref<any>(null);
+  const wholeData = ref<any>(null);
+
 
 // Define chartData and chartOptions
 const chartData = ref<ChartData<"bar">>({
@@ -94,10 +95,8 @@ onMounted(async () => {
     const data = await EnergyServices.getDataFromJsons();
 
     if (data) {
-      wholeData.value = data;
       EnergyData.value = data["Time Series (Daily)"];
-      metaData.value = data["Meta Data"];
-      updateChartData(); // Initialize chart data
+        updateChartData(); // Initialize chart data
     } else {
       console.error("No data found.");
     }
@@ -120,10 +119,14 @@ function updateChartData() {
     startDate.value,
     endDate.value
   );
+
+
   const labels = Object.keys(filteredData).reverse();
   const filteredDataPoints = Object.values(filteredData)
     .map((entry: any) => parseFloat(entry["4. close"]))
     .reverse(); 
+
+
   chartData.value = {
     labels: labels,
     datasets: [
@@ -149,6 +152,7 @@ function filterRecordsByDateRange(data, start, end) {
       return result;
     }, {});
 }
+
 </script>
 
 <style scoped>

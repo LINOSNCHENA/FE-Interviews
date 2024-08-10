@@ -91,10 +91,24 @@ function filterRecordsByDateRange(data: { [x: string]: any; }, start: string | n
 }
 
 h1 {
-  font-family: Arial, sans-serif;
+  font-family: 'Roboto', sans-serif;
+  font-size: 24px;
   color: #333;
   margin-bottom: 20px;
   text-align: center;
+}
+
+.date-field {
+  font-size: 14px;
+  background-color: #e0f2f1;
+}
+
+.filter-btn {
+  width: 100%;
+  height: 50px;
+  font-size: 16px;
+  background-color: #26c6da;
+  color: #fff;
 }
 
 .json-pre {
@@ -108,3 +122,4 @@ h1 {
   overflow-x: auto;
 }
 </style>
+
