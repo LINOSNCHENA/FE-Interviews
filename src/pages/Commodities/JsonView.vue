@@ -12,21 +12,10 @@
         Daily Data Points
       </v-tab>
 
-      <v-tab value="maximum">
-        <v-icon>mdi-chart-areaspline</v-icon>
-        Min-Max Area Chart
+      <v-tab value="rawdata">
+        <v-icon>mdi-database</v-icon>
+        Raw Data
       </v-tab>
-
-      <v-tab value="weekly">
-        <v-icon>mdi-calendar-week</v-icon>
-        Weekly Average Graphs
-      </v-tab>
-
-      <v-tab value="monthly">
-        <v-icon>mdi-calendar-month</v-icon>
-        Monthly Average Graph
-      </v-tab>
-
     </v-tabs>
 
     <v-card
