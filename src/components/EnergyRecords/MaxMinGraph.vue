@@ -36,6 +36,8 @@ import {
 } from "chart.js";
 import "chartjs-adapter-date-fns";
 import EnergyServices from "../../services/EnergyServices";
+import { useRouter } from "vue-router";
+import AuthServices from "../../services/AuthServices";
 
 ChartJS.register(
   Title,
@@ -49,9 +51,10 @@ ChartJS.register(
   Filler
 );
 
-// Initialize state variables
+
 const endDate = ref<string>(formatDate(new Date()));
 const startDate = ref<string>(calculateStartDate(endDate.value));
+const router = useRouter();
 
 const chartData = ref<ChartData<"line">>({
   labels: [],
@@ -115,6 +118,10 @@ const EnergyData = ref<Record<string, { "4. close": string }>>({});
 onMounted(async () => {
   try {
     const data = await EnergyServices.getDataFromJsons();
+    const user = await AuthServices.getUser();
+    if (user === "None@gmail.com") {
+      router.push({ name: "Login" });
+    }
     if (data) {
       EnergyData.value = data["Time Series (Daily)"];
       updateChartData();
@@ -155,51 +162,34 @@ function updateChartData() {
       {
         label: "1. Max Values (" + max.length + ")",
         data: minMaxData.map((d) => ({ x: d.dated, y: d.max })),
-        borderColor: 'blue', // Blue border for visibility
-        borderWidth: 1, // Thin border
-        backgroundColor: 'rgba(0, 0, 255, 0.3)', // Semi-transparent blue fill
+        borderColor: 'blue',
+        borderWidth: 1,
+        backgroundColor: 'rgba(0, 0, 255, 0.3)',
         fill: true,
         type: "line",
       },
-      // {
-      //   label: '2. Maxz (' + maxz.length + ')',
-      //   data: minMaxData.map((d) => ({ x: d.dated, y: d.maxz })),
-      //   borderColor: 'yellow', // Yellow border for visibility
-      //   backgroundColor: 'rgba(255, 255, 0, 0.3)', // Semi-transparent yellow fill
-      //   fill: true,
-      //   type: 'line',
-      // },
       {
-        label: '3. Gap (' + gap.length + ')',
+        label: '2. Gap (' + gap.length + ')',
         data: minMaxData.map((d) => ({ x: d.dated, y: d.gap })),
-        borderColor: 'red', // Red border for visibility
-        backgroundColor: 'rgba(255, 0, 0, 0.3)', // Semi-transparent red fill
+        borderColor: 'red',
+        backgroundColor: 'rgba(255, 0, 0, 0.3)',
         fill: true,
         type: 'line',
       },
       {
-        label: '4. Min Values (' + min.length + ')',
+        label: '3. Min Values (' + min.length + ')',
         data: minMaxData.map((d) => ({ x: d.dated, y: d.min })),
-        borderColor: 'green', // Green border for visibility
-        backgroundColor: 'rgba(0, 128, 0, 0.3)', // Semi-transparent green fill
+        borderColor: 'green',
+        backgroundColor: 'rgba(0, 128, 0, 0.3)',
         fill: true,
         type: 'line',
       },
-      // {
-      //   label: "5. Minz (" + minz.length + ")",
-      //   data: minMaxData.map((d) => ({ x: d.dated, y: d.minz })),
-      //   borderColor: 'teal', // Orange border for visibility
-      //   borderWidth: 1, // Thin border
-      //   backgroundColor: 'rgba(255, 165, 0, 0.3)', // Semi-transparent orange fill
-      //   fill: true,
-      //   type: "line",
-      // },
       {
-        label: "6. Current Year (" + currentYearDataPoints.length + ")",
+        label: "4. Current Year (" + currentYearDataPoints.length + ")",
         data: currentYearDataPoints.map((d) => ({ x: d.x, y: d.y })),
-        borderColor: "brown", // Brown border for visibility
-        borderWidth: 1, // Thin border
-        backgroundColor: "rgba(165, 42, 42, 0.3)", // Semi-transparent brown fill
+        borderColor: "brown",
+        borderWidth: 1,
+        backgroundColor: "rgba(165, 42, 42, 0.3)",
         fill: true,
         type: "line",
       },

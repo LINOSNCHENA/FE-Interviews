@@ -19,8 +19,6 @@
               }}</v-icon>
             </template>
           </v-text-field>
-
-
           <v-btn :disabled="!form" :loading="loading" color="success" size="large" type="submit" variant="flat"
             width="500" height="50">
             Sign In
@@ -48,16 +46,19 @@
 import { onBeforeMount, ref, watchEffect } from "vue";
 import { useRouter } from "vue-router";
 import { useAuthStore } from "../../stores/AppsAuth";
+
+const showPassword = ref(false);
+const storeAUT = useAuthStore();
 const router = useRouter();
 const loading = ref(false);
 const loaded = ref(false);
-const showPassword = ref(false);
-const storeAUT = useAuthStore();
+
 const tradeMark = ref("Trading Houses Data Ltd (v 2.0.1.)");
 const form = ref({
   email: "",
   password: "",
 });
+
 const onSubmit = async () => {
   if (!form.value.email || !form.value.password) return;
   loading.value = true;
@@ -87,7 +88,7 @@ const clearPassword = () => {
 onBeforeMount(async () => {
   storeAUT.isAuthoririsedRevoked();
   watchEffect(() => {
-    console.log("5. Watched value changed:", storeAUT.user);
+    console.log("5. Watched Login-Value changes:", storeAUT.user);
   });
 });
 </script>

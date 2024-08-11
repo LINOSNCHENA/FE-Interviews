@@ -20,19 +20,22 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from "vue";
 import EnergyServices from "../../services/EnergyServices";
+import AuthServices from "../../services/AuthServices";
+import { useRouter } from "vue-router";
 
 const jsonData = ref<any>(null);
 const filteredJsonData = ref<any>(null);
 
 const startDate = ref<string>(formatDate(new Date()));
 const endDate = ref<string>(formatDate(new Date()));
+  const router = useRouter();
 
 const records = computed(() => Object.keys(jsonData.value || {}).length);
 const recordselect = computed(
   () => Object.keys(filteredJsonData.value || {}).length
 );
 
-// Utility function to format date as 'YYYY-MM-DD'
+
 function formatDate(date: Date): string {
   return date.toISOString().split('T')[0];
 }
@@ -40,9 +43,13 @@ function formatDate(date: Date): string {
 onMounted(async () => {
   try {
     const data = await EnergyServices.getDataFromJsons();
+    const user = await AuthServices.getUser();
+    if (user === "None@gmail.com") {
+      router.push({ name: "Login" });
+    }
     if (data) {
       jsonData.value = data["Time Series (Daily)"];
-      filteredJsonData.value = jsonData.value; // Show all records initially
+      filteredJsonData.value = jsonData.value; 
     } else {
       console.error("No data found.");    }
   } catch (error) {

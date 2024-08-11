@@ -36,6 +36,8 @@ import {
 } from "chart.js";
 import "chartjs-adapter-date-fns";
 import EnergyServices from "../../services/EnergyServices";
+import { useRouter } from "vue-router";
+import AuthServices from "../../services/AuthServices";
 
 ChartJS.register(
   Title,
@@ -49,9 +51,9 @@ ChartJS.register(
   Filler
 );
 
-// Initialize state variables
 const endDate = ref<string>(formatDate(new Date()));
 const startDate = ref<string>(calculateStartDate(endDate.value));
+const router = useRouter();
 
 const chartData = ref<ChartData<"line">>({
   labels: [],
@@ -115,6 +117,10 @@ const EnergyData = ref<Record<string, { "4. close": string }>>({});
 onMounted(async () => {
   try {
     const data = await EnergyServices.getDataFromJsons();
+    const user = await AuthServices.getUser();
+    if (user === "None@gmail.com") {
+      router.push({ name: "Login" });
+    }
     if (data) {
       EnergyData.value = data["Time Series (Daily)"];
       updateChartData();
@@ -146,32 +152,31 @@ function updateChartData() {
   let max = x.map(x => x.max);
   let min = x.map(x => x.min);
 
-
   chartData.value = {
     labels: minMaxData.map((d) => new Date(d.dated)),
     datasets: [
       {
         label: "1. Max Values (" + max.length + ")",
         data: minMaxData.map((d) => ({ x: d.dated, y: d.max })),
-        borderColor: 'blue', 
-        borderWidth: 1, 
-        backgroundColor: 'rgba(0, 0, 255, 0.3)', 
+        borderColor: 'blue',
+        borderWidth: 1,
+        backgroundColor: 'rgba(0, 0, 255, 0.3)',
         fill: true,
         type: "line",
-      },   
+      },
       {
-        label: '3. Gap (' + gap.length + ')',
+        label: '2. Gap (' + gap.length + ')',
         data: minMaxData.map((d) => ({ x: d.dated, y: d.gap })),
-        borderColor: 'red', 
-        backgroundColor: 'rgba(255, 0, 0, 0.3)', 
+        borderColor: 'red',
+        backgroundColor: 'rgba(255, 0, 0, 0.3)',
         fill: true,
         type: 'line',
       },
       {
-        label: '4. Min Values (' + min.length + ')',
+        label: '3. Min Values (' + min.length + ')',
         data: minMaxData.map((d) => ({ x: d.dated, y: d.min })),
-        borderColor: 'green', 
-        backgroundColor: 'rgba(0, 128, 0, 0.3)', 
+        borderColor: 'green',
+        backgroundColor: 'rgba(0, 128, 0, 0.3)',
         fill: true,
         type: 'line',
       },
@@ -251,7 +256,7 @@ function calculateMinMaxRange(data: Record<string, { "4. close": string }>) {
       .padStart(2, "0")}-${day.toString().padStart(2, "0")}`;
     return {
       dated: new Date(formattedDate).getTime(),
-      minz: 200+minMaxMap[monthDay][0],
+      minz: 200 + minMaxMap[monthDay][0],
       maxz: minMaxMap[monthDay][1],
       max: minMaxMap[monthDay][2][0],
       min: minMaxMap[monthDay][2][1],

@@ -32,8 +32,10 @@ import {
   ChartData,
 } from "chart.js";
 import EnergyServices from "../../services/EnergyServices";
+import { useRouter } from "vue-router";
+import AuthServices from "../../services/AuthServices";
 
-// Register chart components
+
 ChartJS.register(
   Title,
   Tooltip,
@@ -42,9 +44,11 @@ ChartJS.register(
   CategoryScale,
   LinearScale
 );
-// Initialize state variables
+
 const endDate = ref<string>(formatDate(new Date()));
 const startDate = ref<string>(calculateStartDate(endDate.value));
+  const router = useRouter();
+
 const chartData = ref<ChartData<"bar">>({
   labels: [],
   datasets: [
@@ -80,7 +84,10 @@ const dataRecorded=ref(0);
 onMounted(async () => {
   try {
     const data = await EnergyServices.getDataFromJsons();
-
+    const user = await AuthServices.getUser();
+    if (user === "None@gmail.com") {
+      router.push({ name: "Login" });
+    }
     if (data) {    
       EnergyData.value = data["Time Series (Daily)"];
       updateChartData(); 
@@ -104,8 +111,7 @@ function updateChartData() {
   );
   const monthlyAverages = calculateMonthlyAverages(filteredData); 
   dataRecorded.value=Object.values(monthlyAverages).length;
-  dataFiltered.value=Object.values(filteredData).length;
-  
+  dataFiltered.value=Object.values(filteredData).length;  
   chartData.value = {
     labels: Object.keys(monthlyAverages),
     datasets: [
@@ -154,7 +160,7 @@ function calculateMonthlyAverages(data) {
 
 function calculateStartDate(endDate: string): string {
   const end = new Date(endDate);
-  end.setMonth(end.getMonth() - 90); // Adjust to show data for the last month
+  end.setMonth(end.getMonth() - 90); 
   return formatDate(end);
 }
 

@@ -32,8 +32,10 @@ import {
   ChartData,
 } from "chart.js";
 import EnergyServices from "../../services/EnergyServices";
+import { useRouter } from "vue-router";
+import AuthServices from "../../services/AuthServices";
+const router = useRouter();
 
-// Register chart components
 ChartJS.register(
   Title,
   Tooltip,
@@ -43,9 +45,11 @@ ChartJS.register(
   LinearScale
 );
 
-// Initialize state variables
+
 const endDate = ref<string>(formatDate(new Date()));
 const startDate = ref<string>(calculateStartDate(endDate.value));
+
+
 const chartData = ref<ChartData<"bar">>({
   labels: [],
   datasets: [
@@ -77,15 +81,19 @@ const chartOptions = ref<ChartOptions<"bar">>({
   },
 });
 const EnergyData = ref<any>(null);
-const dataFiltered=ref(0);
-const dataRecorded=ref(0);
+const dataFiltered = ref(0);
+const dataRecorded = ref(0);
+
 onMounted(async () => {
   try {
     const data = await EnergyServices.getDataFromJsons();
-
-    if (data) {    
+    const user = await AuthServices.getUser();
+    if (user === "None@gmail.com") {
+      router.push({ name: "Login" });
+    }
+    if (data) {
       EnergyData.value = data["Time Series (Daily)"];
-      updateChartData(); 
+      updateChartData();
     } else {
       console.error("No data found.");
     }
@@ -104,15 +112,15 @@ function updateChartData() {
     startDate.value,
     endDate.value
   );
-  const monthlyAverages = calculateWeeklyAverages(filteredData); 
-  dataRecorded.value=Object.values(monthlyAverages).length;
-  dataFiltered.value=Object.values(filteredData).length;
-  
+  const monthlyAverages = calculateWeeklyAverages(filteredData);
+  dataRecorded.value = Object.values(monthlyAverages).length;
+  dataFiltered.value = Object.values(filteredData).length;
+
   chartData.value = {
     labels: Object.keys(monthlyAverages),
     datasets: [
       {
-        label: "Closing Prices : Monthly Average Prices | Months counted : ("+String(dataRecorded.value)+"/"+String(dataFiltered.value)+")",
+        label: "Closing Prices : Monthly Average Prices | Months counted : (" + String(dataRecorded.value) + "/" + String(dataFiltered.value) + ")",
         backgroundColor: "watermelon",
         data: Object.values(monthlyAverages),
       },
@@ -135,15 +143,14 @@ function filterRecordsByDateRange(data, start, end) {
 }
 
 
- function calculateWeeklyAverages(data: Record<string, { '4. close': string }>): Record<string, number> {
+function calculateWeeklyAverages(data: Record<string, { '4. close': string }>): Record<string, number> {
   const weeklyTotals: Record<string, number> = {};
   const weeklyCounts: Record<string, number> = {};
 
   function getStartOfWeek(date: string): string {
     const currentDate = new Date(date);
     const dayOfWeek = currentDate.getDay();
-    // Calculate the difference from Monday (day 1) and adjust if it's Sunday (day 0)
-    const daysSinceMonday = (dayOfWeek + 6) % 7; 
+    const daysSinceMonday = (dayOfWeek + 6) % 7;
     const startOfWeekDate = new Date(currentDate.setDate(currentDate.getDate() - daysSinceMonday));
     return startOfWeekDate.toISOString().split('T')[0]; // Format to YYYY-MM-DD
   }
@@ -158,7 +165,7 @@ function filterRecordsByDateRange(data, start, end) {
     weeklyTotals[weekStart] += closePrice;
     weeklyCounts[weekStart] += 1;
   }
-  // Calculate weekly averages
+
   const weeklyAverages: Record<string, number> = {};
   for (const week in weeklyTotals) {
     weeklyAverages[week] = weeklyTotals[week] / weeklyCounts[week];
@@ -168,7 +175,7 @@ function filterRecordsByDateRange(data, start, end) {
 
 function calculateStartDate(endDate: string): string {
   const end = new Date(endDate);
-  end.setMonth(end.getMonth() - 30); 
+  end.setMonth(end.getMonth() - 30);
   return formatDate(end);
 }
 
@@ -203,6 +210,7 @@ function formatDate(date: Date): string {
 .v-btn {
   margin: 0 5px;
 }
+
 .update-btn {
   width: 30vw;
   height: 60vh;

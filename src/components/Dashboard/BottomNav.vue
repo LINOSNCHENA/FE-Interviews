@@ -38,7 +38,7 @@ const userX = ref();
 
 watch(route, () => {
   userX.value = storeAUT.user;
-  console.log("1. Route changed to:", route.name);
+  console.log("1. Route BottomNav changed to:", route.name);
 });
 
 onBeforeMount(() => {
@@ -59,10 +59,12 @@ onBeforeMount(() => {
 
   .v-btn {
     letter-spacing: normal;
+
     &:hover {
       color: darkblue;
     }
   }
+
   [v-cloak] {
     display: none;
   }
