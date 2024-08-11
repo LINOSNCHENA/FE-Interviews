@@ -134,16 +134,11 @@ function filterRecordsByDateRange(data, start, end) {
     }, {});
 }
 
-//function calculateMonthlyAverages(data) {
+
  function calculateWeeklyAverages(data: Record<string, { '4. close': string }>): Record<string, number> {
   const weeklyTotals: Record<string, number> = {};
   const weeklyCounts: Record<string, number> = {};
 
-  /**
-   * Helper function to get the start of the week (Monday) for a given date.
-   * @param date - The date string in YYYY-MM-DD format.
-   * @returns The start of the week (Monday) as a date string in YYYY-MM-DD format.
-   */
   function getStartOfWeek(date: string): string {
     const currentDate = new Date(date);
     const dayOfWeek = currentDate.getDay();
@@ -153,7 +148,6 @@ function filterRecordsByDateRange(data, start, end) {
     return startOfWeekDate.toISOString().split('T')[0]; // Format to YYYY-MM-DD
   }
 
-  // Process each entry in the data
   for (const date in data) {
     const closePrice = parseFloat(data[date]['4. close']);
     const weekStart = getStartOfWeek(date);
@@ -161,7 +155,6 @@ function filterRecordsByDateRange(data, start, end) {
       weeklyTotals[weekStart] = 0;
       weeklyCounts[weekStart] = 0;
     }
-    // Accumulate totals and counts for the week
     weeklyTotals[weekStart] += closePrice;
     weeklyCounts[weekStart] += 1;
   }

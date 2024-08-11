@@ -7,11 +7,9 @@ export {}
 
 declare module 'vue' {
   export interface GlobalComponents {
-    AppFooter: typeof import('./components/AppFooter.vue')['default']
     BottomNav: typeof import('./components/Dashboard/BottomNav.vue')['default']
     DailyGraph: typeof import('./components/EnergyRecords/DailyGraph.vue')['default']
     GapGraph: typeof import('./components/EnergyRecords/GapGraph.vue')['default']
-    HelloWorld: typeof import('./components/HelloWorld.vue')['default']
     LoginPage: typeof import('./components/Dashboard/LoginPage.vue')['default']
     MaxMinGraph: typeof import('./components/EnergyRecords/MaxMinGraph.vue')['default']
     MonthlyGraph: typeof import('./components/EnergyRecords/MonthlyGraph.vue')['default']

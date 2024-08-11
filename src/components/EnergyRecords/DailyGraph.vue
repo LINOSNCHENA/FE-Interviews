@@ -32,6 +32,7 @@ import {
   ChartData,
 } from "chart.js";
 import EnergyServices from "../../services/EnergyServices";
+import AuthServices from "../../services/AuthServices";
 
 // Register chart components
 ChartJS.register(
@@ -92,8 +93,10 @@ const chartOptions = ref<ChartOptions<"bar">>({
 onMounted(async () => {
   try {
     const data = await EnergyServices.getDataFromJsons();
+    const user = await AuthServices.getUser();
 
-    if (data) {
+    if (data && user) {
+      console.log(user)
       wholeData.value = data;
       EnergyData.value = data["Time Series (Daily)"];
       metaData.value = data["Meta Data"];
@@ -123,8 +126,8 @@ function updateChartData() {
   const labels = Object.keys(filteredData).reverse();
   const filteredDataPoints = Object.values(filteredData)
     .map((entry: any) => parseFloat(entry["4. close"]))
-    .reverse(); 
-    
+    .reverse();
+
   chartData.value = {
     labels: labels,
     datasets: [
@@ -153,7 +156,6 @@ function filterRecordsByDateRange(data, start, end) {
 </script>
 
 <style scoped>
-
 .chart-container {
   display: flex;
   flex-direction: column;
