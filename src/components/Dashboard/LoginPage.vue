@@ -7,7 +7,7 @@
       <v-card class="mx-auto justify-center align-center" color="transparent" theme="light" width="80%" height="65vh"
         style="margin: 2%" prepend-icon="mdi-rhombus-outline" title="Commodities Sales & Price Visualizations">
         <v-form v-model="loaded" @submit.prevent="onSubmit" class="form">
-     
+
           <v-text-field v-model="form.email" :readonly="loading" class="loginEmail" clearable label="Email"
             color="black" bg-color="teal" required></v-text-field>
 
@@ -19,13 +19,13 @@
               }}</v-icon>
             </template>
           </v-text-field>
-    
+
 
           <v-btn :disabled="!form" :loading="loading" color="success" size="large" type="submit" variant="flat"
             width="500" height="50">
             Sign In
           </v-btn>
-   
+
           <p>
             {{ tradeMark }} |
             {{
@@ -36,7 +36,7 @@
               })
             }}
           </p>
-      
+
         </v-form>
       </v-card>
     </v-sheet>
@@ -44,13 +44,14 @@
 </template>
 
 <script setup lang="ts">
+
 import { onBeforeMount, ref, watchEffect } from "vue";
 import { useRouter } from "vue-router";
 import { useAuthStore } from "../../stores/AppsAuth";
 const router = useRouter();
- const loading = ref(false);
- const loaded = ref(false);
- const showPassword = ref(false);
+const loading = ref(false);
+const loaded = ref(false);
+const showPassword = ref(false);
 const storeAUT = useAuthStore();
 const tradeMark = ref("Trading Houses Data Ltd (v 2.0.1.)");
 const form = ref({
@@ -84,7 +85,7 @@ const clearPassword = () => {
   form.value.password = "";
 };
 onBeforeMount(async () => {
-  storeAUT.isAuthoririsedRevoked(); 
+  storeAUT.isAuthoririsedRevoked();
   watchEffect(() => {
     console.log("5. Watched value changed:", storeAUT.user);
   });
@@ -121,9 +122,9 @@ onBeforeMount(async () => {
     width: 100%;
     height: 100%;
     max-width: 500px;
-    max-height: 90px;   
-    background-color: #f5f5f5;  
-    margin: 10px 10px; 
+    max-height: 90px;
+    background-color: #f5f5f5;
+    margin: 10px 10px;
     padding: 2px;
   }
 

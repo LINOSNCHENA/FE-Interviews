@@ -55,7 +55,7 @@
                 <v-icon>mdi-chart-areaspline</v-icon>
                 <span class="tab-label">Min-Max Table</span>
               </v-col>
-              <v-col cols="12">              
+              <v-col cols="12">
                 <MaxMinGraph></MaxMinGraph>
               </v-col>
             </v-row>
@@ -67,7 +67,7 @@
                 <v-icon>mdi-calendar-week</v-icon>
                 <span class="tab-label">Weekly Graph</span>
               </v-col>
-              <v-col cols="12">           
+              <v-col cols="12">
                 <WeeklyGraph></WeeklyGraph>
               </v-col>
             </v-row>
@@ -84,48 +84,19 @@
               </v-col>
             </v-row>
           </v-window-item>
-
-              </v-window>
+        </v-window>
       </v-card-text>
     </v-card>
   </div>
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { ref } from "vue";
 import MonthlyGraph from "../../components/EnergyRecords/MonthlyGraph.vue";
 import MaxMinGraph from "../../components/EnergyRecords/MaxMinGraph.vue";
 import WeeklyGraph from "../../components/EnergyRecords/WeeklyGraph.vue";
 
 const tab = ref("maximum");
-const salaries = ref<any[]>([]);
-const families = ref<any[]>([]);
-const discounted = ref<any[]>([]);
-const permit = ref(false);
-const counted1 = ref(0);
-const counted2 = ref(0);
-const counted3 = ref(0);
-const emailx = ref("Administrator");
-
-onMounted(async () => {
-  updatesFromAPI();
-});
-
-const updatesFromAPI = () => {
-
-  isAuthorizedAdmin(emailx.value);
-  counted1.value = salaries.value.length;
-  counted2.value = families.value.length;
-  counted3.value = discounted.value.length;
-};
-
-async function isAuthorizedAdmin(userEmail: string | undefined) {
-  const enforcer = String(userEmail);
-  const authorizedEmails = ["test1@gmail.com", "test2@gmail.com"];
-  const goodUser = authorizedEmails.includes(enforcer);
-  permit.value = goodUser;
-  return goodUser;
-}
 </script>
 
 <style scoped>
