@@ -1,32 +1,26 @@
 <template>
   <div>
-      <v-bottom-navigation v-model="objNav" :bg-color="'green'">
+    <v-bottom-navigation v-model="startedNav" :bg-color="'green'">
       <v-spacer />
       <v-btn :to="{ name: 'Json' }">
         <v-icon aria-hidden="true">mdi-account-supervisor</v-icon>
-        <span>1. JSON </span>
+        <span>Data JSON </span>
       </v-btn>
       <v-spacer />
       <v-btn :to="{ name: 'Commodities' }">
         <v-icon aria-hidden="true">mdi-account-supervisor</v-icon>
-        <span>2. Commodities </span>
-      </v-btn>    
+        <span> Commodities </span>
+      </v-btn>
 
-      <v-btn
-        value="user"
-        :to="{ name: 'Json' }"
-        v-cloak
-        v-if="userEmails"
-      >
+      <v-btn value="user" :to="{ name: 'Json' }" v-cloak v-if="userX">
         <v-icon aria-hidden="true">mdi-finance</v-icon>
-        <span> 3. JSON | {{ familiesNumber }}</span>
+        <span> Data Gaps </span>
       </v-btn>
       <v-spacer />
 
-
       <v-btn :to="{ name: 'Login' }">
         <v-icon aria-hidden="true">mdi-logout</v-icon>
-        <span>Admin: {{ eUsers.toLowerCase() }}</span>
+        <span>Admin: {{ storeAUT.user?.substring(0, userX?.length - 10).toLowerCase() }}</span>
       </v-btn>
       <v-spacer />
     </v-bottom-navigation>
@@ -34,45 +28,44 @@
 </template>
 
 <script setup lang="ts">
+import { onBeforeMount, ref, watch } from "vue";
+import { useRoute } from "vue-router";
+import { useAuthStore } from "../../stores/AppsAuth";
+const storeAUT = useAuthStore();
+const startedNav = ref(true);
+const route = useRoute();
+const userX = ref();
 
-import { ref, computed, onBeforeMount } from "vue";
-
-const objNav = ref("main");
-const email = ref("Marvin@gmail.com");
-const salaries = ref<any[]>([]);
-
-onBeforeMount(async () => {
- loaded();
+watch(route, () => {
+  userX.value = storeAUT.user;
+  console.log("1. Route changed to:", route.name);
+  console.log(userX.value);
 });
 
-const familiesNumber = computed(() => salaries.value?.length || "");
-const userEmails = computed(() => email.value || "");
-const eUsers = userEmails.value
-  ?.substring(0, userEmails.value?.length - 10)
-  .toLowerCase();
+onBeforeMount(() => {
+  userX.value = storeAUT.user;
+});
 
-
-const loaded = () => {
-  return [userEmails.value];
-};
 </script>
 
-<style scoped>
-.div {
+<style lang="scss" scoped>
+.container {
   background-color: mediumaquamarine;
   margin-left: 20%;
-  font-family: arial;
+  font-family: Arial, sans-serif;
   font-size: 20px;
   display: flex;
   justify-content: center;
   color: red;
-}
 
-.v-btn {
-  letter-spacing: normal;
-}
-
-[v-cloak] {
-  display: none;
+  .v-btn {
+    letter-spacing: normal;
+    &:hover {
+      color: darkblue;
+    }
+  }
+  [v-cloak] {
+    display: none;
+  }
 }
 </style>

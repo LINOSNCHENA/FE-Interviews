@@ -148,10 +148,6 @@ function updateChartData() {
   let gap = x.map(x => x.gap);
   let max = x.map(x => x.max);
   let min = x.map(x => x.min);
- // let minz = x.map(x => x.minz);
-  // let maxz = x.map(x => x.maxz);
-  // console.log(minz);
-  // console.log(minMaxData1[0].all);
 
   chartData.value = {
     labels: minMaxData.map((d) => new Date(d.dated)),

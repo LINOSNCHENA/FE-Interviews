@@ -2,7 +2,7 @@
   "name": "benefits-paychecks",
   "version": "0.0.0",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --open",
     "build": "vue-tsc --noEmit && vite build",
     "preview": "vite preview",
     "lint": "eslint . --fix --ignore-path .gitignore"
@@ -31,6 +31,7 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^6.1.1",
     "eslint-plugin-vue": "^9.22.0",
+    "node-sass": "^9.0.0",
     "pinia": "^2.1.7",
     "sass": "^1.77.4",
     "typescript": "^5.4.2",

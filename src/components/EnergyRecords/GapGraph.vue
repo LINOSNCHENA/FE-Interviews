@@ -140,18 +140,12 @@ function updateChartData() {
     endDate.value
   );
   const minMaxData1 = calculateMinMaxRange(filteredData);
-  const currentYearDataPoints = getCurrentYearDataPoints();
-  console.log(minMaxData1[0]);
-
   const minMaxData = minMaxData1.sort((a, b) => a.dated - b.dated);
   let x = minMaxData;
   let gap = x.map(x => x.gap);
   let max = x.map(x => x.max);
   let min = x.map(x => x.min);
- // let minz = x.map(x => x.minz);
-  // let maxz = x.map(x => x.maxz);
-  // console.log(minz);
-  // console.log(minMaxData1[0].all);
+
 
   chartData.value = {
     labels: minMaxData.map((d) => new Date(d.dated)),
@@ -159,53 +153,27 @@ function updateChartData() {
       {
         label: "1. Max Values (" + max.length + ")",
         data: minMaxData.map((d) => ({ x: d.dated, y: d.max })),
-        borderColor: 'blue', // Blue border for visibility
-        borderWidth: 1, // Thin border
-        backgroundColor: 'rgba(0, 0, 255, 0.3)', // Semi-transparent blue fill
+        borderColor: 'blue', 
+        borderWidth: 1, 
+        backgroundColor: 'rgba(0, 0, 255, 0.3)', 
         fill: true,
         type: "line",
-      },
-      // {
-      //   label: '2. Maxz (' + maxz.length + ')',
-      //   data: minMaxData.map((d) => ({ x: d.dated, y: d.maxz })),
-      //   borderColor: 'yellow', // Yellow border for visibility
-      //   backgroundColor: 'rgba(255, 255, 0, 0.3)', // Semi-transparent yellow fill
-      //   fill: true,
-      //   type: 'line',
-      // },
+      },   
       {
         label: '3. Gap (' + gap.length + ')',
         data: minMaxData.map((d) => ({ x: d.dated, y: d.gap })),
-        borderColor: 'red', // Red border for visibility
-        backgroundColor: 'rgba(255, 0, 0, 0.3)', // Semi-transparent red fill
+        borderColor: 'red', 
+        backgroundColor: 'rgba(255, 0, 0, 0.3)', 
         fill: true,
         type: 'line',
       },
       {
         label: '4. Min Values (' + min.length + ')',
         data: minMaxData.map((d) => ({ x: d.dated, y: d.min })),
-        borderColor: 'green', // Green border for visibility
-        backgroundColor: 'rgba(0, 128, 0, 0.3)', // Semi-transparent green fill
+        borderColor: 'green', 
+        backgroundColor: 'rgba(0, 128, 0, 0.3)', 
         fill: true,
         type: 'line',
-      },
-      // {
-      //   label: "5. Minz (" + minz.length + ")",
-      //   data: minMaxData.map((d) => ({ x: d.dated, y: d.minz })),
-      //   borderColor: 'teal', // Orange border for visibility
-      //   borderWidth: 1, // Thin border
-      //   backgroundColor: 'rgba(255, 165, 0, 0.3)', // Semi-transparent orange fill
-      //   fill: true,
-      //   type: "line",
-      // },
-      {
-        label: "6. Current Year (" + currentYearDataPoints.length + ")",
-        data: currentYearDataPoints.map((d) => ({ x: d.x, y: d.y })),
-        borderColor: "brown", // Brown border for visibility
-        borderWidth: 1, // Thin border
-        backgroundColor: "rgba(165, 42, 42, 0.3)", // Semi-transparent brown fill
-        fill: true,
-        type: "line",
       },
     ],
   };
@@ -291,23 +259,6 @@ function calculateMinMaxRange(data: Record<string, { "4. close": string }>) {
       all: minMaxMap[monthDay][3],
     };
   });
-}
-
-function getCurrentYearDataPoints() {
-  const currentYearDataPoints: { x: number; y: number }[] = [];
-  const now = new Date();
-  const currentYear = now.getFullYear();
-
-  for (const date in EnergyData.value) {
-    const dataDate = new Date(date);
-    if (dataDate.getFullYear() === currentYear) {
-      currentYearDataPoints.push({
-        x: dataDate.getTime(),
-        y: parseFloat(EnergyData.value[date]["4. close"]),
-      });
-    }
-  }
-  return currentYearDataPoints;
 }
 
 function calculateStartDate(endDate: string): string {

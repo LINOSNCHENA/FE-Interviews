@@ -1,7 +1,7 @@
 <template>
-  <LoginDashboard />
+  <Login />
 </template>
 
 <script lang="ts" setup>
-import LoginDashboard from "../components/Dashboard/LoginPage.vue";
+import Login from "../components/Dashboard/LoginPage.vue";
 </script>
