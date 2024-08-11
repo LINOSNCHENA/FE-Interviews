@@ -51,7 +51,6 @@ const chartData = ref<ChartData<"bar">>({
     {
       label: "Monthly Average Prices",
       backgroundColor: "yellow",
-      // backgroundColor: "#42A5F5",
       data: [],
     },
   ],
@@ -112,8 +111,7 @@ function updateChartData() {
     datasets: [
       {
         label: "Closing Prices : Monthly Average Prices | Months counted : ("+String(dataRecorded.value)+"/"+String(dataFiltered.value)+")",
-        backgroundColor: "yellow",
-        //backgroundColor: "#42A5F5", // Inside Background
+        backgroundColor: "monarch",
         data: Object.values(monthlyAverages),
       },
     ],

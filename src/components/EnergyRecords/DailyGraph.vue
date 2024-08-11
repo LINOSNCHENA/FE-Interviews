@@ -130,7 +130,7 @@ function updateChartData() {
     datasets: [
       {
         label: `Closing Prices | Total Records: ${Object.keys(wholeData.value["Time Series (Daily)"] || {}).length} | Filtered Records: ${Object.keys(filteredData).length}`,
-        backgroundColor: "#42A5F5",
+        backgroundColor: "monarch",
         data: filteredDataPoints,
       },
     ],

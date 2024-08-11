@@ -42,6 +42,7 @@ ChartJS.register(
   CategoryScale,
   LinearScale
 );
+
 // Initialize state variables
 const endDate = ref<string>(formatDate(new Date()));
 const startDate = ref<string>(calculateStartDate(endDate.value));
@@ -50,12 +51,12 @@ const chartData = ref<ChartData<"bar">>({
   datasets: [
     {
       label: "Monthly Average Prices",
-      backgroundColor: "yellow",
-      // backgroundColor: "#42A5F5",
+      backgroundColor: "watermelon",
       data: [],
     },
   ],
 });
+
 const chartOptions = ref<ChartOptions<"bar">>({
   responsive: true,
   plugins: {
@@ -112,8 +113,7 @@ function updateChartData() {
     datasets: [
       {
         label: "Closing Prices : Monthly Average Prices | Months counted : ("+String(dataRecorded.value)+"/"+String(dataFiltered.value)+")",
-        backgroundColor: "yellow",
-        //backgroundColor: "#42A5F5", // Inside Background
+        backgroundColor: "watermelon",
         data: Object.values(monthlyAverages),
       },
     ],
@@ -135,25 +135,12 @@ function filterRecordsByDateRange(data, start, end) {
 }
 
 //function calculateMonthlyAverages(data) {
-// calculateWeeklyAverages(data);
-// }
-
-/**
- * Calculate weekly averages from daily data.
- * 
- * @param data - Object containing daily data, with dates as keys.
- * @returns An object with weekly averages.
- */
  function calculateWeeklyAverages(data: Record<string, { '4. close': string }>): Record<string, number> {
-  
-  // Object to store the total value for each week
   const weeklyTotals: Record<string, number> = {};
-  // Object to count the number of data points for each week
   const weeklyCounts: Record<string, number> = {};
 
   /**
    * Helper function to get the start of the week (Monday) for a given date.
-   * 
    * @param date - The date string in YYYY-MM-DD format.
    * @returns The start of the week (Monday) as a date string in YYYY-MM-DD format.
    */
@@ -170,30 +157,25 @@ function filterRecordsByDateRange(data, start, end) {
   for (const date in data) {
     const closePrice = parseFloat(data[date]['4. close']);
     const weekStart = getStartOfWeek(date);
-
-    // Initialize weekly totals and counts if not already present
     if (!weeklyTotals[weekStart]) {
       weeklyTotals[weekStart] = 0;
       weeklyCounts[weekStart] = 0;
     }
-
     // Accumulate totals and counts for the week
     weeklyTotals[weekStart] += closePrice;
     weeklyCounts[weekStart] += 1;
   }
-
   // Calculate weekly averages
   const weeklyAverages: Record<string, number> = {};
   for (const week in weeklyTotals) {
     weeklyAverages[week] = weeklyTotals[week] / weeklyCounts[week];
   }
-
   return weeklyAverages;
 }
 
 function calculateStartDate(endDate: string): string {
   const end = new Date(endDate);
-  end.setMonth(end.getMonth() - 90); // Adjust to show data for the last month
+  end.setMonth(end.getMonth() - 30); 
   return formatDate(end);
 }
 
