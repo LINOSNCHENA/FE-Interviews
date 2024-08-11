@@ -49,10 +49,9 @@
 </template>
 
 <script setup lang="ts">
-import { onBeforeMount, ref } from "vue";
+import { ref } from "vue";
 
 import { useRouter } from "vue-router";
-import { useEmployeeStore } from "../../stores/DataEmployees";
 import { useAuthStore } from "../../stores/AppsAuth";
 
 const router = useRouter();
@@ -60,7 +59,6 @@ const router = useRouter();
 const loading = ref(false);
 const loaded = ref(false);
 const showPassword = ref(false);
-const storeAPI = useEmployeeStore();
 const storeAUT = useAuthStore();
 const tradeMark = ref("Trading Houses data Ltd (v 2.0.1.)");
 
@@ -69,9 +67,6 @@ const form = ref({
   password: "",
 });
 
-onBeforeMount(async () => {
-  await storeAPI.fetchSalaries();
-});
 
 const onSubmit = async () => {
   if (!form.value.email || !form.value.password) return;

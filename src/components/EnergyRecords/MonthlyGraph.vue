@@ -156,7 +156,7 @@ function calculateMonthlyAverages(data) {
 
 function calculateStartDate(endDate: string): string {
   const end = new Date(endDate);
-  end.setMonth(end.getMonth() - 1); // Adjust to show data for the last month
+  end.setMonth(end.getMonth() - 90); // Adjust to show data for the last month
   return formatDate(end);
 }
 

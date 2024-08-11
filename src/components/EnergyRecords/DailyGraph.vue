@@ -49,7 +49,7 @@ const startDate = ref<string>(calculateStartDate(endDate.value));
 
 function calculateStartDate(endDate: string): string {
   const end = new Date(endDate);
-  end.setDate(end.getDate() - 7);
+  end.setDate(end.getDate() - 90);
   return formatDate(end);
 }
 

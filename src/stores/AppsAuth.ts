@@ -1,4 +1,4 @@
-// Data-Securirity.ts
+
 import { defineStore } from "pinia";
 interface HealthAuthState {
   loading: boolean;
@@ -19,8 +19,6 @@ export const useAuthStore = defineStore("authStore", {
       const authorizedEmails = [
         "test1@gmail.com",
         "test2@gmail.com",
-        "test3@gmail.com",
-        "christinadolonina@gmail.com",
       ];
       return authorizedEmails.includes(enforcer);
     },

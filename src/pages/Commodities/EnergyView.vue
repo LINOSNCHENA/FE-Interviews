@@ -26,9 +26,7 @@
         <v-icon>mdi-calendar-month</v-icon>
         Monthly Average Graph
       </v-tab>
-
     </v-tabs>
-
     <v-card
       class="mx-auto"
       color="#26c6da"
@@ -87,18 +85,7 @@
             </v-row>
           </v-window-item>
 
-          <v-window-item value="rawdata">
-            <v-row>
-              <v-col cols="12">
-                <v-icon>mdi-database</v-icon>
-                <span class="tab-label">Raw Data</span>
-              </v-col>
-              <v-col cols="12">
-                <RawData></RawData>
-              </v-col>
-            </v-row>
-          </v-window-item>
-        </v-window>
+              </v-window>
       </v-card-text>
     </v-card>
   </div>
@@ -109,7 +96,6 @@ import { onMounted, ref } from "vue";
 import MonthlyGraph from "../../components/EnergyRecords/MonthlyGraph.vue";
 import MaxMinGraph from "../../components/EnergyRecords/MaxMinGraph.vue";
 import WeeklyGraph from "../../components/EnergyRecords/WeeklyGraph.vue";
-
 
 const tab = ref("maximum");
 const salaries = ref<any[]>([]);

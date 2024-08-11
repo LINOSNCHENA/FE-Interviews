@@ -36,15 +36,12 @@
 <script setup lang="ts">
 
 import { ref, computed, onBeforeMount } from "vue";
-// import { useEmployeeStore } from "../../stores/DataEmployees";
 
-// const storePDF = useEmployeeStore();
 const objNav = ref("main");
 const email = ref("Marvin@gmail.com");
 const salaries = ref<any[]>([]);
 
 onBeforeMount(async () => {
- // storePDF.fetchSalaries(), 
  loaded();
 });
 
@@ -56,7 +53,6 @@ const eUsers = userEmails.value
 
 
 const loaded = () => {
-  // let x = storePDF.loadedSalaries;
   return [userEmails.value];
 };
 </script>

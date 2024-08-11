@@ -283,7 +283,7 @@ function calculateMinMaxRange(data: Record<string, { "4. close": string }>) {
       .padStart(2, "0")}-${day.toString().padStart(2, "0")}`;
     return {
       dated: new Date(formattedDate).getTime(),
-      minz: minMaxMap[monthDay][0],
+      minz: 200+minMaxMap[monthDay][0],
       maxz: minMaxMap[monthDay][1],
       max: minMaxMap[monthDay][2][0],
       min: minMaxMap[monthDay][2][1],

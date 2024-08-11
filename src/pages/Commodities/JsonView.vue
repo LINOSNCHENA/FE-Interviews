@@ -7,15 +7,17 @@
       fixed-tabs
       background-color="deep-purple accent-4"
     >
-      <v-tab value="daily">
-        <v-icon>mdi-calendar</v-icon>
-        Daily Data Points
+   
+      <v-tab value="gap">
+        <v-icon>mdi-database</v-icon>
+       1.  Gap Max-MIN
       </v-tab>
 
       <v-tab value="rawdata">
         <v-icon>mdi-database</v-icon>
-        Raw Data
+        2. Raw Data
       </v-tab>
+
     </v-tabs>
 
     <v-card
@@ -36,6 +38,19 @@
               </v-col>
               <v-col cols="12">
                 <DailyGraph></DailyGraph>
+              </v-col>
+            </v-row>
+          </v-window-item>
+
+          <v-window-item value="gap">
+            <v-row>
+              <v-col cols="12">
+                <v-icon>mdi-calendar-month</v-icon>
+                <span class="tab-label">Monthly Table</span>
+              </v-col>
+              <v-col cols="12">
+                <!-- <MonthlyGraph></MonthlyGraph> -->
+                <GapGraph></GapGraph>
               </v-col>
             </v-row>
           </v-window-item>
